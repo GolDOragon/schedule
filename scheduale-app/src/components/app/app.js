@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import './app.css';
 // import your component
 
-export default class App extends Component {
-  render() {
-    return (
-      //add your component into div
-      <div>
-        Hello
-      </div>
-    )
-  }
+const  App = () => {
+  return (
+    //add your component into div
+    <div>
+      Hello
+    </div>
+  ) 
 }
+
+export default App;
