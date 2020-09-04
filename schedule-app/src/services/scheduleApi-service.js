@@ -6,29 +6,49 @@ export default class ScheduleApiService {
     const res = await fetch(`${this._apiBase}${url}`);
 
       if(!res.ok) {
-        throw new Error(`Could not fetch ${url}` + `,recived ${res.status}`)
+        throw new Error(`Could not fetch ${url}` + 
+        `,recived ${res.status}`)
       }
       return await res.json();
   }
 
   async getAllEvents() {
     const res = await this.getResource(`/events`);
-    return res.data;
+    return res.map(this._transformEvent);
   }
 
-  getEvent(id) {
-    return this.getResource(`/event/${id}`);
+  async getEvent(id) {
+    const event = await this.getResource(`/event/${id}`);
+    return this._transformEvent(event);
   }
 
   async getAllOrganizers() {
     const res = await this.getResource(`/organizers`);
-    return res.data;
+    return res.map(this._transwormOrganizer);
   }
 
-  getOrganizer(id) {
-    return this.getResource(`/organizer/${id}`);
+  async getOrganizer(id) {
+    const organizer = await this.getResource(`/organizer/${id}`);
+    return this._transwormOrganizer(organizer);
   }
 
+  _transformEvent(event) {
+    return {
+      id: event.id,
+      name:event.name,
+      type: event.type,
+      descriptionUrl: event.descriptionUrl,
+      description: event.description,
+      place: event.place
+    } 
+  }
+
+  _transwormOrganizer(organizer) {
+    return {
+      id: organizer.id,
+      name: organizer.name
+    }
+  }
 }
 
 
