@@ -4,7 +4,7 @@ import ScheduleApiService from '../../services/scheduleApi-service';
 export default class Table extends Component {
   
   scheduleApiService = new ScheduleApiService();
-
+  
   state = {
     event: {}
   };
@@ -55,12 +55,16 @@ export default class Table extends Component {
     this.scheduleApiService
       .deleteEvent('yUMFUXCclbHtcmXclBYQ')
   }
-  
+ 
+  getEvents = () => {
+    this.scheduleApiService
+      .getAllEvents()
+  }
   
 
   render() {
 
-    const  { event: { name, type, descriptionUrl, description, place},
+    const  { event: { name, type, descriptionUrl, description, place}
              }= this.state;
     return (
       <div>
@@ -71,7 +75,7 @@ export default class Table extends Component {
           <li className="list-group-item">{description}</li>
           <li className="list-group-item">{place}1</li>
           <li className="list-group-item">{this.updateOrganizer()}</li>
-          {/* <button>{console.log(this.scheduleApiService.updateEvent('2fk8VKAtCzHuAF2SFqlO', name, description))}</button> */}
+          <button>{this.getEvents()}</button>
         </ul>
         <ul className="list-group ">
           <li className="list-group-item">1</li>

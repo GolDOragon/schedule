@@ -14,7 +14,7 @@ export default class ScheduleApiService {
 
   async getAllEvents() {
     const res = await this.getResource(`/events`);
-    return res.map(this._transformEvent);
+    return res.data;
   }
 
   async getEvent(eventId) {
