@@ -6,7 +6,7 @@ export default class Table extends Component {
   scheduleApiService = new ScheduleApiService();
 
   state = {
-    event: {},
+    event: {}
   };
 
   constructor() {
@@ -30,22 +30,38 @@ export default class Table extends Component {
       .getEvent(id)
       .then(this.onEventLoaded);
   }
+
   updateOrganizer = () => {
     const id = 'H1DP9yWIwO5CTKBPLllD';
     this.scheduleApiService
       .getOrganizer(id)
-      .then(this.onOrganizerLoaded)
-      // .then((organizer) => {
-      //   console.log(organizer.name)
-      //   return organizer.name;
-      // })
+      // .then(this.onOrganizerLoaded)
+      .then((organizer) => {
+        console.log(organizer.name)
+        // return organizer.name;
+      })
       
   }
+  add = () => {
+    this.scheduleApiService
+      .addEvent({
+        event: {
+          name: 'testWithoutData', 
+          timePass: '16h', 
+        }
+      })
+  }
+  deleteEvent = () =>{
+    this.scheduleApiService
+      .deleteEvent('yUMFUXCclbHtcmXclBYQ')
+  }
+  
+  
 
   render() {
 
-    const  { event: { name, type, descriptionUrl, description, place}
-            }= this.state;
+    const  { event: { name, type, descriptionUrl, description, place},
+             }= this.state;
     return (
       <div>
         <ul className="list-group mb-5">
@@ -53,8 +69,9 @@ export default class Table extends Component {
           <li className="list-group-item">{type}</li>
           <li className="list-group-item">{descriptionUrl}</li>
           <li className="list-group-item">{description}</li>
-          <li className="list-group-item">{place}</li>
+          <li className="list-group-item">{place}1</li>
           <li className="list-group-item">{this.updateOrganizer()}</li>
+          {/* <button>{console.log(this.scheduleApiService.updateEvent('2fk8VKAtCzHuAF2SFqlO', name, description))}</button> */}
         </ul>
         <ul className="list-group ">
           <li className="list-group-item">1</li>

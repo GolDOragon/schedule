@@ -17,9 +17,74 @@ export default class ScheduleApiService {
     return res.map(this._transformEvent);
   }
 
-  async getEvent(id) {
-    const event = await this.getResource(`/event/${id}`);
+  async getEvent(eventId) {
+    const event = await this.getResource(`/event/${eventId}`);
     return this._transformEvent(event);
+  }
+
+  async addEvent(dateTime, time, type, name, timePass, description, descriptionUrl, place, timeZone, comment) {
+    const url = 'https://rs-react-schedule.firebaseapp.com/api/team/26/event';
+    const body = {
+      dateTime : `${dateTime}`,
+      time : `${time}`,
+      type : `${type}`,
+      name : `${name}`,
+      timePass: `${timePass}`,
+      description : `${description}`,
+      descriptionUrl : `${descriptionUrl}`,
+      place: `${place}`,
+      timeZone : `${timeZone}`,
+      comment: `${comment}`
+    }
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    })
+    .then ((res) => res.json());
+    return res;
+  }
+
+  async updateEvent(eventId, dateTime, time, type, name, timePass, description, descriptionUrl, place, timeZone, comment){
+    const url = `https://rs-react-schedule.firebaseapp.com/api/team/26/event/${eventId}`;
+    const body = {
+      dateTime : `${dateTime}`,
+      time : `${time}`,
+      type : `${type}`,
+      name : `${name}`,
+      timePass: `${timePass}`,
+      description : `${description}`,
+      descriptionUrl : `${descriptionUrl}`,
+      place: `${place}`,
+      timeZone : `${timeZone}`,
+      comment: `${comment}`
+    }
+    const res = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    })
+    .then((res) => res.json());
+    return res;
+  }
+
+  async deleteEvent(eventId) {
+    const url = `https://rs-react-schedule.firebaseapp.com/api/team/26/event/${eventId}`
+    const res = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+    .then((res) => res.json()) ;
+    return res;
   }
 
   async getAllOrganizers() {
@@ -27,19 +92,73 @@ export default class ScheduleApiService {
     return res.map(this._transwormOrganizer);
   }
 
-  async getOrganizer(id) {
-    const organizer = await this.getResource(`/organizer/${id}`);
+  async getOrganizer(organizerId) {
+    const organizer = await this.getResource(`/organizer/${organizerId}`);
     return this._transwormOrganizer(organizer);
   }
+
+  async addOrganizer(organizer) {
+    const url = 'https://rs-react-schedule.firebaseapp.com/api/team/26/organizer';
+    const body = {
+      name : `${organizer}`
+    }
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    })
+    .then ((res) => res.json());
+    return res;
+  }
+
+  async updateOrganizer(organizerId, name){
+    const url = `https://rs-react-schedule.firebaseapp.com/api/team/26/organizer/${organizerId}`;
+    const body = {
+      name: `${name}`
+    }
+    const res = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    })
+    .then((res) => res.json());
+    return res;
+  }
+
+  async deleteOrganizer(organizerId) {
+    const url = `https://rs-react-schedule.firebaseapp.com/api/team/26/organizer/${organizerId}`
+    const res = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+    .then((res) => res.json()) ;
+    console.log(res);
+  }
+
+
 
   _transformEvent(event) {
     return {
       id: event.id,
+      dateTime : event.dateTime,
+      time : event.time,
       name:event.name,
+      timePass: event.timePass,
       type: event.type,
       descriptionUrl: event.descriptionUrl,
       description: event.description,
-      place: event.place
+      place: event.place,
+      timeZone : event.timeZone,
+      comment: event.comment
     } 
   }
 
@@ -50,5 +169,7 @@ export default class ScheduleApiService {
     }
   }
 }
+
+
 
 
