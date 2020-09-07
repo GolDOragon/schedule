@@ -1,4 +1,4 @@
-export default class ScheduleApiService {
+class ScheduleApiService {
 
   _apiBase = 'https://rs-react-schedule.firebaseapp.com/api/team/26';
 
@@ -25,18 +25,18 @@ export default class ScheduleApiService {
   async addEvent(dateTime, time, type, name, timePass, description, descriptionUrl, place, timeZone, comment) {
     const url = 'https://rs-react-schedule.firebaseapp.com/api/team/26/event';
     const body = {
-      dateTime : `${dateTime}`,
-      time : `${time}`,
-      type : `${type}`,
-      name : `${name}`,
-      timePass: `${timePass}`,
-      description : `${description}`,
-      descriptionUrl : `${descriptionUrl}`,
-      place: `${place}`,
-      timeZone : `${timeZone}`,
-      comment: `${comment}`
-    }
-    const res = await fetch(url, {
+      dateTime : dateTime,
+      time : time,
+      type : type,
+      name : name,
+      timePass: timePass,
+      description : description,
+      descriptionUrl : descriptionUrl,
+      place: place,
+      timeZone : `UTC${new Date().getTimezoneOffset()/60}`,
+      comment: comment
+    };
+    await fetch(url, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -44,25 +44,23 @@ export default class ScheduleApiService {
       },
       body: JSON.stringify(body),
     })
-    .then ((res) => res.json());
-    return res;
   }
 
   async updateEvent(eventId, dateTime, time, type, name, timePass, description, descriptionUrl, place, timeZone, comment){
     const url = `https://rs-react-schedule.firebaseapp.com/api/team/26/event/${eventId}`;
     const body = {
-      dateTime : `${dateTime}`,
-      time : `${time}`,
-      type : `${type}`,
-      name : `${name}`,
-      timePass: `${timePass}`,
-      description : `${description}`,
-      descriptionUrl : `${descriptionUrl}`,
-      place: `${place}`,
-      timeZone : `${timeZone}`,
-      comment: `${comment}`
-    }
-    const res = await fetch(url, {
+      dateTime : dateTime,
+      time : time,
+      type : type,
+      name : name,
+      timePass: timePass,
+      description : description,
+      descriptionUrl : descriptionUrl,
+      place: place,
+      timeZone : timeZone,
+      comment: comment
+    };
+    await fetch(url, {
       method: 'PUT',
       headers: {
         Accept: 'application/json',
@@ -70,21 +68,17 @@ export default class ScheduleApiService {
       },
       body: JSON.stringify(body),
     })
-    .then((res) => res.json());
-    return res;
   }
 
   async deleteEvent(eventId) {
-    const url = `https://rs-react-schedule.firebaseapp.com/api/team/26/event/${eventId}`
-    const res = await fetch(url, {
+    const url = `https://rs-react-schedule.firebaseapp.com/api/team/26/event/${eventId}`;
+    await fetch(url, {
       method: 'DELETE',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
     })
-    .then((res) => res.json()) ;
-    return res;
   }
 
   async getAllOrganizers() {
@@ -101,8 +95,8 @@ export default class ScheduleApiService {
     const url = 'https://rs-react-schedule.firebaseapp.com/api/team/26/organizer';
     const body = {
       name : `${organizer}`
-    }
-    const res = await fetch(url, {
+    };
+    await fetch(url, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -110,16 +104,14 @@ export default class ScheduleApiService {
       },
       body: JSON.stringify(body),
     })
-    .then ((res) => res.json());
-    return res;
   }
 
-  async updateOrganizer(organizerId, name){
+  async updateOrganizer(organizerId, organizer){
     const url = `https://rs-react-schedule.firebaseapp.com/api/team/26/organizer/${organizerId}`;
     const body = {
-      name: `${name}`
-    }
-    const res = await fetch(url, {
+      organizer: `${organizer}`
+    };
+    await fetch(url, {
       method: 'PUT',
       headers: {
         Accept: 'application/json',
@@ -127,24 +119,18 @@ export default class ScheduleApiService {
       },
       body: JSON.stringify(body),
     })
-    .then((res) => res.json());
-    return res;
   }
 
   async deleteOrganizer(organizerId) {
     const url = `https://rs-react-schedule.firebaseapp.com/api/team/26/organizer/${organizerId}`
-    const res = await fetch(url, {
+    await fetch(url, {
       method: 'DELETE',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
     })
-    .then((res) => res.json()) ;
-    console.log(res);
   }
-
-
 
   _transformEvent(event) {
     return {
@@ -170,6 +156,6 @@ export default class ScheduleApiService {
   }
 }
 
+const scheduleApiService = new ScheduleApiService();
 
-
-
+export default scheduleApiService;
