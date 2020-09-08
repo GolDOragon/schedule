@@ -10,7 +10,7 @@ export class EventCalendar extends Component{
       <FullCalendar
         plugins={[ dayGridPlugin ]}
         initialView= "dayGridMonth"
-        buttonIcons = "false"
+        buttonIcons = "true"
         weekNumbers = "true"
         navLinks = "true"
         editable = "true"
