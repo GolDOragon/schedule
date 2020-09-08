@@ -9,11 +9,17 @@ export class EventCalendar extends Component{
     return(
       <FullCalendar
         plugins={[ dayGridPlugin ]}
-        initialView="dayGridMonth"
+        initialView= "dayGridMonth"
+        buttonIcons = "false"
+        weekNumbers = "true"
+        navLinks = "true"
+        editable = "true"
+        dayMaxEvents = "true"
         events={[
           { title: 'event 1', date: '2020-09-20' },
           { title: 'eaaaa', date: '2020-09-21' }
         ]}
+
       />
     )
   };
