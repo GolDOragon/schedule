@@ -1,27 +1,29 @@
-import React, {Component} from 'react';
+import React from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from "@fullcalendar/timegrid";
 import './App.css';
 
-export class EventCalendar extends Component{
+import "@fullcalendar/daygrid/main.css";
+import "@fullcalendar/timegrid/main.css";
 
-  render(){
-    return(
+export function EventCalendar() {
+  return (
+    <div className="App">
       <FullCalendar
-        plugins={[ dayGridPlugin ]}
-        initialView= "dayGridMonth"
         buttonIcons = "true"
-        weekNumbers = "true"
+        height = "auto"
         navLinks = "true"
         editable = "true"
         dayMaxEvents = "true"
-        events={[
-          { title: 'event 1', date: '2020-09-20' },
-          { title: 'eaaaa', date: '2020-09-21' }
-        ]}
-
+        headerToolbar={{
+          left: "prev,today,next",
+          center: "title",
+          right: "dayGridMonth,timeGridWeek,timeGridDay"
+        }}
+        locale="ru"
+        plugins={[dayGridPlugin, timeGridPlugin]}
       />
-    )
-  };
-
+    </div>
+  );
 }
