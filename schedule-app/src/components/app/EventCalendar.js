@@ -10,6 +10,10 @@ export class EventCalendar extends Component{
       <FullCalendar
         plugins={[ dayGridPlugin ]}
         initialView="dayGridMonth"
+        events={[
+          { title: 'event 1', date: '2020-09-20' },
+          { title: 'eaaaa', date: '2020-09-21' }
+        ]}
       />
     )
   };
