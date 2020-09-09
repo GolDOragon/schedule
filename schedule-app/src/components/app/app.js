@@ -3,14 +3,13 @@ import './app.css';
 import Table from '../table/table';
 import ScheduleApiService from '../../services/scheduleApi-service'
 
-// import your component
-
 const  App = () => {
   const [items, setItems] = React.useState([]);
   
   function onEdit(newValue, row) {
+    console.log(row)
     ScheduleApiService.updateEvent(
-      row.eventId, 
+      row.id, 
       row.dateTime, 
       row.time, 
       row.type, 
