@@ -14,7 +14,7 @@
 }
 
 .fc-daygrid-event{
-overflow: scroll!important;
+  overflow-x: scroll!important;
 }
 
 @media (max-width: 605px) {
@@ -35,7 +35,7 @@ overflow: scroll!important;
 }
 
 .fc-direction-ltr .fc-daygrid-event .fc-event-time {
-    font-size: .6rem;
+  font-size: .6rem;
 }
 
 .fc-daygrid-dot-event .fc-event-title{
