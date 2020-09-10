@@ -44,6 +44,7 @@ class ScheduleApiService {
       },
       body: JSON.stringify(body),
     })
+    return this.getAllEvents();
   }
 
   async updateEvent(eventId, dateTime, time, type, name, timePass, description, descriptionUrl, place, timeZone, comment){
@@ -79,6 +80,7 @@ class ScheduleApiService {
         'Content-Type': 'application/json',
       },
     })
+    return this.getAllEvents();
   }
 
   async getAllOrganizers() {

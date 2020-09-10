@@ -90,6 +90,7 @@ function Table(props) {
   return (
     <div className="table-wrapper">
       <div>
+        <button onClick={props.onAdd}>Добавить строку</button>
         <BootstrapTable
         responsive
         keyField='id'

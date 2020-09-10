@@ -23,20 +23,28 @@ const  App = () => {
     )
   }
   
+  function onAdd(row) {
+    ScheduleApiService.addEvent('', '', '', 'Ввод нового события...', '', '', '', '', '',  '', '')
+    .then((data) => {setItems(data)})  
+  }
+  
+  //В этой функции будет вызов всплывающего окна, в котором будет удаление. Пока что просто удаление.
   function onSelect(row) {
-    alert(`Здесь будет карточка для таска: ${row.name}`)
+    const deleteRow = window.confirm ("Удалить запись?");
+    if (deleteRow) {
+      ScheduleApiService.deleteEvent(row.id)
+      .then((data) => {setItems(data)})  
+    }
   }
   
   React.useEffect(() => {
     ScheduleApiService.getAllEvents()
-    .then((data) => {
-      setItems(data)
-    });
+    .then((data) => {setItems(data)});
   }, [])
   
   return (
     <div>
-      <Table items={items} onEdit={onEdit} onSelect={onSelect} />
+      <Table items={items} onEdit={onEdit} onSelect={onSelect} onAdd={onAdd}/>
     </div>
   ) 
 }
