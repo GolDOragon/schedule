@@ -1,10 +1,22 @@
 import React from 'react'
-import {EventCalendar} from './EventCalendar';
+import ScheduleApiService from '../../services/scheduleApi-service'
+import {EventCalendar} from './EventCalendar'
 
-function App() {
+const  App = () => {
+  const [items, setItems] = React.useState([]);
+
+  React.useEffect(() => {
+    ScheduleApiService.getAllEvents()
+    .then((data) => {
+      setItems(data);
+    });
+  }, [])
+
   return (
-    <EventCalendar />
-  );
+    <div>
+      <EventCalendar items={items}/>
+    </div>
+  )
 }
 
 export default App;

@@ -3,12 +3,18 @@
   text-align: center;
 }
 
+.MuiCircularProgress-colorSecondary {
+    top: 45% !important;
+    position: absolute !important;
+    left: 48% !important;
+}
+
 @media (max-width: 605px) {
-  .fc-toolbar-title {
+.fc-toolbar-title {
       margin: revert !important;
   }
 
-  .fc-toolbar {
+.fc-toolbar {
     display: block !important;
 }
 
@@ -18,5 +24,9 @@
 
 .fc-timeGridWeek-view th{
   font-size: 0.7rem !important;
+}
+
+.fc-direction-ltr .fc-daygrid-event .fc-event-time {
+    font-size: .6rem;
 }
 }
