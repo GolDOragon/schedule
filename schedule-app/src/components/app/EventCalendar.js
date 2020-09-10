@@ -4,14 +4,17 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from "@fullcalendar/timegrid";
 import Demo from './prelouder';
 import {Array, List} from './event';
+import Pdf from "react-to-pdf"
 import './App.css';
+
+const ref = React.createRef();
 
 export function EventCalendar(props) {
   if (props.items.length !== 0){
   Array(props);
 
   return (
-    <div className="App">
+    <div className="App" ref={ref}>
       <FullCalendar
         // timeZone = "local"
         displayEventTime = "true"
@@ -40,6 +43,9 @@ export function EventCalendar(props) {
         }}
         events = {List}
       />
+      <Pdf targetRef={ref} filename="file.pdf" x={5} y={5} scale={.5}>
+         {({ toPdf }) => <a href="/#" className="bott" onClick={toPdf}>Save</a>}
+      </Pdf>
     </div>
   );
 }

@@ -25,7 +25,7 @@ function Array(props) {
     if(type === 'screening'){
       typeColor = '#a55ff2fc';
     }
-    List.push({ title: "[" + type + "] " + name + " (" +place +")", backgroundColor: typeColor, start: date + 'T12:00', allDay : false })
+    List.push({ title: "[" + type + "] " + name + " (" + place +")", backgroundColor: typeColor, start: date + 'T12:00', allDay : false })
   }
 }
 
