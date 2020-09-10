@@ -2,14 +2,34 @@ import React  from 'react';
 import './table.css';
 import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory, {Type} from 'react-bootstrap-table2-editor';
+import filterFactory, { textFilter, selectFilter, dateFilter } from 'react-bootstrap-table2-filter';
+import paginationFactory from 'react-bootstrap-table2-paginator';
 
 function Table(props) {
+  const selectOptionsType = {
+    'self education': 'self education',
+    'deadline': 'deadline',
+    'task': 'task',
+    'test': 'test',
+    'lecture': 'lecture',
+    'screening': 'screening'
+  };
+  
+  const selectOptionsPlace = {
+    'Online': 'Online',
+    'Offline': 'Offline',
+  };
+  
   const columns = [
     {dataField: 'eventId', text: 'ID', hidden: true},
-    {dataField: 'name', text: 'Название', sort: true},
-    {dataField: 'description', text: 'Описание', sort: true},
-    {dataField: 'descriptionUrl', text: 'Ссылка на событие', sort: true},
+    {dataField: 'name', text: 'Название', sort: true, filter: textFilter({placeholder: ' ',})},
+    {dataField: 'description', text: 'Описание', sort: true, filter: textFilter({placeholder: ' ',})},
+    {dataField: 'descriptionUrl', text: 'Ссылка', sort: true, headerStyle: (colum, colIndex) => {return { width: '15%' };}},
     {dataField: 'type', text: 'Событие', sort: true,
+      filter: selectFilter({
+        options: selectOptionsType,
+        placeholder: ' ',
+      }),
       editor: {
         type: Type.SELECT,
         options: [{
@@ -31,10 +51,17 @@ function Table(props) {
           value: 'screening',
           label: 'screening'
         }]
-      }},
-    {dataField: 'dateTime', text: 'Дата', sort: true, editor: {type: Type.DATE}},
-    {dataField: 'time', text: 'Время', sort: true},
-    {dataField: 'place', text: 'Место', sort: true, editor: {
+      },
+      headerStyle: (colum, colIndex) => {return { width: '5%' };}
+    },
+    {dataField: 'dateTime', text: 'Дата', sort: true, editor: {type: Type.DATE}, filter: dateFilter(), headerStyle: (colum, colIndex) => {return { width: '5%' };}},
+    {dataField: 'time', text: 'Время', sort: true, filter: textFilter({placeholder: ' ',}), headerStyle: (colum, colIndex) => {return { width: '5%' };}},
+    {dataField: 'place', text: 'Место', sort: true,       
+      filter: selectFilter({
+        options: selectOptionsPlace,
+        placeholder: ' ',
+      }), 
+      editor: {
       type: Type.SELECT,
       options: [{
         value: 'Online',
@@ -43,8 +70,10 @@ function Table(props) {
         value: 'Offline',
         label: 'Offline'
       }]
-    }},
-    {dataField: 'timePass', text: 'Время на выполнение', sort: true},
+    },
+      headerStyle: (colum, colIndex) => {return { width: '5%' };}
+    },
+    {dataField: 'timePass', text: 'Срок', sort: true, filter: textFilter({placeholder: ' ',}), headerStyle: (colum, colIndex) => {return { width: '5%' };}},
     {dataField: 'comment', text: 'Комментарий', sort: true, editor: {type: Type.TEXTAREA}}
   ];
   const defaultSorted = [{dataField: 'name', order: 'desc'}];
@@ -62,6 +91,7 @@ function Table(props) {
     <div className="table-wrapper">
       <div>
         <BootstrapTable
+        responsive
         keyField='id'
         data={props.items}
         columns={columns}
@@ -71,6 +101,8 @@ function Table(props) {
           mode: 'dbclick',
           afterSaveCell: (oldValue, newValue, row, column) => {props.onEdit(newValue, row)}
         })}
+        filter={ filterFactory() }
+        pagination={ paginationFactory() }
         />
       </div>
     </div>

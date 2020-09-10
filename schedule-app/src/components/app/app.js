@@ -36,7 +36,7 @@ const  App = () => {
   
   return (
     <div>
-      <Table items={items} onEdit={onEdit} onSelect={onSelect}/>
+      <Table items={items} onEdit={onEdit} onSelect={onSelect} />
     </div>
   ) 
 }
