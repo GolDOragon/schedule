@@ -4,13 +4,11 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from "@fullcalendar/timegrid";
 import './App.css';
 
-import "@fullcalendar/daygrid/main.css";
-import "@fullcalendar/timegrid/main.css";
-
 export function EventCalendar() {
   return (
     <div className="App">
       <FullCalendar
+        // timeZone = "local"
         buttonIcons = "true"
         height = "auto"
         navLinks = "true"
