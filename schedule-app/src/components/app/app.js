@@ -24,7 +24,7 @@ const  App = () => {
   }
   
   function onAdd(row) {
-    ScheduleApiService.addEvent('', '', '', 'Ввод нового события...', '', '', '', '', '',  '', '')
+    ScheduleApiService.addEvent('', '', '', ' Ввод нового события...', '', '', '', '', '',  '', '')
     .then((data) => {setItems(data)})  
   }
   

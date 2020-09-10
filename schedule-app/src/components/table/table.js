@@ -76,7 +76,7 @@ function Table(props) {
     {dataField: 'timePass', text: 'Срок', sort: true, filter: textFilter({placeholder: ' ',}), headerStyle: (colum, colIndex) => {return { width: '5%' };}},
     {dataField: 'comment', text: 'Комментарий', sort: true, editor: {type: Type.TEXTAREA}}
   ];
-  const defaultSorted = [{dataField: 'name', order: 'desc'}];
+  const defaultSorted = [{dataField: 'name', order: 'asc'}];
   const selectRow = {
     mode: 'checkbox',
     clickToSelect: true,
@@ -90,7 +90,7 @@ function Table(props) {
   return (
     <div className="table-wrapper">
       <div>
-        <button onClick={props.onAdd}>Добавить строку</button>
+        <button onClick={props.onAdd}>Добавить событие</button>
         <BootstrapTable
         responsive
         keyField='id'
