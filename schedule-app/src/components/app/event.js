@@ -1,8 +1,5 @@
-import React from 'react';
-
 let List = [];
 function Array(props) {
-  console.log(props.items);
   for(let i = 0; i < props.items.length; i++){
     let name=props.items[i].name;
     let time=props.items[i].time;
@@ -28,9 +25,8 @@ function Array(props) {
     if(type === 'screening'){
       typeColor = '#a55ff2fc';
     }
-    List.push({ title: name + " (" +place +")", backgroundColor: typeColor, start: date + 'T12:00', allDay : false })
+    List.push({ title: "[" + type + "] " + name + " (" +place +")", backgroundColor: typeColor, start: date + 'T12:00', allDay : false })
   }
-    console.log(List);
 }
 
 export {Array, List};

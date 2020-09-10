@@ -9,6 +9,14 @@
     left: 48% !important;
 }
 
+.fc-daygrid-dot-event .fc-event-title{
+  overflow: unset!important;
+}
+
+.fc-daygrid-event{
+overflow: scroll!important;
+}
+
 @media (max-width: 605px) {
 .fc-toolbar-title {
       margin: revert !important;
@@ -28,5 +36,13 @@
 
 .fc-direction-ltr .fc-daygrid-event .fc-event-time {
     font-size: .6rem;
+}
+
+.fc-daygrid-dot-event .fc-event-title{
+  font-size: .6rem;
+}
+
+.fc-direction-ltr .fc-daygrid-event.fc-event-start, .fc-direction-rtl .fc-daygrid-event.fc-event-end{
+  margin-left: 0px!important;
 }
 }
