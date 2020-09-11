@@ -14,12 +14,12 @@ function Table(props) {
     'lecture': 'lecture',
     'screening': 'screening'
   };
-  
+
   const selectOptionsPlace = {
     'Online': 'Online',
     'Offline': 'Offline',
   };
-  
+
   const columns = [
     {dataField: 'eventId', text: 'ID', hidden: true},
     {dataField: 'name', text: 'Название', sort: true, filter: textFilter({placeholder: ' ',})},
@@ -56,11 +56,11 @@ function Table(props) {
     },
     {dataField: 'dateTime', text: 'Дата', sort: true, editor: {type: Type.DATE}, filter: dateFilter(), headerStyle: (colum, colIndex) => {return { width: '5%' };}},
     {dataField: 'time', text: 'Время', sort: true, filter: textFilter({placeholder: ' ',}), headerStyle: (colum, colIndex) => {return { width: '5%' };}},
-    {dataField: 'place', text: 'Место', sort: true,       
+    {dataField: 'place', text: 'Место', sort: true,
       filter: selectFilter({
         options: selectOptionsPlace,
         placeholder: ' ',
-      }), 
+      }),
       editor: {
       type: Type.SELECT,
       options: [{
@@ -86,11 +86,11 @@ function Table(props) {
       props.onSelect(row)
     }
   }
-  
+
   return (
     <div className="table-wrapper">
       <div>
-        <button onClick={props.onAdd}>Добавить событие</button>
+        {props.userType === 'mentor' ? <button onClick={props.onAdd}>Добавить событие</button> : ''}
         <BootstrapTable
         responsive
         keyField='id'
@@ -98,10 +98,11 @@ function Table(props) {
         columns={columns}
         defaultSorted={defaultSorted}
         selectRow={selectRow}
-        cellEdit={cellEditFactory({
-          mode: 'dbclick',
-          afterSaveCell: (oldValue, newValue, row, column) => {props.onEdit(newValue, row)}
-        })}
+        cellEdit={
+          props.userType === 'mentor'
+            ? cellEditFactory({mode: 'dbclick', afterSaveCell: (oldValue, newValue, row, column) => {props.onEdit(newValue, row)}})
+            : cellEditFactory({})
+        }
         filter={ filterFactory() }
         pagination={ paginationFactory() }
         />
