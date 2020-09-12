@@ -2,7 +2,14 @@ let List = [];
 function Array(props) {
   for(let i = 0; i < props.items.length; i++){
     let name=props.items[i].name;
-    let time=props.items[i].time;
+    let time;
+    if(props.items[i].time.length === 0){
+    time = "";
+    }
+    else{
+    time = 'T' + props.items[i].time;
+    }
+    console.log(time);
     let date=props.items[i].dateTime;
     let place=props.items[i].place;
     let type=props.items[i].type;
@@ -25,7 +32,7 @@ function Array(props) {
     if(type === 'screening'){
       typeColor = '#a55ff2fc';
     }
-    List.push({ title: "[" + type + "] " + name + " (" + place +")", backgroundColor: typeColor, start: date + 'T12:00', allDay : false })
+    List.push({ title: "[" + type + "] " + name + " (" + place +")", backgroundColor: typeColor, start: date + time})
   }
 }
 

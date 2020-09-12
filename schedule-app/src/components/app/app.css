@@ -1,3 +1,23 @@
+::-webkit-scrollbar{
+    width:10px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-thumb{
+    border-color: #777;
+    background-color: #aaa;
+}
+
+::-webkit-scrollbar-thumb:hover{
+    border-color: #555;
+    background-color: #777;
+}
+
+::-webkit-scrollbar-track {
+    background: lavender;
+    background-clip: content-box;
+}
+
 .App {
   font-family: sans-serif;
   text-align: center;
@@ -15,6 +35,15 @@
 
 .fc-daygrid-event{
   overflow-x: scroll!important;
+}
+
+.fc-h-event .fc-event-title {
+    overflow: visible!important;
+}
+
+.fc-h-event {
+    display: block;
+    border: none;
 }
 
 a.bott:hover{
@@ -117,5 +146,9 @@ animation: none;
 
 .fc-direction-ltr .fc-daygrid-event.fc-event-start, .fc-direction-rtl .fc-daygrid-event.fc-event-end{
   margin-left: 0px!important;
+}
+
+.fc-h-event .fc-event-title {
+    max-width: none!important;
 }
 }
