@@ -1,0 +1,8 @@
+.table thead th {
+  text-align: center;
+  vertical-align: top;
+  cursor: pointer;
+}
+.filter-label {
+  display: block;
+}

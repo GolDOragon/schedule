@@ -1,86 +1,114 @@
-import React, { Component } from 'react';
-import ScheduleApiService from '../../services/scheduleApi-service';
+import React  from 'react';
+import './table.css';
+import BootstrapTable from 'react-bootstrap-table-next';
+import cellEditFactory, {Type} from 'react-bootstrap-table2-editor';
+import filterFactory, { textFilter, selectFilter, dateFilter } from 'react-bootstrap-table2-filter';
+import paginationFactory from 'react-bootstrap-table2-paginator';
 
-export default class Table extends Component {
-  
-  scheduleApiService = new ScheduleApiService();
-
-  state = {
-    event: {}
+function Table(props) {
+  const selectOptionsType = {
+    'self education': 'self education',
+    'deadline': 'deadline',
+    'task': 'task',
+    'test': 'test',
+    'lecture': 'lecture',
+    'screening': 'screening'
   };
 
-  constructor() {
-    super();
-    this.updateEvent();
-  }
-
-  onEventLoaded = (event) => {
-    this.setState({event});
+  const selectOptionsPlace = {
+    'Online': 'Online',
+    'Offline': 'Offline',
   };
 
-  onOrganizerLoaded = (organizer) => {
-    this.setState({organizer: {
-      name: organizer.name
-    }});
+  const columns = [
+    {dataField: 'eventId', text: 'ID', hidden: true},
+    {dataField: 'name', text: 'Название', sort: true, filter: textFilter({placeholder: ' ',})},
+    {dataField: 'description', text: 'Описание', sort: true, filter: textFilter({placeholder: ' ',})},
+    {dataField: 'descriptionUrl', text: 'Ссылка', sort: true, headerStyle: (colum, colIndex) => {return { width: '15%' };}},
+    {dataField: 'type', text: 'Событие', sort: true,
+      filter: selectFilter({
+        options: selectOptionsType,
+        placeholder: ' ',
+      }),
+      editor: {
+        type: Type.SELECT,
+        options: [{
+          value: 'self education',
+          label: 'self education'
+        }, {
+          value: 'deadline',
+          label: 'deadline'
+        }, {
+          value: 'task',
+          label: 'task'
+        }, {
+          value: 'test',
+          label: 'test'
+        }, {
+          value: 'lecture',
+          label: 'lecture'
+        }, {
+          value: 'screening',
+          label: 'screening'
+        }]
+      },
+      headerStyle: (colum, colIndex) => {return { width: '5%' };}
+    },
+    {dataField: 'dateTime', text: 'Дата', sort: true, editor: {type: Type.DATE}, filter: dateFilter(), headerStyle: (colum, colIndex) => {return { width: '5%' };}},
+    {dataField: 'time', text: 'Время', sort: true, filter: textFilter({placeholder: ' ',}), headerStyle: (colum, colIndex) => {return { width: '5%' };}},
+    {dataField: 'place', text: 'Место', sort: true,
+      filter: selectFilter({
+        options: selectOptionsPlace,
+        placeholder: ' ',
+      }),
+      editor: {
+      type: Type.SELECT,
+      options: [{
+        value: 'Online',
+        label: 'Online'
+      }, {
+        value: 'Offline',
+        label: 'Offline'
+      }]
+    },
+      headerStyle: (colum, colIndex) => {return { width: '5%' };}
+    },
+    {dataField: 'timePass', text: 'Срок', sort: true, filter: textFilter({placeholder: ' ',}), headerStyle: (colum, colIndex) => {return { width: '5%' };}},
+    {dataField: 'comment', text: 'Комментарий', sort: true, editor: {type: Type.TEXTAREA}}
+  ];
+  const defaultSorted = [{dataField: 'name', order: 'asc'}];
+  const selectRow = {
+    mode: 'checkbox',
+    clickToSelect: true,
+    clickToEdit: true,
+    hideSelectColumn: true,
+    onSelect: (row) => {
+      props.onSelect(row)
+    }
   }
 
-  updateEvent() {
-    const id = 'nbG5bWM8NqUY9UOj6rWW';
-    this.scheduleApiService
-      .getEvent(id)
-      .then(this.onEventLoaded);
-  }
-
-  updateOrganizer = () => {
-    const id = 'H1DP9yWIwO5CTKBPLllD';
-    this.scheduleApiService
-      .getOrganizer(id)
-      // .then(this.onOrganizerLoaded)
-      .then((organizer) => {
-        console.log(organizer.name)
-        // return organizer.name;
-      })
-      
-  }
-  add = () => {
-    this.scheduleApiService
-      .addEvent({
-        event: {
-          name: 'testWithoutData', 
-          timePass: '16h', 
-        }
-      })
-  }
-  deleteEvent = () =>{
-    this.scheduleApiService
-      .deleteEvent('yUMFUXCclbHtcmXclBYQ')
-  }
-  
-  
-
-  render() {
-
-    const  { event: { name, type, descriptionUrl, description, place},
-             }= this.state;
-    return (
+  return (
+    <div className="table-wrapper">
       <div>
-        <ul className="list-group mb-5">
-          <li className="list-group-item">{name}</li>
-          <li className="list-group-item">{type}</li>
-          <li className="list-group-item">{descriptionUrl}</li>
-          <li className="list-group-item">{description}</li>
-          <li className="list-group-item">{place}1</li>
-          <li className="list-group-item">{this.updateOrganizer()}</li>
-          {/* <button>{console.log(this.scheduleApiService.updateEvent('2fk8VKAtCzHuAF2SFqlO', name, description))}</button> */}
-        </ul>
-        <ul className="list-group ">
-          <li className="list-group-item">1</li>
-          <li className="list-group-item">2</li>
-          <li className="list-group-item">3</li>
-          <li className="list-group-item">4</li>
-          <li className="list-group-item">5</li>
-        </ul>
+        {props.userType === 'mentor' ? <button onClick={props.onAdd}>Добавить событие</button> : ''}
+        <BootstrapTable
+        responsive
+        keyField='id'
+        data={props.items}
+        columns={columns}
+        defaultSorted={defaultSorted}
+        selectRow={selectRow}
+        cellEdit={
+          props.userType === 'mentor'
+            ? cellEditFactory({mode: 'dbclick', afterSaveCell: (oldValue, newValue, row, column) => {props.onEdit(newValue, row)}})
+            : cellEditFactory({})
+        }
+        filter={ filterFactory() }
+        pagination={ paginationFactory() }
+        />
       </div>
-    )
-  }
+    </div>
+  );
 }
+
+export default Table;
