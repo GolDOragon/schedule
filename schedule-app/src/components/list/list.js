@@ -2,78 +2,18 @@ import React, { Component } from 'react';
 import './list.css';
 import 'antd/dist/antd.css';
 import { Layout, Menu, Row, Col, Card } from 'antd';
-import ScheduleApiService from '../../services/scheduleApi-service';
-
 import {
     MenuUnfoldOutlined,
     MenuFoldOutlined
 } from '@ant-design/icons';
 
 const { Header, Sider, Content } = Layout;
-
 export default class List extends Component {
-
-    scheduleApiService = new ScheduleApiService();
 
     state = {
         event: {},
         collapsed: true
     };
-
-    constructor() {
-        super();
-        this.updateEvent();
-    };
-
-    onEventLoaded = (event) => {
-        this.setState({event});
-    };
-
-    onOrganizerLoaded = (organizer) => {
-        this.setState({organizer: {
-                name: organizer.name
-            }});
-    }
-
-    updateEvent() {
-        const id = 'nbG5bWM8NqUY9UOj6rWW';
-        this.scheduleApiService
-            .getEvent(id)
-            .then(this.onEventLoaded);
-    };
-
-    updateOrganizer = () => {
-        const id = 'H1DP9yWIwO5CTKBPLllD';
-        this.scheduleApiService
-            .getOrganizer(id)
-            // .then(this.onOrganizerLoaded)
-            .then((organizer) => {
-                console.log(organizer.name)
-                // return organizer.name;
-            })
-
-    };
-    add = () => {
-        this.scheduleApiService
-            .addEvent({
-                event: {
-                    name: 'testWithoutData',
-                    timePass: '16h',
-                }
-            })
-    };
-    deleteEvent = () =>{
-        this.scheduleApiService
-            .deleteEvent('yUMFUXCclbHtcmXclBYQ')
-    };
-
-    toggle = () => {
-        this.setState({
-            collapsed: !this.state.collapsed,
-        });
-    };
-
-
 
     render() {
 
