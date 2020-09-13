@@ -1,12 +1,34 @@
-import React  from 'react';
-import './app.css';
+import React from 'react';
 import Header from '../header/header';
+import AddModal from '../addModal/addModal';
 import Table from '../table/table';
+import {Button} from 'antd';
+import 'antd/dist/antd.css';
+import './app.css';
+
 import ScheduleApiService from '../../services/scheduleApi-service'
 
 const  App = () => {
   const [items, setItems] = React.useState([]);
   const [userType, setUserType] = React.useState([]);
+  const [visible, setVisible] = React.useState(false);
+
+  function onCreate(values) {
+    ScheduleApiService.addEvent(
+      values.dateTime,
+      values.time,
+      values.type,
+      values.name,
+      values.timePass,
+      values.description,
+      values.descriptionUrl,
+      values.place,
+      '', //values.timeZone
+      values.comment
+    )
+    .then((data) => {setItems(data)})
+    setVisible(false);
+  };
 
   function onEdit(newValue, row) {
     ScheduleApiService.updateEvent(
@@ -22,11 +44,6 @@ const  App = () => {
       row.timeZone,
       row.comment
     )
-  }
-
-  function onAdd(row) {
-    ScheduleApiService.addEvent('', '', '', ' Ввод нового события...', '', '', '', '', '',  '', '')
-    .then((data) => {setItems(data)})
   }
 
   //В этой функции будет вызов всплывающего окна, в котором будет удаление. Пока что просто удаление.
@@ -50,7 +67,9 @@ const  App = () => {
   return (
     <div>
       <Header onUserChange={onUserChange}/>
-      <Table items={items} onEdit={onEdit} onSelect={onSelect} onAdd={onAdd} userType={userType}/>
+      {userType === 'mentor' && <Button type="primary" onClick={() => {setVisible(true)}}>New Collection</Button> }
+      <AddModal visible={visible} onCreate={onCreate} onCancel={() => {setVisible(false)}}/>
+      <Table items={items} onEdit={onEdit} onSelect={onSelect} userType={userType}/>
     </div>
   )
 }

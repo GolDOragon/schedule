@@ -90,7 +90,6 @@ function Table(props) {
   return (
     <div className="table-wrapper">
       <div>
-        {props.userType === 'mentor' ? <button onClick={props.onAdd}>Добавить событие</button> : ''}
         <BootstrapTable
         responsive
         keyField='id'
