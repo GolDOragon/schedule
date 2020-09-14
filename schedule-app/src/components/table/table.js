@@ -7,12 +7,12 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 
 function Table(props) {
   const selectOptionsType = {
-    'self education': 'self education',
-    'deadline': 'deadline',
-    'task': 'task',
-    'test': 'test',
-    'lecture': 'lecture',
-    'screening': 'screening'
+    'Self education': 'Self education',
+    'Deadline': 'Deadline',
+    'Task': 'Task',
+    'Test': 'Test',
+    'Lecture': 'Lecture',
+    'Screening': 'Screening'
   };
 
   const selectOptionsPlace = {
@@ -22,6 +22,7 @@ function Table(props) {
 
   const columns = [
     {dataField: 'eventId', text: 'ID', hidden: true},
+    {dataField: 'dateTime', text: 'Дата', sort: true, editor: {type: Type.DATE}, filter: dateFilter(), headerStyle: (colum, colIndex) => {return { width: '5%' };}},
     {dataField: 'name', text: 'Название', sort: true, filter: textFilter({placeholder: ' ',})},
     {dataField: 'description', text: 'Описание', sort: true, filter: textFilter({placeholder: ' ',})},
     {dataField: 'descriptionUrl', text: 'Ссылка', sort: true, headerStyle: (colum, colIndex) => {return { width: '15%' };}},
@@ -33,28 +34,27 @@ function Table(props) {
       editor: {
         type: Type.SELECT,
         options: [{
-          value: 'self education',
-          label: 'self education'
+          value: 'Self education',
+          label: 'Self education'
         }, {
-          value: 'deadline',
-          label: 'deadline'
+          value: 'Deadline',
+          label: 'Deadline'
         }, {
-          value: 'task',
-          label: 'task'
+          value: 'Task',
+          label: 'Task'
         }, {
-          value: 'test',
-          label: 'test'
+          value: 'Test',
+          label: 'Test'
         }, {
-          value: 'lecture',
-          label: 'lecture'
+          value: 'Lecture',
+          label: 'Lecture'
         }, {
-          value: 'screening',
-          label: 'screening'
+          value: 'Screening',
+          label: 'Screening'
         }]
       },
       headerStyle: (colum, colIndex) => {return { width: '5%' };}
     },
-    {dataField: 'dateTime', text: 'Дата', sort: true, editor: {type: Type.DATE}, filter: dateFilter(), headerStyle: (colum, colIndex) => {return { width: '5%' };}},
     {dataField: 'time', text: 'Время', sort: true, filter: textFilter({placeholder: ' ',}), headerStyle: (colum, colIndex) => {return { width: '5%' };}},
     {dataField: 'place', text: 'Место', sort: true,
       filter: selectFilter({
@@ -62,15 +62,15 @@ function Table(props) {
         placeholder: ' ',
       }),
       editor: {
-      type: Type.SELECT,
-      options: [{
-        value: 'Online',
-        label: 'Online'
-      }, {
-        value: 'Offline',
-        label: 'Offline'
-      }]
-    },
+        type: Type.SELECT,
+        options: [{
+          value: 'Online',
+          label: 'Online'
+        }, {
+          value: 'Offline',
+          label: 'Offline'
+        }]
+      },
       headerStyle: (colum, colIndex) => {return { width: '5%' };}
     },
     {dataField: 'timePass', text: 'Срок', sort: true, filter: textFilter({placeholder: ' ',}), headerStyle: (colum, colIndex) => {return { width: '5%' };}},

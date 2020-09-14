@@ -10,13 +10,14 @@ import ScheduleApiService from '../../services/scheduleApi-service'
 
 const  App = () => {
   const [items, setItems] = React.useState([]);
-  const [userType, setUserType] = React.useState([]);
+  const [userType, setUserType] = React.useState('mentor');
   const [visible, setVisible] = React.useState(false);
+
 
   function onCreate(values) {
     ScheduleApiService.addEvent(
-      values.dateTime,
-      values.time,
+      values.dateTime ? values.dateTime.format('YYYY-MM-DD') : '',
+      values.time ? values.time.format('HH:mm') : '',
       values.type,
       values.name,
       values.timePass,
@@ -31,6 +32,7 @@ const  App = () => {
   };
 
   function onEdit(newValue, row) {
+    console.log(row);
     ScheduleApiService.updateEvent(
       row.id,
       row.dateTime,
@@ -56,7 +58,7 @@ const  App = () => {
   }
 
   function onUserChange(user) {
-    setUserType(user.target.value);
+    setUserType(user);
   }
 
   React.useEffect(() => {
@@ -65,9 +67,11 @@ const  App = () => {
   }, [])
 
   return (
-    <div>
-      <Header onUserChange={onUserChange}/>
-      {userType === 'mentor' && <Button type="primary" onClick={() => {setVisible(true)}}>New Collection</Button> }
+    <div className="wrapper">
+      <header>
+        <Header onUserChange={onUserChange}/>
+        {userType === 'mentor' && <Button type="primary" onClick={() => {setVisible(true)}}>Добавить событие</Button> }
+      </header>
       <AddModal visible={visible} onCreate={onCreate} onCancel={() => {setVisible(false)}}/>
       <Table items={items} onEdit={onEdit} onSelect={onSelect} userType={userType}/>
     </div>

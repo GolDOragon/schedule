@@ -5,13 +5,14 @@ import 'antd/dist/antd.css';
 function AddModal(props) {
   const [form] = Form.useForm();
   const [eventType, setEventType] = React.useState('');
+  const timeFormat = 'HH:mm';
 
   return (
     <Modal
       visible={props.visible}
-      title="Create a new collection"
-      okText="Create"
-      cancelText="Cancel"
+      title="Создание нового события"
+      okText="Создать событие"
+      cancelText="Отмена"
       onCancel={props.onCancel}
       onOk={() => {
         form
@@ -21,7 +22,7 @@ function AddModal(props) {
             props.onCreate(values);
           })
           .catch((info) => {
-            console.log('Validate Failed:', info);
+
           });
       }}
     >
@@ -31,39 +32,39 @@ function AddModal(props) {
       wrapperCol={{span: 14}}
       layout='horizontal'
       initialValues={{
-        type: 'task',
+        type: 'Task',
         name: '',
         description: '',
         descriptionUrl: '',
         dateTime: '',
         time: '',
         timePass: '',
-        place: 'online',
+        place: 'Online',
         comment: '',
       }}
       >
       <Form.Item name='type' label='Событие'>
         <Select onChange={setEventType}>
-          <Select.Option value='selfEducation'>Self education</Select.Option>
-          <Select.Option value='deadline'>Deadline</Select.Option>
-          <Select.Option value='task'>Task</Select.Option>
-          <Select.Option value='test'>Test</Select.Option>
-          <Select.Option value='lecture'>Lecture</Select.Option>
-          <Select.Option value='screening'>Screening</Select.Option>
+          <Select.Option value='Self education'>Self education</Select.Option>
+          <Select.Option value='Deadline'>Deadline</Select.Option>
+          <Select.Option value='Task'>Task</Select.Option>
+          <Select.Option value='Test'>Test</Select.Option>
+          <Select.Option value='Lecture'>Lecture</Select.Option>
+          <Select.Option value='Screening'>Screening</Select.Option>
         </Select>
       </Form.Item>
       <Form.Item name='name' label='Название' rules={[{required: true, message: 'Это обязательное поле'}]}><Input /></Form.Item>
       <Form.Item name='description' label='Описание'><Input.TextArea /></Form.Item>
-      {eventType !== 'deadline' && <Form.Item name='descriptionUrl' label='Ссылка'><Input /></Form.Item>}
+      <Form.Item name='descriptionUrl' label='Ссылка' hidden={eventType === 'Deadline' && true}><Input /></Form.Item>
       <Form.Item name='dateTime' label='Дата'><DatePicker /></Form.Item>
-      {(eventType !== 'selfEducation' || eventType !== 'screening') && <Form.Item name='time' label='Время'><TimePicker /></Form.Item>}
-      {eventType === 'lecture' && <Form.Item name='place' label='Место'>
+      <Form.Item name='time' label='Время' hidden={(eventType === 'Self education' || eventType === 'Screening') && true}><TimePicker format={timeFormat}/></Form.Item>
+      <Form.Item name='place' label='Место' hidden={eventType !== 'Lecture' && true}>
         <Select>
-          <Select.Option value='online'>Online</Select.Option>
-          <Select.Option value='offline'>Offline</Select.Option>
+          <Select.Option value='Online'>Online</Select.Option>
+          <Select.Option value='Offline'>Offline</Select.Option>
         </Select>
-      </Form.Item>}
-      {(eventType === 'selfEducation' || eventType === 'task' || eventType === 'test') && <Form.Item name='timePass' label='Срок'><Input /></Form.Item> }
+      </Form.Item>
+      <Form.Item name='timePass' label='Срок' hidden={(eventType !== 'Self education' || eventType !== 'Task' || eventType !== 'Test') && true}><Input /></Form.Item>
       <Form.Item name='comment' label='Комментарий'><Input.TextArea /></Form.Item>
     </Form>
     </Modal>
