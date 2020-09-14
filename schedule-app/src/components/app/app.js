@@ -1,5 +1,6 @@
 import React  from 'react';
 import './app.css';
+import  { BrowserRouter as Router, Route } from 'react-router-dom';
 import Header from '../header/header';
 import Table from '../table/table';
 import ScheduleApiService from '../../services/scheduleApi-service'
@@ -29,7 +30,6 @@ const  App = () => {
     .then((data) => {setItems(data)})
   }
 
-  //В этой функции будет вызов всплывающего окна, в котором будет удаление. Пока что просто удаление.
   function onSelect(row) {
     const deleteRow = window.confirm ("Удалить запись?");
     if (deleteRow) {
@@ -48,10 +48,16 @@ const  App = () => {
   }, [])
 
   return (
-    <div>
-      <Header onUserChange={onUserChange}/>
-      <Table items={items} onEdit={onEdit} onSelect={onSelect} onAdd={onAdd} userType={userType}/>
-    </div>
+    <Router>
+      <div>
+        <Header onUserChange={onUserChange}/>
+        <Route path="/table">
+          <Table items={items} onEdit={onEdit} onSelect={onSelect} onAdd={onAdd} userType={userType}/>
+        </Route>  
+        <Route path="/calendar" render={() => <h2>Calendar</h2>}></Route>
+        <Route path="/list" render={() => <h2>List</h2>}></Route>
+      </div>
+    </Router>
   )
 }
 
