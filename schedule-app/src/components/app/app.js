@@ -3,13 +3,22 @@ import './app.css';
 import  { BrowserRouter as Router, Route } from 'react-router-dom';
 import Header from '../header/header';
 import Table from '../table/table';
+import Card from '../card/card';
 import ScheduleApiService from '../../services/scheduleApi-service'
+
 
 const  App = () => {
   const [items, setItems] = React.useState([]);
   const [userType, setUserType] = React.useState([]);
 
+  // сетаем в стейт показывать ли описание таски
+  const [viewTaskDescript, setViewTaskDesc] = React.useState(false);
+  // сетаем в стейт ID какой таски показывать
+  const [viewTaskId, setViewTaskId] = React.useState(1);
+
+
   function onEdit(newValue, row) {
+    console.log(newValue, row)
     ScheduleApiService.updateEvent(
       row.id,
       row.dateTime,
@@ -31,11 +40,24 @@ const  App = () => {
   }
 
   function onSelect(row) {
+    setViewTaskDesc(true);
+    setViewTaskId(row.id);
+  }
+
+   function onCloseDescription() {
+    setViewTaskDesc(false)
+  }
+
+  function onSaveDescription() {
+    alert ("еще не реализованно")
+  }
+
+  function onDeleteDescription() {
     const deleteRow = window.confirm ("Удалить запись?");
     if (deleteRow) {
-      ScheduleApiService.deleteEvent(row.id)
-      .then((data) => {setItems(data)})
-    }
+        ScheduleApiService.deleteEvent(viewTaskId)
+            .then((data) => {setItems(data)})
+    } 
   }
 
   function onUserChange(user) {
@@ -45,11 +67,18 @@ const  App = () => {
   React.useEffect(() => {
     ScheduleApiService.getAllEvents()
     .then((data) => {setItems(data)});
-  }, [])
+  }, []);
 
   return (
     <Router>
       <div>
+      { viewTaskDescript===true
+            ?  <Card items={items} viewId={viewTaskId}
+               onCloseDescription={onCloseDescription}
+               onSaveDescription={onSaveDescription}
+               onDeleteDescription={onDeleteDescription}
+               />
+            :  <div></div> }
         <Header onUserChange={onUserChange}/>
         <Route path="/table">
           <Table items={items} onEdit={onEdit} onSelect={onSelect} onAdd={onAdd} userType={userType}/>
