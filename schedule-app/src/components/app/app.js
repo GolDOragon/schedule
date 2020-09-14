@@ -1,5 +1,6 @@
 import React  from 'react';
 import './app.css';
+import  { BrowserRouter as Router, Route } from 'react-router-dom';
 import Header from '../header/header';
 import Table from '../table/table';
 import Card from '../card/card';
@@ -38,14 +39,14 @@ const  App = () => {
     .then((data) => {setItems(data)})
   }
 
-   function onSelect(row) {
+  function onSelect(row) {
     setViewTaskDesc(true);
     setViewTaskId(row.id);
-    }
+  }
 
    function onCloseDescription() {
     setViewTaskDesc(false)
-    }
+  }
 
   function onSaveDescription() {
     alert ("еще не реализованно")
@@ -53,10 +54,11 @@ const  App = () => {
 
   function onDeleteDescription() {
     const deleteRow = window.confirm ("Удалить запись?");
-      if (deleteRow) {
-          ScheduleApiService.deleteEvent(viewTaskId)
-              .then((data) => {setItems(data)})
-      } }
+    if (deleteRow) {
+        ScheduleApiService.deleteEvent(viewTaskId)
+            .then((data) => {setItems(data)})
+    } 
+  }
 
   function onUserChange(user) {
     setUserType(user.target.value);
@@ -68,18 +70,23 @@ const  App = () => {
   }, []);
 
   return (
-       <div>
-         { viewTaskDescript==true
+    <Router>
+      <div>
+      { viewTaskDescript===true
             ?  <Card items={items} viewId={viewTaskId}
                onCloseDescription={onCloseDescription}
                onSaveDescription={onSaveDescription}
                onDeleteDescription={onDeleteDescription}
                />
             :  <div></div> }
-
-      <Header onUserChange={onUserChange}/>
-      <Table items={items} onEdit={onEdit} onSelect={onSelect} onAdd={onAdd} userType={userType}/>
+        <Header onUserChange={onUserChange}/>
+        <Route path="/table">
+          <Table items={items} onEdit={onEdit} onSelect={onSelect} onAdd={onAdd} userType={userType}/>
+        </Route>  
+        <Route path="/calendar" render={() => <h2>Calendar</h2>}></Route>
+        <Route path="/list" render={() => <h2>List</h2>}></Route>
       </div>
+    </Router>
   )
 }
 
