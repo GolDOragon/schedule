@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from '../header/header';
 import AddModal from '../addModal/addModal';
-import Table from '../table/table';
+import AntTable from '../table/table';
 import {Button} from 'antd';
 import 'antd/dist/antd.css';
 import './app.css';
@@ -27,6 +27,10 @@ const  App = () => {
       '', //values.timeZone
       values.comment
     )
+    .then((data) => {
+       data.map((item) => {return item.key = item.id})
+       return data;
+    })
     .then((data) => {setItems(data)})
     setVisible(false);
   };
@@ -50,6 +54,7 @@ const  App = () => {
 
   //В этой функции будет вызов всплывающего окна, в котором будет удаление. Пока что просто удаление.
   function onSelect(row) {
+    console.log(row)
     const deleteRow = window.confirm ("Удалить запись?");
     if (deleteRow) {
       ScheduleApiService.deleteEvent(row.id)
@@ -63,6 +68,10 @@ const  App = () => {
 
   React.useEffect(() => {
     ScheduleApiService.getAllEvents()
+    .then((data) => {
+       data.map((item) => {return item.key = item.id})
+       return data;
+    })
     .then((data) => {setItems(data)});
   }, [])
 
@@ -73,7 +82,7 @@ const  App = () => {
         {userType === 'mentor' && <Button type="primary" onClick={() => {setVisible(true)}}>Добавить событие</Button> }
       </header>
       <AddModal visible={visible} onCreate={onCreate} onCancel={() => {setVisible(false)}}/>
-      <Table items={items} onEdit={onEdit} onSelect={onSelect} userType={userType}/>
+      <AntTable items={items} onEdit={onEdit} onSelect={onSelect} userType={userType}/>
     </div>
   )
 }

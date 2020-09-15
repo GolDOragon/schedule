@@ -1,113 +1,149 @@
-import React  from 'react';
+import React from 'react';
 import './table.css';
-import BootstrapTable from 'react-bootstrap-table-next';
-import cellEditFactory, {Type} from 'react-bootstrap-table2-editor';
-import filterFactory, { textFilter, selectFilter, dateFilter } from 'react-bootstrap-table2-filter';
-import paginationFactory from 'react-bootstrap-table2-paginator';
+import { Table, Input, Button, Space } from 'antd';
+import Highlighter from 'react-highlight-words';
+import { SearchOutlined } from '@ant-design/icons';
 
-function Table(props) {
-  const selectOptionsType = {
-    'Self education': 'Self education',
-    'Deadline': 'Deadline',
-    'Task': 'Task',
-    'Test': 'Test',
-    'Lecture': 'Lecture',
-    'Screening': 'Screening'
+class AntTable extends React.Component {
+  state = {
+    searchText: '',
+    searchedColumn: '',
   };
 
-  const selectOptionsPlace = {
-    'Online': 'Online',
-    'Offline': 'Offline',
-  };
-
-  const columns = [
-    {dataField: 'eventId', text: 'ID', hidden: true},
-    {dataField: 'dateTime', text: 'Дата', sort: true, editor: {type: Type.DATE}, filter: dateFilter(), headerStyle: (colum, colIndex) => {return { width: '5%' };}},
-    {dataField: 'name', text: 'Название', sort: true, filter: textFilter({placeholder: ' ',})},
-    {dataField: 'description', text: 'Описание', sort: true, filter: textFilter({placeholder: ' ',})},
-    {dataField: 'descriptionUrl', text: 'Ссылка', sort: true, headerStyle: (colum, colIndex) => {return { width: '15%' };}},
-    {dataField: 'type', text: 'Событие', sort: true,
-      filter: selectFilter({
-        options: selectOptionsType,
-        placeholder: ' ',
-      }),
-      editor: {
-        type: Type.SELECT,
-        options: [{
-          value: 'Self education',
-          label: 'Self education'
-        }, {
-          value: 'Deadline',
-          label: 'Deadline'
-        }, {
-          value: 'Task',
-          label: 'Task'
-        }, {
-          value: 'Test',
-          label: 'Test'
-        }, {
-          value: 'Lecture',
-          label: 'Lecture'
-        }, {
-          value: 'Screening',
-          label: 'Screening'
-        }]
-      },
-      headerStyle: (colum, colIndex) => {return { width: '5%' };}
-    },
-    {dataField: 'time', text: 'Время', sort: true, filter: textFilter({placeholder: ' ',}), headerStyle: (colum, colIndex) => {return { width: '5%' };}},
-    {dataField: 'place', text: 'Место', sort: true,
-      filter: selectFilter({
-        options: selectOptionsPlace,
-        placeholder: ' ',
-      }),
-      editor: {
-        type: Type.SELECT,
-        options: [{
-          value: 'Online',
-          label: 'Online'
-        }, {
-          value: 'Offline',
-          label: 'Offline'
-        }]
-      },
-      headerStyle: (colum, colIndex) => {return { width: '5%' };}
-    },
-    {dataField: 'timePass', text: 'Срок', sort: true, filter: textFilter({placeholder: ' ',}), headerStyle: (colum, colIndex) => {return { width: '5%' };}},
-    {dataField: 'comment', text: 'Комментарий', sort: true, editor: {type: Type.TEXTAREA}}
-  ];
-  const defaultSorted = [{dataField: 'name', order: 'asc'}];
-  const selectRow = {
-    mode: 'checkbox',
-    clickToSelect: true,
-    clickToEdit: true,
-    hideSelectColumn: true,
-    onSelect: (row) => {
-      props.onSelect(row)
-    }
-  }
-
-  return (
-    <div className="table-wrapper">
-      <div>
-        <BootstrapTable
-        responsive
-        keyField='id'
-        data={props.items}
-        columns={columns}
-        defaultSorted={defaultSorted}
-        selectRow={selectRow}
-        cellEdit={
-          props.userType === 'mentor'
-            ? cellEditFactory({mode: 'dbclick', afterSaveCell: (oldValue, newValue, row, column) => {props.onEdit(newValue, row)}})
-            : cellEditFactory({})
-        }
-        filter={ filterFactory() }
-        pagination={ paginationFactory() }
+  getColumnSearchProps = dataIndex => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+      <div style={{ padding: 8 }}>
+        <Input
+          ref={node => {
+            this.searchInput = node;
+          }}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{ width: 188, marginBottom: 8, display: 'block' }}
         />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Search
+          </Button>
+          <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+            Reset
+          </Button>
+        </Space>
       </div>
-    </div>
-  );
+    ),
+    filterIcon: filtered => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
+    onFilter: (value, record) =>
+      record[dataIndex]
+        ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
+        : '',
+    onFilterDropdownVisibleChange: visible => {
+      if (visible) {
+        setTimeout(() => this.searchInput.select(), 100);
+      }
+    },
+    render: text =>
+      this.state.searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+          searchWords={[this.state.searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ''}
+        />
+      ) : (
+        text
+      ),
+  });
+
+  handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    this.setState({
+      searchText: selectedKeys[0],
+      searchedColumn: dataIndex,
+    });
+  };
+
+  handleReset = clearFilters => {
+    clearFilters();
+    this.setState({ searchText: '' });
+  };
+
+  render() {
+    const columns = [
+      {dataIndex: 'dateTime',
+        key: 'dateTime',
+        title: 'Дата',
+        defaultSortOrder: 'descend',
+        sorter: (a, b) => new Date(a.dateTime) - new Date(b.dateTime),
+        sortDirections: ['descend', 'ascend'],
+        editable: true,
+      },
+      {dataIndex: 'name',
+        key: 'name',
+        title: 'Название',
+        ...this.getColumnSearchProps('name'),
+        sorter: (a, b) => a.name.localeCompare(b.name),
+        editable: true,
+      },
+      {dataIndex: 'description',
+        key: 'description',
+        title: 'Описание',
+        ...this.getColumnSearchProps('description'),
+        editable: true,
+      },
+      {dataIndex: 'descriptionUrl', key: 'descriptionUrl', title: 'Ссылка', editable: true,},
+      {dataIndex: 'type',
+        key: 'type',
+        title: 'Событие',
+        filters: [{
+            value: 'Self education',
+            text: 'Self education'
+          }, {
+            value: 'Deadline',
+            text: 'Deadline'
+          }, {
+            value: 'Task',
+            text: 'Task'
+          }, {
+            value: 'Test',
+            text: 'Test'
+          }, {
+            value: 'Lecture',
+            text: 'Lecture'
+          }, {
+            value: 'Screening',
+            text: 'Screening'
+          }],
+        onFilter: (value, record) => record.type.indexOf(value) === 0,
+        editable: true,
+      },
+      {dataIndex: 'time', key: 'time', title: 'Время', editable: true,},
+      {dataIndex: 'place', key: 'place', title: 'Место', editable: true,},
+      {dataIndex: 'timePass', key: 'timePass', title: 'Срок', editable: true,},
+      {dataIndex: 'comment', key: 'comment', title: 'Комментарий', editable: true,}
+    ];
+
+    return (
+      <div className="table-wrapper">
+        <div>
+          <Table dataSource={this.props.items} columns={columns}
+          onRow={(record, rowIndex) => {
+              return {
+                onDoubleClick: () => this.props.onSelect(record), // double click row
+              };
+            }}
+          />;
+        </div>
+      </div>
+    );
+  }
 }
 
-export default Table;
+export default AntTable;
