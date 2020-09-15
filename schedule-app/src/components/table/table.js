@@ -149,15 +149,15 @@ class AntTable extends React.Component {
       selectedRowKeys,
       onChange: this.onSelectedRowKeysChange,
     };
-    
+
     return (
       <div className="table-wrapper tablesaw-overflow">
         <div>
           <Table dataSource={this.props.items} columns={columns} rowSelection={rowSelection}
           onRow={(record, rowIndex) => {
               return {
-                onDoubleClick: () => this.props.onSelect(record),
-                onClick: () => {this.selectRow(record);},
+                onClick: () => this.props.onSelect(record),
+                //onClick: () => {this.selectRow(record);},
               };
             }}
           />;
