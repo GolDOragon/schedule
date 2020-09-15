@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React from 'react'
 import './сard.css';
 
 
@@ -11,7 +11,7 @@ const  Card = (props) => {
     let TaskInArrayId;
     function findIdTask() {
         for (let i = 0; i < objData.length; i++) {
-            if (taskLongId == objData[i].id) {
+            if (taskLongId === objData[i].id) {
                 TaskInArrayId = i;
             }
         }
@@ -19,7 +19,7 @@ const  Card = (props) => {
     }
     findIdTask();
 
-    if (objData[TaskInArrayId]==undefined) {objData[TaskInArrayId]={}}
+    if (objData[TaskInArrayId] === undefined) {objData[TaskInArrayId]={}}
     let Data=objData[TaskInArrayId]
 
 // ------- как отсюда отдать данные и как сформировать новый объект с данными ?  ------------------
