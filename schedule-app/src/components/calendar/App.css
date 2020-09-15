@@ -50,6 +50,8 @@ a.bott:hover{
   cursor: pointer;
 }
 
+a {color: black !important;}
+
 a.bott{
 display: block;
 font-size: 1.1em;
@@ -60,7 +62,7 @@ font: bold 14px arial;
 text-transform: uppercase;
 padding: 10px 15px;
 margin: 10px auto;
-color: #ccc;
+color: #ccc !important;
 background-color: #555;
 background-image: linear-gradient(to top, #888 0%, #555 100%);
 background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #888), color-stop(1, #555));

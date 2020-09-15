@@ -16,7 +16,6 @@ export function EventCalendar(props) {
   return (
     <div className="App" ref={ref}>
       <FullCalendar
-        // timeZone = "local"
         displayEventTime = "true"
         buttonIcons = "true"
         height = "auto"
@@ -44,7 +43,7 @@ export function EventCalendar(props) {
         events = {List}
       />
       <Pdf targetRef={ref} filename="file.pdf" x={5} y={5} scale={.5}>
-         {({ toPdf }) => <a href="/#" className="bott" onClick={toPdf}>Save</a>}
+         {({ toPdf }) => <a href="# " className="bott" onClick={toPdf}>Save</a>}
       </Pdf>
     </div>
   );
