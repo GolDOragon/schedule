@@ -2,7 +2,7 @@ import React from 'react'
 import ScheduleApiService from '../../services/scheduleApi-service'
 import {EventCalendar} from './EventCalendar'
 
-const  App = () => {
+const  AppCalendar = () => {
   const [items, setItems] = React.useState([]);
 
   React.useEffect(() => {
@@ -19,4 +19,4 @@ const  App = () => {
   )
 }
 
-export default App;
+export default AppCalendar;
