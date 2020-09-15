@@ -4,6 +4,7 @@ import  { BrowserRouter as Router, Route } from 'react-router-dom';
 import Header from '../header/header';
 import AddModal from '../addModal/addModal';
 import AntTable from '../table/table';
+import Calendar from '../calendar/app';
 import Card from '../card/card';
 import {Button} from 'antd';
 import 'antd/dist/antd.css';
@@ -112,7 +113,9 @@ const  App = () => {
         <Route path="/table">
           <AntTable items={items} onEdit={onEdit} onSelect={onSelect} userType={userType}/>
         </Route>
-        <Route path="/calendar" render={() => <h2>Calendar</h2>}></Route>
+        <Route path="/calendar">
+          <Calendar />                              
+        </Route>
         <Route path="/list" render={() => <h2>List</h2>}></Route>
       </div>
     </Router>
