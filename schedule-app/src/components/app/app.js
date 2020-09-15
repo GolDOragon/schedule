@@ -1,7 +1,7 @@
 import React  from 'react';
 import './app.css';
 
-import List from '../list/list';
+import ListRS from '../listRS/listRS';
 
 import Header from '../header/header';
 import Table from '../table/table';
@@ -57,7 +57,7 @@ const  App = () => {
       <Header onUserChange={onUserChange}/>
       <Table items={items} onEdit={onEdit} onSelect={onSelect} onAdd={onAdd} userType={userType}/>
       <hr></hr>
-      <List />
+      <ListRS items={items}/>
 
     </div>
   )
