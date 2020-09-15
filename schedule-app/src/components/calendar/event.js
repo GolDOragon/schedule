@@ -9,7 +9,6 @@ function Array(props) {
     else{
     time = 'T' + props.items[i].time;
     }
-    console.log(time);
     let date=props.items[i].dateTime;
     let place=props.items[i].place;
     let type=props.items[i].type;
