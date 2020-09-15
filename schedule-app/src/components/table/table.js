@@ -8,7 +8,21 @@ class AntTable extends React.Component {
   state = {
     searchText: '',
     searchedColumn: '',
+    selectedRowKeys: [],
   };
+
+  selectRow = (record) => {
+    const selectedRowKeys = [...this.state.selectedRowKeys];
+    if (selectedRowKeys.indexOf(record.key) >= 0) {
+      selectedRowKeys.splice(selectedRowKeys.indexOf(record.key), 1);
+    } else {
+      selectedRowKeys.push(record.key);
+    }
+    this.setState({ selectedRowKeys });
+  }
+  onSelectedRowKeysChange = (selectedRowKeys) => {
+    this.setState({ selectedRowKeys });
+  }
 
   getColumnSearchProps = dataIndex => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
@@ -130,13 +144,20 @@ class AntTable extends React.Component {
       {dataIndex: 'comment', key: 'comment', title: 'Комментарий', editable: true,}
     ];
 
+    const { selectedRowKeys } = this.state;
+    const rowSelection = {
+      selectedRowKeys,
+      onChange: this.onSelectedRowKeysChange,
+    };
+    
     return (
-      <div className="table-wrapper">
+      <div className="table-wrapper tablesaw-overflow">
         <div>
-          <Table dataSource={this.props.items} columns={columns}
+          <Table dataSource={this.props.items} columns={columns} rowSelection={rowSelection}
           onRow={(record, rowIndex) => {
               return {
-                onDoubleClick: () => this.props.onSelect(record), // double click row
+                onDoubleClick: () => this.props.onSelect(record),
+                onClick: () => {this.selectRow(record);},
               };
             }}
           />;
