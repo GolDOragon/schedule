@@ -6,7 +6,7 @@ class ScheduleApiService {
     const res = await fetch(`${this._apiBase}${url}`);
 
       if(!res.ok) {
-        throw new Error(`Could not fetch ${url}` +
+        throw new Error(`Could not fetch ${url}` + 
         `,recived ${res.status}`)
       }
       return await res.json();
@@ -44,6 +44,7 @@ class ScheduleApiService {
       },
       body: JSON.stringify(body),
     })
+    return this.getAllEvents();
   }
 
   async updateEvent(eventId, dateTime, time, type, name, timePass, description, descriptionUrl, place, timeZone, comment){
@@ -79,6 +80,7 @@ class ScheduleApiService {
         'Content-Type': 'application/json',
       },
     })
+    return this.getAllEvents();
   }
 
   async getAllOrganizers() {
@@ -145,7 +147,7 @@ class ScheduleApiService {
       place: event.place,
       timeZone : event.timeZone,
       comment: event.comment
-    }
+    } 
   }
 
   _transwormOrganizer(organizer) {
