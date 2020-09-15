@@ -1,73 +1,74 @@
-import React, {Component} from 'react'
+import React, {useState} from 'react';
 import './сard.css';
 
+class Card extends React.Component {
 
-const  Card = (props) => {
-
-    // получение данных расписания для выбора и рендера строки
-    let taskLongId=props.viewId
-    let objData=Object.values(props.items)
-
-    let TaskInArrayId;
-    function findIdTask() {
-        for (let i = 0; i < objData.length; i++) {
-            if (taskLongId == objData[i].id) {
-                TaskInArrayId = i;
-            }
-        }
-        return TaskInArrayId
+    state={};
+    componentDidMount(){
+        this.setState(this.props.items)
     }
-    findIdTask();
 
-    if (objData[TaskInArrayId]==undefined) {objData[TaskInArrayId]={}}
-    let Data=objData[TaskInArrayId]
+    render = () => {
+        let headerKeys = Object.keys(this.state)
+        let TableHeader=()=> {
+            return headerKeys.map((key, index) => {
+                return <tr index={index}>{key.toUpperCase()}:</tr>
+            }) }
 
-// ------- как отсюда отдать данные и как сформировать новый объект с данными ?  ------------------
-
-      function changeValue (e) {
-      // props.changeTitle(viewId, e.currentTarget.value);
-      console.log (e.currentTarget.id, e.currentTarget.value, taskLongId)
-    }
- // ------------------------------------------------------------------------------------------------
-
-    function TableHeader() {
-    let headerKeys = Object.keys(Data)
-    return headerKeys.map((key, index) => {
-      return <tr index={index}>{key.toUpperCase()}:</tr>
-    }) }
-
-    function TableElement() {
-    let objValue = Object.values(Data)
-    return objValue.map((element,id) => {
-      return <tr> <input
-      onChange={changeValue}
-      className="input"
-      value={element}
-      id={id} />
-      </tr>
-    })  }
+        let objValue=Object.values(this.state);
+        let TableElement=()=> {
+            return objValue.map((element,id) => {
+                return <tr> <input
+                    onChange={changeValue}
+                    className="input"
+                    value={element}
+                    id={id} />
+                </tr>
+            })  }
 
 
-  return (
+
+        let newObjValue
+        let changeValue=(e)=> {
+            newObjValue=objValue.map((element,id) => {
+                if (id != e.currentTarget.id) {return element }
+                else {return e.currentTarget.value}
+            });
+
+            let newRow={};
+            for (let i=0; i<headerKeys.length; i++) {
+                if (typeof newRow[headerKeys[i]] === 'undefined') {
+                    newRow[headerKeys[i]] = newObjValue[i];
+                } else {
+                    if (newRow[headerKeys[i]] instanceof Array === false) {
+                        newRow[headerKeys[i]] = [newRow[headerKeys[i]]];
+                    }
+                    newRow[headerKeys[i]].push(newObjValue[i]);
+                } }
+            this.setState(newRow)
+        };
 
 
-        <div id="fogging">
-            <div id="okno">
+        return (
+            <div id="fogging">
+                <div id="okno">
                     <div className="taskBox">
                         <table id="table" >
-                          {TableHeader()}
+                            {TableHeader()}
                         </table>
                         <table id="table">
-                          {TableElement()};
+                            {TableElement()}
                         </table>
                     </div>
-                       <button className="button" onClick={()=>props.onDeleteDescription()}>Удалить распиание</button>
-                       <button className="button" onClick={()=>props.onSaveDescription()}>Сохранить</button>
-                       <button className="button" onClick={()=>props.onCloseDescription()}>Закрыть</button>
+                    <button className="button" onClick={()=>this.props.onDeleteDescription()}>Удалить событие</button>
+                    <button className="button" onClick={()=>this.props.onSaveDescription(this.state)}>Сохранить</button>
+                    <button className="button" onClick={()=>this.props.onCloseDescription()}>Закрыть</button>
+                    </div>
             </div>
-        </div>
 
-)
+        );
+    }
 }
 
 export default Card;
+

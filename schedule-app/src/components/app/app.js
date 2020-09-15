@@ -4,6 +4,9 @@ import  { BrowserRouter as Router, Route } from 'react-router-dom';
 import Header from '../header/header';
 import Table from '../table/table';
 import Card from '../card/card';
+
+
+
 import ScheduleApiService from '../../services/scheduleApi-service'
 
 
@@ -13,12 +16,12 @@ const  App = () => {
 
   // сетаем в стейт показывать ли описание таски
   const [viewTaskDescript, setViewTaskDesc] = React.useState(false);
-  // сетаем в стейт ID какой таски показывать
-  const [viewTaskId, setViewTaskId] = React.useState(1);
+
+  // сетаем в стейт  Row
+  const [viewTaskRow, setTaskRow] = React.useState();
 
 
   function onEdit(newValue, row) {
-    console.log(newValue, row)
     ScheduleApiService.updateEvent(
       row.id,
       row.dateTime,
@@ -41,22 +44,40 @@ const  App = () => {
 
   function onSelect(row) {
     setViewTaskDesc(true);
-    setViewTaskId(row.id);
+    setTaskRow(row);
   }
 
    function onCloseDescription() {
     setViewTaskDesc(false)
   }
 
-  function onSaveDescription() {
-    alert ("еще не реализованно")
+  function onSaveDescription(row) {
+    ScheduleApiService.updateEvent(
+        row.id,
+        row.dateTime,
+        row.time,
+        row.type,
+        row.name,
+        row.timePass,
+        row.description,
+        row.descriptionUrl,
+        row.place,
+        row.timeZone,
+        row.comment
+    )
+    console.log (row)
+    alert ("сохранение")
+
+
   }
 
   function onDeleteDescription() {
     const deleteRow = window.confirm ("Удалить запись?");
     if (deleteRow) {
-        ScheduleApiService.deleteEvent(viewTaskId)
+        ScheduleApiService.deleteEvent(viewTaskRow.id)
             .then((data) => {setItems(data)})
+      setViewTaskDesc(false);
+        alert("Запись будет удалена");
     } 
   }
 
@@ -72,13 +93,11 @@ const  App = () => {
   return (
     <Router>
       <div>
-      { viewTaskDescript===true
-            ?  <Card items={items} viewId={viewTaskId}
-               onCloseDescription={onCloseDescription}
-               onSaveDescription={onSaveDescription}
-               onDeleteDescription={onDeleteDescription}
-               />
-            :  <div></div> }
+          { viewTaskDescript===true
+          ?  <Card items={viewTaskRow} onCloseDescription={onCloseDescription}
+                                       onSaveDescription={onSaveDescription}
+                                       onDeleteDescription={onDeleteDescription} />
+          : <div></div> }
         <Header onUserChange={onUserChange}/>
         <Route path="/table">
           <Table items={items} onEdit={onEdit} onSelect={onSelect} onAdd={onAdd} userType={userType}/>
