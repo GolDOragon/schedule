@@ -1,3 +1,4 @@
+let ListDemo = [];
 let List = [];
 function Array(props) {
   for(let i = 0; i < props.items.length; i++){
@@ -31,8 +32,10 @@ function Array(props) {
     if(type === 'screening'){
       typeColor = '#a55ff2fc';
     }
-    List.push({ title: "[" + type + "] " + name + " (" + place +")", backgroundColor: typeColor, start: date + time})
+    ListDemo.push({ title: "[" + type + "] " + name + " (" + place +")", backgroundColor: typeColor, start: date + time})
   }
+  List=ListDemo;
+  ListDemo=[];
 }
 
 export {Array, List};

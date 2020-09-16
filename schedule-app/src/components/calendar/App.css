@@ -41,6 +41,10 @@
     overflow: visible!important;
 }
 
+.fc-v-event .fc-event-title {
+    overflow: auto;
+}
+
 .fc-h-event {
     display: block;
     border: none;
