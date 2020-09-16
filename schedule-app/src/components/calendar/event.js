@@ -1,17 +1,17 @@
 let List = [];
-function Array(props1) {
-  for(let i = 0; i < props1.items.length; i++){
-    let name=props1.items[i].name;
+function Array(props) {
+  for(let i = 0; i < props.items.length; i++){
+    let name=props.items[i].name;
     let time;
-    if(props1.items[i].time === undefined || props1.items[i].time.length === 0){
+    if(props.items[i].time === undefined || props.items[i].time.length === 0){
     time = "";
     }
     else{
-    time = 'T' + props1.items[i].time;
+    time = 'T' + props.items[i].time;
     }
-    let date=props1.items[i].dateTime;
-    let place=props1.items[i].place;
-    let type=props1.items[i].type;
+    let date=props.items[i].dateTime;
+    let place=props.items[i].place;
+    let type=props.items[i].type;
     let typeColor;
     if(type === 'self education'){
       typeColor = '#d9d9d9';
