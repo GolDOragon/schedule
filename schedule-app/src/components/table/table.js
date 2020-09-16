@@ -112,7 +112,12 @@ class AntTable extends React.Component {
         ...this.getColumnSearchProps('description'),
 
       },
-      {dataIndex: 'descriptionUrl', key: 'descriptionUrl', title: 'Ссылка', },
+      {dataIndex: 'descriptionUrl', key: 'descriptionUrl', title: 'Ссылка',
+        render: link => {
+          if (link.length === 0) return false;
+          return <a target="_blank" rel="noopener noreferrer" href={link}>Ссылка</a>
+        }
+      },
       {dataIndex: 'type',
         key: 'type',
         title: 'Событие',
@@ -166,7 +171,7 @@ class AntTable extends React.Component {
           <Table dataSource={this.props.items} columns={columns} rowSelection={rowSelection}
           onRow={(record, rowIndex) => {
               return {
-                onClick: () => this.props.onSelect(record),
+                onDoubleClick: () => this.props.onSelect(record),
                 //onClick: () => {this.selectRow(record);},
               };
             }}
