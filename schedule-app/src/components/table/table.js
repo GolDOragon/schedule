@@ -1,6 +1,6 @@
 import React from 'react';
 import './table.css';
-import { Table, Input, Button, Space } from 'antd';
+import { Table, Input, Button, Space, Tag } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 
@@ -97,25 +97,35 @@ class AntTable extends React.Component {
         defaultSortOrder: 'descend',
         sorter: (a, b) => new Date(a.dateTime) - new Date(b.dateTime),
         sortDirections: ['descend', 'ascend'],
-        editable: true,
+
       },
       {dataIndex: 'name',
         key: 'name',
         title: 'Название',
         ...this.getColumnSearchProps('name'),
         sorter: (a, b) => a.name.localeCompare(b.name),
-        editable: true,
+
       },
       {dataIndex: 'description',
         key: 'description',
         title: 'Описание',
         ...this.getColumnSearchProps('description'),
-        editable: true,
+
       },
-      {dataIndex: 'descriptionUrl', key: 'descriptionUrl', title: 'Ссылка', editable: true,},
+      {dataIndex: 'descriptionUrl', key: 'descriptionUrl', title: 'Ссылка', },
       {dataIndex: 'type',
         key: 'type',
         title: 'Событие',
+        render: type => {
+                let color='';
+                if (type === 'Deadline') {color = 'red'}
+                if (type === 'Self education') {color = 'green'}
+                if (type === 'Task') {color = 'orange'}
+                if (type === 'Test') {color = 'blue'}
+                if (type === 'Lecture') {color = 'cyan'}
+                if (type === 'Screening') {color = 'magenta'}
+                return (<Tag color={color} key={type}>{type}</Tag>);
+                },
         filters: [{
             value: 'Self education',
             text: 'Self education'
@@ -136,12 +146,12 @@ class AntTable extends React.Component {
             text: 'Screening'
           }],
         onFilter: (value, record) => record.type.indexOf(value) === 0,
-        editable: true,
+
       },
-      {dataIndex: 'time', key: 'time', title: 'Время', editable: true,},
-      {dataIndex: 'place', key: 'place', title: 'Место', editable: true,},
-      {dataIndex: 'timePass', key: 'timePass', title: 'Срок', editable: true,},
-      {dataIndex: 'comment', key: 'comment', title: 'Комментарий', editable: true,}
+      {dataIndex: 'time', key: 'time', title: 'Время', },
+      {dataIndex: 'place', key: 'place', title: 'Место', },
+      {dataIndex: 'timePass', key: 'timePass', title: 'Срок', },
+      {dataIndex: 'comment', key: 'comment', title: 'Комментарий', }
     ];
 
     const { selectedRowKeys } = this.state;
