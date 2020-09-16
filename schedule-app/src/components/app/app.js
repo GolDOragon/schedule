@@ -5,6 +5,7 @@ import Header from '../header/header';
 import AddModal from '../addModal/addModal';
 import AddMentorModal from '../addMentorModal/addMentorModal';
 import AntTable from '../table/table';
+import {EventCalendar} from '../calendar/EventCalendar'
 import Card from '../card/card';
 import {Button} from 'antd';
 import 'antd/dist/antd.css';
@@ -138,7 +139,9 @@ const  App = () => {
         <Route path="/table">
           <AntTable items={items} onEdit={onEdit} onSelect={onSelect} userType={userType} organizers={organizers}/>
         </Route>
-        <Route path="/calendar" render={() => <h2>Calendar</h2>}></Route>
+        <Route path="/calendar">
+          <EventCalendar items={items}/>
+        </Route>
         <Route path="/list" render={() => <h2>List</h2>}></Route>
       </div>
     </Router>
