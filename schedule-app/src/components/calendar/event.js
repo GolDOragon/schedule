@@ -3,7 +3,7 @@ function Array(props) {
   for(let i = 0; i < props.items.length; i++){
     let name=props.items[i].name;
     let time;
-    if(props.items[i].time.length === 0){
+    if(props.items[i].time === undefined || props.items[i].time.length === 0){
     time = "";
     }
     else{
