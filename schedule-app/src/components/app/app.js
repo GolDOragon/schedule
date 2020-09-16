@@ -4,10 +4,11 @@ import  { BrowserRouter as Router, Route } from 'react-router-dom';
 import Header from '../header/header';
 import AddModal from '../addModal/addModal';
 import AntTable from '../table/table';
-import Card from '../card/card';
+// import Card from '../card/card';
 import {Button} from 'antd';
 import 'antd/dist/antd.css';
-import ScheduleApiService from '../../services/scheduleApi-service'
+import ScheduleApiService from '../../services/scheduleApi-service';
+import TestCard from '../card/testCard'
 
 
 const  App = () => {
@@ -41,7 +42,7 @@ const  App = () => {
   const [viewTaskDescript, setViewTaskDesc] = React.useState(false);
   // сетаем в стейт ID какой таски показывать
   const [viewTaskId, setViewTaskId] = React.useState(1);
-
+  const [event, setEvent] = React.useState([]);
 
   function onEdit(newValue, row) {
     console.log(newValue, row)
@@ -63,6 +64,8 @@ const  App = () => {
   function onSelect(row) {
     setViewTaskDesc(true);
     setViewTaskId(row.id);
+    setEvent(row)
+    console.log(row);
   }
 
    function onCloseDescription() {
@@ -97,23 +100,26 @@ const  App = () => {
   return (
     <Router>
       <div>
-      { viewTaskDescript===true
+      {/* { viewTaskDescript===true
             ?  <Card items={items} viewId={viewTaskId}
                onCloseDescription={onCloseDescription}
                onSaveDescription={onSaveDescription}
                onDeleteDescription={onDeleteDescription}
                />
-            :  <div></div> }
+            :  <div></div> } */}
         <header>
           <Header onUserChange={onUserChange}/>
           {userType === 'mentor' && <Button type="primary" onClick={() => {setVisible(true)}}>Добавить событие</Button> }
         </header>
         <AddModal visible={visible} onCreate={onCreate} onCancel={() => {setVisible(false)}}/>
-        <Route path="/table">
+        <Route path="/" exact>
           <AntTable items={items} onEdit={onEdit} onSelect={onSelect} userType={userType}/>
         </Route>
         <Route path="/calendar" render={() => <h2>Calendar</h2>}></Route>
         <Route path="/list" render={() => <h2>List</h2>}></Route>
+        <Route path="/card">
+          <TestCard items={items} viewId={viewTaskId} event={event}/>
+        </Route>
       </div>
     </Router>
   )
