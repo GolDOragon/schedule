@@ -45,6 +45,18 @@
     overflow: auto;
 }
 
+.fc-h-event .fc-event-main {
+    color: black;
+    color: var(--fc-event-text-color, black);
+    font-weight: bold;
+}
+
+.fc-v-event .fc-event-main {
+  color: black;
+  color: var(--fc-event-text-color, black);
+  font-weight: bold;
+}
+
 .fc-h-event {
     display: block;
     border: none;
