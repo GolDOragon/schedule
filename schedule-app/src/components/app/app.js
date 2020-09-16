@@ -3,6 +3,7 @@ import './app.css';
 import  { BrowserRouter as Router, Route } from 'react-router-dom';
 import Header from '../header/header';
 import AddModal from '../addModal/addModal';
+import AddMentorModal from '../addMentorModal/addMentorModal';
 import AntTable from '../table/table';
 import Card from '../card/card';
 import {Button} from 'antd';
@@ -14,7 +15,8 @@ const  App = () => {
   const [items, setItems] = React.useState([]);
   const [userType, setUserType] = React.useState('mentor');
   const [visible, setVisible] = React.useState(false);
-
+  const [visibleM, setVisibleM] = React.useState(false);
+  const [organizers, setOrganaizers] = React.useState([]);
 
   function onCreate(values) {
     ScheduleApiService.addEvent(
@@ -27,7 +29,11 @@ const  App = () => {
       values.descriptionUrl,
       values.place,
       '', //values.timeZone
-      values.comment
+      values.comment,
+      values.picture,
+      values.video,
+      values.map,
+      values.mentor
     )
     .then((data) => {
        data.map((item) => {return item.key = item.id})
@@ -37,6 +43,12 @@ const  App = () => {
     setVisible(false);
   };
 
+  function onMentorCreate(values) {
+    ScheduleApiService.addOrganizer(values)
+    .then((data) => {setOrganaizers(data)})
+    setVisibleM(false);
+  }
+
   // сетаем в стейт показывать ли описание таски
   const [viewTaskDescript, setViewTaskDesc] = React.useState(false);
   // сетаем в стейт ID какой таски показывать
@@ -44,7 +56,6 @@ const  App = () => {
 
 
   function onEdit(newValue, row) {
-    console.log(newValue, row)
     ScheduleApiService.updateEvent(
       row.id,
       row.dateTime,
@@ -56,7 +67,11 @@ const  App = () => {
       row.descriptionUrl,
       row.place,
       row.timeZone,
-      row.comment
+      row.comment,
+      row.picture,
+      row.video,
+      row.map,
+      row.mentor,
     )
   }
 
@@ -94,6 +109,15 @@ const  App = () => {
     .then((data) => {setItems(data)});
   }, []);
 
+  React.useEffect(() => {
+    ScheduleApiService.getAllOrganizers()
+    .then((data) => {
+       data.map((item) => {return item.key = item.id})
+       return data;
+    })
+    .then((data) => {setOrganaizers(data)});
+  }, []);
+
   return (
     <Router>
       <div>
@@ -107,10 +131,12 @@ const  App = () => {
         <header>
           <Header onUserChange={onUserChange}/>
           {userType === 'mentor' && <Button type="primary" onClick={() => {setVisible(true)}}>Добавить событие</Button> }
+          {userType === 'mentor' && <Button className="secondBtn" type="primary" onClick={() => {setVisibleM(true)}}>Добавить ментора</Button> }
         </header>
-        <AddModal visible={visible} onCreate={onCreate} onCancel={() => {setVisible(false)}}/>
+        <AddModal visible={visible} onCreate={onCreate} organizers={organizers} onCancel={() => {setVisible(false)}}/>
+        <AddMentorModal visible={visibleM} onCreate={onMentorCreate} onCancel={() => {setVisibleM(false)}}/>
         <Route path="/table">
-          <AntTable items={items} onEdit={onEdit} onSelect={onSelect} userType={userType}/>
+          <AntTable items={items} onEdit={onEdit} onSelect={onSelect} userType={userType} organizers={organizers}/>
         </Route>
         <Route path="/calendar" render={() => <h2>Calendar</h2>}></Route>
         <Route path="/list" render={() => <h2>List</h2>}></Route>

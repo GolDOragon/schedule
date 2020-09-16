@@ -94,6 +94,7 @@ class AntTable extends React.Component {
       {dataIndex: 'dateTime',
         key: 'dateTime',
         title: 'Дата',
+        className: 'dateTime',
         defaultSortOrder: 'descend',
         sorter: (a, b) => new Date(a.dateTime) - new Date(b.dateTime),
         sortDirections: ['descend', 'ascend'],
@@ -123,7 +124,7 @@ class AntTable extends React.Component {
         title: 'Событие',
         render: type => {
                 let color='';
-                if (type === 'Deadline') {color = 'red'}
+                if (type === 'Deadline') {color = '#f5222d'}
                 if (type === 'Self education') {color = 'green'}
                 if (type === 'Task') {color = 'orange'}
                 if (type === 'Test') {color = 'blue'}
@@ -156,7 +157,24 @@ class AntTable extends React.Component {
       {dataIndex: 'time', key: 'time', title: 'Время', },
       {dataIndex: 'place', key: 'place', title: 'Место', },
       {dataIndex: 'timePass', key: 'timePass', title: 'Срок', },
-      {dataIndex: 'comment', key: 'comment', title: 'Комментарий', }
+      {dataIndex: 'comment', key: 'comment', title: 'Комментарий', },
+      {dataIndex: 'mentor', key: 'mentor', title: 'Ментор',
+      render: mentor => {
+                let fullMentor = {};
+                this.props.organizers.forEach((item) => {
+                  if (item.id === mentor) fullMentor = item;
+                });
+                const divStyle = {
+                  backgroundImage: 'url(' + fullMentor.face + ')',
+                };
+                if (fullMentor.id) return (
+                  <div className="mentor-cell" >
+                    <div style={divStyle}></div>
+                    <a href={fullMentor.gitLink} target="_blank" rel="noopener noreferrer">{fullMentor.name}</a>
+                  </div>
+                )
+              },
+      }
     ];
 
     const { selectedRowKeys } = this.state;

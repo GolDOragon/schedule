@@ -6,7 +6,11 @@ function AddModal(props) {
   const [form] = Form.useForm();
   const [eventType, setEventType] = React.useState('');
   const timeFormat = 'HH:mm';
-
+  const { Option } = Select;
+  const children = [];
+  for (let i = 0; i < props.organizers.length; i++) {
+    children.push(<Option key={props.organizers[i].id}>{props.organizers[i].name}</Option>);
+  }
   return (
     <Modal
       visible={props.visible}
@@ -41,6 +45,9 @@ function AddModal(props) {
         timePass: '',
         place: 'Online',
         comment: '',
+        picture: '',
+        video: '',
+        map: '',
       }}
       >
       <Form.Item name='type' label='Событие'>
@@ -66,6 +73,14 @@ function AddModal(props) {
       </Form.Item>
       <Form.Item name='timePass' label='Срок' hidden={(eventType !== 'Self education' || eventType !== 'Task' || eventType !== 'Test') && true}><Input /></Form.Item>
       <Form.Item name='comment' label='Комментарий'><Input.TextArea /></Form.Item>
+      <Form.Item name='picture' label='Картинка' hidden={(eventType === 'Deadline' || eventType === 'Test') && true}><Input /></Form.Item>
+      <Form.Item name='video' label='Видео' hidden={(eventType === 'Deadline' || eventType === 'Test' || eventType === 'Deadline') && true}><Input /></Form.Item>
+      <Form.Item name='map' label='Карта' hidden={(eventType !== 'Lecture') && true}><Input /></Form.Item>
+      <Form.Item name='mentor' label='Ментор'>
+        <Select>
+          {children}
+        </Select>
+      </Form.Item>
     </Form>
     </Modal>
   );
