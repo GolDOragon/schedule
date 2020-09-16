@@ -14,25 +14,28 @@ function Array(props) {
     let place=props.items[i].place;
     let type=props.items[i].type;
     let typeColor;
-    if(type === 'self education'){
+        console.log(type);
+    if(type === 'Self education'){
       typeColor = '#d9d9d9';
     }
-    if(type === 'deadline'){
+    if(type === 'Deadline'){
       typeColor = '#f5222d';
     }
-    if(type === 'task'){
-      typeColor = '#b7eb8f';
+    if(type === 'Task'){
+      typeColor = '#52c41a';
     }
-    if(type === 'test'){
-      typeColor = '#4e86ba';
+    if(type === 'Test'){
+      typeColor = '#1890ff';
     }
-    if(type === 'lecture'){
-      typeColor = '#f2e75ffc';
+    if(type === 'Lecture'){
+      typeColor = '#fa8c16';
     }
-    if(type === 'screening'){
-      typeColor = '#a55ff2fc';
+    if(type === 'Screening'){
+      typeColor = '#722ed1';
     }
+        console.log(typeColor);
     ListDemo.push({ title: "[" + type + "] " + name + " (" + place +")", backgroundColor: typeColor, start: date + time})
+    console.log(ListDemo);
   }
   List=ListDemo;
   ListDemo=[];
