@@ -19,7 +19,6 @@ const  App = () => {
   const [visible, setVisible] = React.useState(false);
   const [visibleM, setVisibleM] = React.useState(false);
   const [organizers, setOrganaizers] = React.useState([]);
-  
 
   function onCreate(values) {
     ScheduleApiService.addEvent(
@@ -124,8 +123,6 @@ const  App = () => {
     .then((data) => {setOrganaizers(data)});
   }, []);
 
-
-
   return (
     <Router>
       <div>
@@ -150,7 +147,7 @@ const  App = () => {
           <EventCalendar items={items}/>
         </Route>
         <Route path="/list" render={() => <h2>List</h2>}></Route>
-        <Route path="/card">
+        <Route path="/page">
           <Page items={items} viewId={viewTaskId} event={event} />
         </Route>
       </div>

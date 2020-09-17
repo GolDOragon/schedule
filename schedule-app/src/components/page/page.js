@@ -40,7 +40,10 @@ const Page = (props)=> {
           <span>{dateTime}</span>
           <span className="p-2">{time}</span>
           <span className="float-right"><Rate allowHalf defaultValue={2.5} /></span>
-          <Organizer organizerId={mentor}/>
+          {mentor!==undefined &&
+          <Organizer organizerId={mentor}/> 
+          }
+          
           <Divider orientation="left">Описание:</Divider>
           {description.length!==0 &&
             <p>{description}</p>
