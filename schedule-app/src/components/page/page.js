@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
-import './сard.css';
 import { Card, Input, Tag, Divider, Rate, Space, Row, Col } from 'antd';
 import Feedback from './feedback';
 import SimpleMap from './map';
-import './testCard.css';
+import './page.css';
 import { EditOutlined, EllipsisOutlined, SettingOutlined} from '@ant-design/icons';
 
 const { TextArea } = Input;
