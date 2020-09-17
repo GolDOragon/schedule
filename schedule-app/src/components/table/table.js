@@ -160,7 +160,7 @@ class AntTable extends React.Component {
       },
       {dataIndex: 'time', key: 'time', title: 'Время', },
       {dataIndex: 'place', key: 'place', title: 'Место', },
-      {dataIndex: 'timePass', key: 'timePass', title: 'Срок', },
+      {dataIndex: 'timePass', key: 'timePass', title: 'Длительность', },
       {dataIndex: 'comment', key: 'comment', title: 'Комментарий', },
       {dataIndex: 'mentor', key: 'mentor', title: 'Ментор',
       render: mentor => {

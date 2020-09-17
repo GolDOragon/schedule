@@ -1,5 +1,5 @@
 import React from 'react';
-import {Modal, Form, Input, Select, DatePicker, TimePicker} from 'antd';
+import {Modal, Form, Input, InputNumber, Select, DatePicker, TimePicker} from 'antd';
 import 'antd/dist/antd.css';
 
 function AddEventModal(props) {
@@ -48,6 +48,7 @@ function AddEventModal(props) {
         picture: '',
         video: '',
         map: '',
+        mentor: '',
       }}
       >
       <Form.Item name='type' label='Событие'>
@@ -66,17 +67,17 @@ function AddEventModal(props) {
       <Form.Item name='description' label='Описание'><Input.TextArea /></Form.Item>
       <Form.Item name='descriptionUrl' label='Ссылка' hidden={eventType === 'Deadline' && true}><Input /></Form.Item>
       <Form.Item name='time' label='Время' hidden={(eventType === 'Self education' || eventType === 'Screening') && true}><TimePicker format={timeFormat}/></Form.Item>
-      <Form.Item name='place' label='Место' hidden={(eventType !== 'Lecture' || eventType !== 'Meetup') && true}>
+      <Form.Item name='place' label='Место' hidden={(eventType !== 'Lecture' && eventType !== 'Meetup') && true}>
         <Select>
           <Select.Option value='Online'>Online</Select.Option>
           <Select.Option value='Offline'>Offline</Select.Option>
         </Select>
       </Form.Item>
-      <Form.Item name='timePass' label='Срок' hidden={(eventType !== 'Self education' || eventType !== 'Task' || eventType !== 'Test') && true}><Input /></Form.Item>
+      <Form.Item name='timePass' label='Длительность' hidden={(eventType === 'Deadline' || eventType === 'Screening') && true}><InputNumber min={1}/> часы</Form.Item>
       <Form.Item name='comment' label='Комментарий'><Input.TextArea /></Form.Item>
       <Form.Item name='picture' label='Картинка' hidden={(eventType === 'Deadline' || eventType === 'Test') && true}><Input /></Form.Item>
       <Form.Item name='video' label='Видео' hidden={(eventType === 'Deadline' || eventType === 'Test' || eventType === 'Deadline') && true}><Input /></Form.Item>
-      <Form.Item name='map' label='Карта' hidden={(eventType !== 'Lecture' || eventType !== 'Meetup') && true}><Input /></Form.Item>
+      <Form.Item name='map' label='Карта' hidden={(eventType !== 'Lecture' && eventType !== 'Meetup') && true}><Input /></Form.Item>
       <Form.Item name='mentor' label='Ментор'>
         <Select>
           {children}
