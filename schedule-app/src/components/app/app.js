@@ -2,7 +2,7 @@ import React  from 'react';
 import './app.css';
 import  { BrowserRouter as Router, Route } from 'react-router-dom';
 import Header from '../header/header';
-import AddModal from '../addModal/addModal';
+import AddEventModal from '../addEventModal/addEventModal';
 import AddMentorModal from '../addMentorModal/addMentorModal';
 import AntTable from '../table/table';
 import {EventCalendar} from '../calendar/EventCalendar'
@@ -134,7 +134,7 @@ const  App = () => {
           {userType === 'mentor' && <Button type="primary" onClick={() => {setVisible(true)}}>Добавить событие</Button> }
           {userType === 'mentor' && <Button className="secondBtn" type="primary" onClick={() => {setVisibleM(true)}}>Добавить ментора</Button> }
         </header>
-        <AddModal visible={visible} onCreate={onCreate} organizers={organizers} onCancel={() => {setVisible(false)}}/>
+        <AddEventModal visible={visible} onCreate={onCreate} organizers={organizers} onCancel={() => {setVisible(false)}}/>
         <AddMentorModal visible={visibleM} onCreate={onMentorCreate} onCancel={() => {setVisibleM(false)}}/>
         <Route path="/table">
           <AntTable items={items} onEdit={onEdit} onSelect={onSelect} userType={userType} organizers={organizers}/>

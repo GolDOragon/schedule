@@ -124,12 +124,13 @@ class AntTable extends React.Component {
         title: 'Событие',
         render: type => {
                 let color='';
-                if (type === 'Deadline') {color = '#f5222d'}
-                if (type === 'Self education') {color = 'green'}
-                if (type === 'Task') {color = 'orange'}
+                if (type === 'Deadline') {color = 'red'}
+                if (type === 'Self education') {color = ''}
+                if (type === 'Task') {color = 'green'}
                 if (type === 'Test') {color = 'blue'}
-                if (type === 'Lecture') {color = 'cyan'}
-                if (type === 'Screening') {color = 'magenta'}
+                if (type === 'Lecture') {color = 'orange'}
+                if (type === 'Screening') {color = 'purple'}
+                if (type === 'Meetup') {color = 'magenta'}
                 return (<Tag color={color} key={type}>{type}</Tag>);
                 },
         filters: [{
@@ -147,6 +148,9 @@ class AntTable extends React.Component {
           }, {
             value: 'Lecture',
             text: 'Lecture'
+          }, {
+            value: 'Meetup',
+            text: 'Meetup'
           }, {
             value: 'Screening',
             text: 'Screening'
@@ -190,7 +194,6 @@ class AntTable extends React.Component {
           onRow={(record, rowIndex) => {
               return {
                 onDoubleClick: () => this.props.onSelect(record),
-                //onClick: () => {this.selectRow(record);},
               };
             }}
           />;

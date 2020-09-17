@@ -2,7 +2,7 @@ import React from 'react';
 import {Modal, Form, Input, Select, DatePicker, TimePicker} from 'antd';
 import 'antd/dist/antd.css';
 
-function AddModal(props) {
+function AddEventModal(props) {
   const [form] = Form.useForm();
   const [eventType, setEventType] = React.useState('');
   const timeFormat = 'HH:mm';
@@ -57,15 +57,16 @@ function AddModal(props) {
           <Select.Option value='Task'>Task</Select.Option>
           <Select.Option value='Test'>Test</Select.Option>
           <Select.Option value='Lecture'>Lecture</Select.Option>
+          <Select.Option value='Meetup'>Meetup</Select.Option>
           <Select.Option value='Screening'>Screening</Select.Option>
         </Select>
       </Form.Item>
       <Form.Item name='name' label='Название' rules={[{required: true, message: 'Это обязательное поле'}]}><Input /></Form.Item>
+      <Form.Item name='dateTime' label='Дата' rules={[{required: true, message: 'Это обязательное поле'}]}><DatePicker /></Form.Item>
       <Form.Item name='description' label='Описание'><Input.TextArea /></Form.Item>
       <Form.Item name='descriptionUrl' label='Ссылка' hidden={eventType === 'Deadline' && true}><Input /></Form.Item>
-      <Form.Item name='dateTime' label='Дата'><DatePicker /></Form.Item>
       <Form.Item name='time' label='Время' hidden={(eventType === 'Self education' || eventType === 'Screening') && true}><TimePicker format={timeFormat}/></Form.Item>
-      <Form.Item name='place' label='Место' hidden={eventType !== 'Lecture' && true}>
+      <Form.Item name='place' label='Место' hidden={(eventType !== 'Lecture' || eventType !== 'Meetup') && true}>
         <Select>
           <Select.Option value='Online'>Online</Select.Option>
           <Select.Option value='Offline'>Offline</Select.Option>
@@ -75,7 +76,7 @@ function AddModal(props) {
       <Form.Item name='comment' label='Комментарий'><Input.TextArea /></Form.Item>
       <Form.Item name='picture' label='Картинка' hidden={(eventType === 'Deadline' || eventType === 'Test') && true}><Input /></Form.Item>
       <Form.Item name='video' label='Видео' hidden={(eventType === 'Deadline' || eventType === 'Test' || eventType === 'Deadline') && true}><Input /></Form.Item>
-      <Form.Item name='map' label='Карта' hidden={(eventType !== 'Lecture') && true}><Input /></Form.Item>
+      <Form.Item name='map' label='Карта' hidden={(eventType !== 'Lecture' || eventType !== 'Meetup') && true}><Input /></Form.Item>
       <Form.Item name='mentor' label='Ментор'>
         <Select>
           {children}
@@ -86,4 +87,4 @@ function AddModal(props) {
   );
 };
 
-export default AddModal;
+export default AddEventModal;
