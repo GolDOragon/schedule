@@ -1,7 +1,6 @@
 import React from 'react';
 import { Comment, Avatar, Form, Button, List, Input } from 'antd';
 import moment from 'moment';
-import { DislikeOutlined, LikeOutlined, DislikeFilled, LikeFilled } from '@ant-design/icons';
 
 const { TextArea } = Input;
 const CommentList = ({ comments }) => (
@@ -67,7 +66,7 @@ export default class Feedback extends React.Component {
 
   render() {
     const { comments, submitting, value } = this.state;
-
+    const { comment } = this.props;
     return (
       <>
         {comments.length > 0 && <CommentList comments={comments} />}
@@ -79,12 +78,13 @@ export default class Feedback extends React.Component {
             />
           }
           content={
+            comment.length===0 ? 
             <Editor
               onChange={this.handleChange}
               onSubmit={this.handleSubmit}
               submitting={submitting}
               value={value}
-            />
+            /> : <p>{comment}</p>
           }
         />
       </>
