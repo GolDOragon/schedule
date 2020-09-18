@@ -51,6 +51,10 @@ const  App = () => {
     setVisibleM(false);
   }
 
+  // сетаем в стейт ID какой таски показывать
+  const [viewTaskId, setViewTaskId] = React.useState(1);
+  const [event, setEvent] = React.useState([]);
+
   function onEdit(newValue, row) {
     ScheduleApiService.updateEvent(
       row.id,
