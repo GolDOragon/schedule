@@ -189,7 +189,7 @@ class AntTable extends React.Component {
           <Table dataSource={this.props.items} columns={columns} rowSelection={rowSelection}
           onRow={(record, rowIndex) => {
               return {
-                onDoubleClick: () => this.props.onSelect(record)
+                onDoubleClick: () => this.props.onSelect(record),
                 //onClick: () => {this.selectRow(record);},
               };
             }}
