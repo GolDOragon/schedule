@@ -11,7 +11,7 @@ const Organizer = (props) => {
     .then((data) => {
       console.log(data)
       setOrganizer(data)});
-  }, []);
+  }, [organizerId]);
 
     return (
       <div>
