@@ -51,8 +51,6 @@ const  App = () => {
     setVisibleM(false);
   }
 
-  // сетаем в стейт показывать ли описание таски
-  const [viewTaskDescript, setViewTaskDesc] = React.useState(false);
   // сетаем в стейт ID какой таски показывать
   const [viewTaskId, setViewTaskId] = React.useState(1);
   const [event, setEvent] = React.useState([]);
@@ -78,27 +76,8 @@ const  App = () => {
   }
 
   function onSelect(row) {
-    setViewTaskDesc(true);
     setViewTaskId(row.id);
     setEvent(row);
-    
-    console.log(row.mentor);
-  }
-
-   function onCloseDescription() {
-    setViewTaskDesc(false)
-  }
-
-  function onSaveDescription() {
-    alert ("еще не реализованно")
-  }
-
-  function onDeleteDescription() {
-    const deleteRow = window.confirm ("Удалить запись?");
-    if (deleteRow) {
-        ScheduleApiService.deleteEvent(viewTaskId)
-            .then((data) => {setItems(data)})
-    }
   }
 
   function onUserChange(user) {
@@ -126,13 +105,6 @@ const  App = () => {
   return (
     <Router>
       <div>
-      {/* { viewTaskDescript===true
-            ?  <Card items={items} viewId={viewTaskId}
-               onCloseDescription={onCloseDescription}
-               onSaveDescription={onSaveDescription}
-               onDeleteDescription={onDeleteDescription}
-               />
-            :  <div></div> } */}
         <header>
           <Header onUserChange={onUserChange}/>
           {userType === 'mentor' && <Button type="primary" onClick={() => {setVisible(true)}}>Добавить событие</Button> }
