@@ -6,10 +6,11 @@ import AddModal from '../addModal/addModal';
 import AddMentorModal from '../addMentorModal/addMentorModal';
 import AntTable from '../table/table';
 import {EventCalendar} from '../calendar/EventCalendar'
-import Card from '../card/card';
+// import Card from '../card/card';
 import {Button} from 'antd';
 import 'antd/dist/antd.css';
-import ScheduleApiService from '../../services/scheduleApi-service'
+import ScheduleApiService from '../../services/scheduleApi-service';
+import Page from '../page/page';
 
 
 const  App = () => {
@@ -54,7 +55,7 @@ const  App = () => {
   const [viewTaskDescript, setViewTaskDesc] = React.useState(false);
   // сетаем в стейт ID какой таски показывать
   const [viewTaskId, setViewTaskId] = React.useState(1);
-
+  const [event, setEvent] = React.useState([]);
 
   function onEdit(newValue, row) {
     ScheduleApiService.updateEvent(
@@ -79,6 +80,9 @@ const  App = () => {
   function onSelect(row) {
     setViewTaskDesc(true);
     setViewTaskId(row.id);
+    setEvent(row);
+    
+    console.log(row.mentor);
   }
 
    function onCloseDescription() {
@@ -122,13 +126,13 @@ const  App = () => {
   return (
     <Router>
       <div>
-      { viewTaskDescript===true
+      {/* { viewTaskDescript===true
             ?  <Card items={items} viewId={viewTaskId}
                onCloseDescription={onCloseDescription}
                onSaveDescription={onSaveDescription}
                onDeleteDescription={onDeleteDescription}
                />
-            :  <div></div> }
+            :  <div></div> } */}
         <header>
           <Header onUserChange={onUserChange}/>
           {userType === 'mentor' && <Button type="primary" onClick={() => {setVisible(true)}}>Добавить событие</Button> }
@@ -136,13 +140,16 @@ const  App = () => {
         </header>
         <AddModal visible={visible} onCreate={onCreate} organizers={organizers} onCancel={() => {setVisible(false)}}/>
         <AddMentorModal visible={visibleM} onCreate={onMentorCreate} onCancel={() => {setVisibleM(false)}}/>
-        <Route path="/table">
+        <Route path="/" exact>
           <AntTable items={items} onEdit={onEdit} onSelect={onSelect} userType={userType} organizers={organizers}/>
         </Route>
         <Route path="/calendar">
           <EventCalendar items={items}/>
         </Route>
         <Route path="/list" render={() => <h2>List</h2>}></Route>
+        <Route path="/page">
+          <Page items={items} viewId={viewTaskId} event={event} userType={userType} />
+        </Route>
       </div>
     </Router>
   )
