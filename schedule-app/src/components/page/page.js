@@ -13,28 +13,33 @@ const Page = (props)=> {
 
   const [color, setColor] = useState('');
   const [display, setDisplay] = useState('block');
+  const [onEdit, setOnEdit] = useState(false);
 
-    React.useEffect(() => {
-      if (props.event.type === 'Deadline') {setColor('red')}
-      if (props.event.type === 'Self education') {setColor('')}
-      if (props.event.type === 'Task') {setColor('green')}
-      if (props.event.type === 'Test') {setColor('blue')}
-      if (props.event.type === 'Lecture') {setColor('orange')}
-      if (props.event.type === 'Screening') {setColor('purple')}
-    },[]) 
+  React.useEffect(() => {
+    switch(props.event.type) {
+      case 'Deadline': {setColor('red')} break;
+      case 'Self education': {setColor('')} break;  
+      case 'Task': {setColor('green')} break;  
+      case 'Test': {setColor('blue')} break;  
+      case 'Lecture': {setColor('purple')} break;  
+      case 'Screening': {setColor('')} break;  
+      case 'Meetup': {setColor('magenta')} break;  
+    }
+  },[]) 
     
-    const { event: {dateTime, time, type, name, timePass, description, descriptionUrl, place, comment, mentor}} = props;
+    const { event: {dateTime, time, type, name, timePass, description, descriptionUrl, place, comment, mentor}, userType} = props;
     return (
       <Row>
         <Card
           className="card m-auto" 
           title={name}
-          actions={[
-            <SettingOutlined key="setting" />,
-            <EditOutlined 
-              key="edit" />,
-            <EllipsisOutlined key="ellipsis" />,
-          ]}>
+          
+          actions={
+            userType === 'mentor' &&  
+            [<SettingOutlined key="setting" />,
+            <EditOutlined key="edit" />,
+            <EllipsisOutlined key="ellipsis" />,]
+          }>
           
           <Tag color={color}>{type}</Tag> 
           <span>{dateTime}</span>

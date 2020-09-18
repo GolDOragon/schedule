@@ -148,7 +148,7 @@ const  App = () => {
         </Route>
         <Route path="/list" render={() => <h2>List</h2>}></Route>
         <Route path="/page">
-          <Page items={items} viewId={viewTaskId} event={event} />
+          <Page items={items} viewId={viewTaskId} event={event} userType={userType} />
         </Route>
       </div>
     </Router>
