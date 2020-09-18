@@ -1,12 +1,11 @@
 import React  from 'react';
 import './app.css';
-import  { BrowserRouter as Router, Route } from 'react-router-dom';
+import  { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import Header from '../header/header';
 import AddEventModal from '../addEventModal/addEventModal';
 import AddMentorModal from '../addMentorModal/addMentorModal';
 import AntTable from '../table/table';
 import {EventCalendar} from '../calendar/EventCalendar'
-// import Card from '../card/card';
 import {Button} from 'antd';
 import 'antd/dist/antd.css';
 import ScheduleApiService from '../../services/scheduleApi-service';
@@ -19,6 +18,7 @@ const  App = () => {
   const [visible, setVisible] = React.useState(false);
   const [visibleM, setVisibleM] = React.useState(false);
   const [organizers, setOrganaizers] = React.useState([]);
+  const [redirect, setRedirect] = React.useState('/');
 
   function onCreate(values) {
     ScheduleApiService.addEvent(
@@ -51,12 +51,6 @@ const  App = () => {
     setVisibleM(false);
   }
 
-  // сетаем в стейт показывать ли описание таски
-  const [viewTaskDescript, setViewTaskDesc] = React.useState(false);
-  // сетаем в стейт ID какой таски показывать
-  const [viewTaskId, setViewTaskId] = React.useState(1);
-  const [event, setEvent] = React.useState([]);
-
   function onEdit(newValue, row) {
     ScheduleApiService.updateEvent(
       row.id,
@@ -78,27 +72,8 @@ const  App = () => {
   }
 
   function onSelect(row) {
-    setViewTaskDesc(true);
-    setViewTaskId(row.id);
-    setEvent(row);
-    
-    console.log(row.mentor);
-  }
-
-   function onCloseDescription() {
-    setViewTaskDesc(false)
-  }
-
-  function onSaveDescription() {
-    alert ("еще не реализованно")
-  }
-
-  function onDeleteDescription() {
-    const deleteRow = window.confirm ("Удалить запись?");
-    if (deleteRow) {
-        ScheduleApiService.deleteEvent(viewTaskId)
-            .then((data) => {setItems(data)})
-    }
+    const url = `/page?${row.id}`;
+    setRedirect(url);
   }
 
   function onUserChange(user) {
@@ -126,13 +101,7 @@ const  App = () => {
   return (
     <Router>
       <div>
-      {/* { viewTaskDescript===true
-            ?  <Card items={items} viewId={viewTaskId}
-               onCloseDescription={onCloseDescription}
-               onSaveDescription={onSaveDescription}
-               onDeleteDescription={onDeleteDescription}
-               />
-            :  <div></div> } */}
+        <Redirect to={redirect} />
         <header>
           <Header onUserChange={onUserChange}/>
           {userType === 'mentor' && <Button type="primary" onClick={() => {setVisible(true)}}>Добавить событие</Button> }
@@ -148,7 +117,7 @@ const  App = () => {
         </Route>
         <Route path="/list" render={() => <h2>List</h2>}></Route>
         <Route path="/page">
-          <Page items={items} viewId={viewTaskId} event={event} userType={userType} />
+          <Page items={items} userType={userType} />
         </Route>
       </div>
     </Router>

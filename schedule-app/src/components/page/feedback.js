@@ -78,7 +78,7 @@ export default class Feedback extends React.Component {
             />
           }
           content={
-            comment.length===0 ? 
+            comment ? 
             <Editor
               onChange={this.handleChange}
               onSubmit={this.handleSubmit}
