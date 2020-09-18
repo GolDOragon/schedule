@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Card, Tag, Divider, Rate, Row} from 'antd';
 import Feedback from './feedback';
 import SimpleMap from './map';
+import ScheduleApiService from '../../services/scheduleApi-service';
 import './page.css';
 import { EditOutlined, EllipsisOutlined, SettingOutlined} from '@ant-design/icons';
 import Organizer from './organizer';
@@ -11,53 +12,58 @@ const Page = (props)=> {
 
   const [color, setColor] = useState('');
   const [onEdit, setOnEdit] = useState(false);
+  const [row, setRow] = useState('');
+  const str = window.location.href;
+  const eventId = str.substr(str.lastIndexOf('?') + 1);
 
   React.useEffect(() => {
-    switch(props.event.type) {
-      case 'Deadline': setColor('red'); break;
-      case 'Self education': setColor(''); break;  
-      case 'Task': setColor('green'); break;  
-      case 'Test': setColor('blue'); break;  
-      case 'Lecture': setColor('purple'); break;  
-      case 'Screening': setColor(''); break;  
-      case 'Meetup': setColor('magenta'); break;  
+    ScheduleApiService.getEvent(eventId)
+    .then((data) => {setRow(data)});
+    switch(row.type) {
+      case 'Deadline': {setColor('red')} break;
+      case 'Self education': {setColor('')} break;
+      case 'Task': {setColor('green')} break;
+      case 'Test': {setColor('blue')} break;
+      case 'Lecture': {setColor('purple')} break;
+      case 'Screening': {setColor('')} break;
+      case 'Meetup': {setColor('magenta')} break;
       default:setColor('');
     }
-  },[props.event.type]) 
-    
-    const { event: {dateTime, time, type, name, timePass, description, descriptionUrl, place, comment, mentor}, userType} = props;
+  },[row.type])
+
+    const {dateTime, time, type, name, timePass, description, descriptionUrl, place, comment, mentor} = row;
     return (
-      <Row> 
+      <Row>
       {onEdit===false ?
-        <Card 
-          className="card m-auto" 
+        <Card
+          className="card m-auto"
           title={name}
-          
+
           actions={
-            userType === 'mentor' &&  
+            props.userType === 'mentor' &&
             [<SettingOutlined key="setting" />,
             <EditOutlined key="edit" onClick={() => {setOnEdit(true)}}/>,
             <EllipsisOutlined key="ellipsis" />,]
           }>
-          
-          <Tag color={color}>{type}</Tag> 
+
+          <Tag color={color}>{type}</Tag>
           <span>{dateTime}</span>
           <span className="p-2">{time}</span>
           <span className="p-2 pr-5">{timePass}</span>
           <span className="float-right"><Rate allowHalf defaultValue={2.5} /></span>
           {mentor!==undefined &&
-          <Organizer organizerId={mentor}/> 
+          <Organizer organizerId={mentor}/>
           }
-          
+
           <Divider orientation="left">Описание:</Divider>
-          {description.length!==0 &&
+          {description &&
             <p>{description}</p>
           }
           {descriptionUrl.length!==0 &&
           <a href={descriptionUrl}>Ссылка на ТЗ</a>
           }
-          <br />  
-          {type==='Lecture' && 
+          <br />
+          {type==='Lecture' &&
           <Row className="m-3">
             <iframe title="видео" className="m-auto"  src="https://youtube.com/embed/0M9Rz-wXYas" width="480" height="360" allowFullScreen></iframe>
           </Row>
@@ -69,7 +75,7 @@ const Page = (props)=> {
               <SimpleMap/>
             </div>
           </Row>
-          
+
           <p>{comment}</p>
           <Feedback comment={comment}/>
         </Card> : <EditedPage event={props.event}/>
@@ -77,8 +83,8 @@ const Page = (props)=> {
         
         
       </Row>
-      
-    )  
+
+    )
 }
 
 export default Page;

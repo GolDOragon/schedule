@@ -24,9 +24,6 @@ function Header(props) {
       <li className="nav-item">
         <Link className="nav-link" to="/list">list</Link>
       </li>
-      <li className="nav-item">
-        <Link className="nav-link" to="/page">card</Link>
-      </li>
       </ul>
     </div>
   )
