@@ -101,7 +101,7 @@ const  App = () => {
   return (
     <Router>
       <div>
-        <Redirect to={redirect} />
+        {redirect !== '/' && <Redirect to={redirect} />}
         <header>
           <Header onUserChange={onUserChange}/>
           {userType === 'mentor' && <Button type="primary" onClick={() => {setVisible(true)}}>Добавить событие</Button> }
