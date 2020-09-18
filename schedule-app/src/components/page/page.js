@@ -15,10 +15,13 @@ const Page = (props)=> {
   const [row, setRow] = useState('');
   const str = window.location.href;
   const eventId = str.substr(str.lastIndexOf('?') + 1);
+  console.log(eventId)
 
   React.useEffect(() => {
     ScheduleApiService.getEvent(eventId)
-    .then((data) => {setRow(data)});
+    .then((data) => {
+      console.log(data);
+      setRow(data)});
     switch(row.type) {
       case 'Deadline': {setColor('red')} break;
       case 'Self education': {setColor('')} break;
@@ -29,7 +32,7 @@ const Page = (props)=> {
       case 'Meetup': {setColor('magenta')} break;
       default:setColor('');
     }
-  },[row.type])
+  },[eventId, row.type])
 
     const {dateTime, time, type, name, timePass, description, descriptionUrl, place, comment, mentor} = row;
     return (
@@ -51,7 +54,7 @@ const Page = (props)=> {
           <span className="p-2">{time}</span>
           <span className="p-2 pr-5">{timePass}</span>
           <span className="float-right"><Rate allowHalf defaultValue={2.5} /></span>
-          {mentor!==undefined &&
+          {mentor &&
           <Organizer organizerId={mentor}/>
           }
 
@@ -59,7 +62,7 @@ const Page = (props)=> {
           {description &&
             <p>{description}</p>
           }
-          {descriptionUrl.length!==0 &&
+          {descriptionUrl &&
           <a href={descriptionUrl}>Ссылка на ТЗ</a>
           }
           <br />
@@ -78,7 +81,7 @@ const Page = (props)=> {
 
           <p>{comment}</p>
           <Feedback comment={comment}/>
-        </Card> : <EditedPage event={props.event}/>
+        </Card> : <EditedPage event={row}/>
       } 
         
         
