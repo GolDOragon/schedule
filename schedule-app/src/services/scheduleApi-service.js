@@ -38,7 +38,8 @@ class ScheduleApiService {
       picture: picture,
       video: video,
       map: map,
-      mentor: mentor
+      mentor: mentor,
+      showComment: 'true'
     };
     await fetch(url, {
       method: 'POST',
@@ -67,7 +68,7 @@ class ScheduleApiService {
       picture: picture,
       video: video,
       map: map,
-      mentor: mentor
+      mentor: mentor,
     };
     await fetch(url, {
       method: 'PUT',
@@ -77,6 +78,7 @@ class ScheduleApiService {
       },
       body: JSON.stringify(body),
     })
+    return this.getEvent(eventId);
   }
 
   async deleteEvent(eventId) {

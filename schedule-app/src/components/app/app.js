@@ -19,6 +19,7 @@ const  App = () => {
   const [visibleM, setVisibleM] = React.useState(false);
   const [organizers, setOrganaizers] = React.useState([]);
   const [redirect, setRedirect] = React.useState('/');
+  const [eventId, setEventId] = React.useState('');
 
   function onCreate(values) {
     ScheduleApiService.addEvent(
@@ -35,7 +36,8 @@ const  App = () => {
       values.picture,
       values.video,
       values.map,
-      values.mentor
+      values.mentor,
+      values.showComment
     )
     .then((data) => {
        data.map((item) => {return item.key = item.id})
@@ -45,15 +47,39 @@ const  App = () => {
     setVisible(false);
   };
 
+  function onUpdateEvent(eventId, values) {
+    ScheduleApiService.updateEvent(eventId,
+      values.dateTime ? values.dateTime.format('YYYY-MM-DD') : '',
+      values.time ? values.time.format('HH:mm') : '',
+      values.type,
+      values.name,
+      values.timePass ? `${values.timePass}h` : '',
+      values.description,
+      values.descriptionUrl,
+      values.place,
+      '', //values.timeZone
+      values.comment,
+      values.picture,
+      values.video,
+      values.map,
+      values.mentor,
+      // values.showComment
+    )
+    .then((data) => {
+       
+       console.log(data);
+      //  data.map((item) => {return item.key = item.id})
+       return data;
+    })
+    // .then((data) => {setItems(data)})
+    // setVisible(false);
+  };
+
   function onMentorCreate(values) {
     ScheduleApiService.addOrganizer(values)
     .then((data) => {setOrganaizers(data)})
     setVisibleM(false);
   }
-
-  // сетаем в стейт ID какой таски показывать
-  const [viewTaskId, setViewTaskId] = React.useState(1);
-  const [event, setEvent] = React.useState([]);
 
   function onEdit(newValue, row) {
     ScheduleApiService.updateEvent(
@@ -72,12 +98,14 @@ const  App = () => {
       row.video,
       row.map,
       row.mentor,
+      row.showComment
     )
   }
 
   function onSelect(row) {
     const url = `/page?${row.id}`;
     setRedirect(url);
+    setEventId(row.id);
   }
 
   function onUserChange(user) {
@@ -121,7 +149,7 @@ const  App = () => {
         </Route>
         <Route path="/list" render={() => <h2>List</h2>}></Route>
         <Route path="/page">
-          <Page items={items} userType={userType} />
+          <Page items={items} userType={userType} onUpdateEvent={onUpdateEvent} />
         </Route>
       </div>
     </Router>
