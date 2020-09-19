@@ -51,8 +51,8 @@ const ListRS = ({items}) => {
 
                     <List.Item.Meta
                         // avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                        title={<div><a href="#">{item.name}</a> <span>{item.dateTime}</span></div>}
-                        description={<div>item.description <span>{item.time}  </span><span>{item.dateTime}</span></div>}
+                        title={<div><a href="#">{item.name}</a></div>}
+                        description={<div>{item.description} <div><span>{item.time}  </span><span>{item.dateTime}</span></div></div>}
                     />
                     <CheckType type={item.type}/>
                     <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />
