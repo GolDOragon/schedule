@@ -12,10 +12,13 @@ const Page = (props)=> {
 
   const [color, setColor] = useState('');
   const [onEdit, setOnEdit] = useState(false);
+  
   const [row, setRow] = useState('');
   const str = window.location.href;
   const eventId = str.substr(str.lastIndexOf('?') + 1);
-  console.log(eventId)
+  console.log(eventId);
+
+  
 
   React.useEffect(() => {
     ScheduleApiService.getEvent(eventId)
@@ -23,18 +26,19 @@ const Page = (props)=> {
       console.log(data);
       setRow(data)});
     switch(row.type) {
-      case 'Deadline': {setColor('red')} break;
-      case 'Self education': {setColor('')} break;
-      case 'Task': {setColor('green')} break;
-      case 'Test': {setColor('blue')} break;
-      case 'Lecture': {setColor('purple')} break;
-      case 'Screening': {setColor('')} break;
-      case 'Meetup': {setColor('magenta')} break;
+      case 'Deadline': setColor('red'); break;
+      case 'Self education': setColor(''); break;
+      case 'Task': setColor('green'); break;
+      case 'Test': setColor('blue'); break;
+      case 'Lecture': setColor('purple'); break;
+      case 'Screening': setColor(''); break;
+      case 'Meetup': setColor('magenta'); break;
       default:setColor('');
     }
   },[eventId, row.type])
 
-    const {dateTime, time, type, name, timePass, description, descriptionUrl, place, comment, mentor} = row;
+    const {dateTime, time, type, name, timePass, description, descriptionUrl, place, comment, mentor, showComment} = row;
+    const {onUpdateEvent} = props;
     return (
       <Row>
       {onEdit===false ?
@@ -80,8 +84,12 @@ const Page = (props)=> {
           </Row>
 
           <p>{comment}</p>
-          <Feedback comment={comment}/>
-        </Card> : <EditedPage event={row}/>
+          {showComment==='true' &&
+            <Feedback comment={comment} />
+          }
+          
+        </Card> : 
+        <EditedPage event={row} eventId={eventId} onUpdateEvent={onUpdateEvent}/>
       } 
         
         
