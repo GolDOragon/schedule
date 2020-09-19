@@ -55,7 +55,7 @@ const  App = () => {
     <div>
 
       <Header onUserChange={onUserChange}/>
-      <Table items={items} onEdit={onEdit} onSelect={onSelect} onAdd={onAdd} userType={userType}/>
+      {/*<Table items={items} onEdit={onEdit} onSelect={onSelect} onAdd={onAdd} userType={userType}/>*/}
       <hr></hr>
       <ListRS items={items}/>
 

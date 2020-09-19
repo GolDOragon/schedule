@@ -1,18 +1,20 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import './listRS.css';
 import 'antd/dist/antd.css';
-import { Layout, Menu, Row, Col, Card, Avatar, List } from 'antd';
+import { Layout,Button, List, Card} from 'antd';
 import {
     MenuUnfoldOutlined,
     MenuFoldOutlined
 } from '@ant-design/icons';
 
-const { Header, Sider, Content } = Layout;
+const {Content } = Layout;
 
 const ListRS = ({items}) => {
+    const [type, setType] = useState('list');
 
-    return (
-         <Layout className="site-layout">
+    if(type === 'list'){
+        return (
+            <Layout className="site-layout">
                 <Content
                     className="site-layout-background"
                     style={{
@@ -22,9 +24,10 @@ const ListRS = ({items}) => {
                     }}
                 >
                     <div>
-                        <button >Basic list</button>
-                        <button>Grid</button>
+                        <Button onClick={() => setType('list')}>Basic list</Button>
+                        <Button onClick={() => setType('grid')}>Grid</Button>
                     </div>
+
                     <List
                         itemLayout="horizontal"
                         dataSource={items}
@@ -37,11 +40,46 @@ const ListRS = ({items}) => {
                                 />
                             </List.Item>
                         )}
-                    />,
+                    />
                 </Content>
-        </Layout>
-    )
-
+            </Layout>
+        )
+    }else{
+        return(
+            <Layout className="site-layout">
+                <Content
+                    className="site-layout-background"
+                    style={{
+                        margin: '24px 16px',
+                        padding: 24,
+                        minHeight: 280,
+                    }}
+                >
+                    <div>
+                        <Button onClick={() => setType('list')}>Basic list</Button>
+                        <Button onClick={() => setType('grid')}>Grid</Button>
+                    </div>
+                    <List
+                        grid={{
+                            gutter: 16,
+                            xs: 1,
+                            sm: 2,
+                            md: 4,
+                            lg: 4,
+                            xl: 6,
+                            xxl: 3,
+                        }}
+                        dataSource={items}
+                        renderItem={item => (
+                            <List.Item>
+                                <Card title={item.name}>Card content</Card>
+                            </List.Item>
+                        )}
+                    />
+                </Content>
+            </Layout>
+        )
+    }
 }
 
 export default ListRS;
