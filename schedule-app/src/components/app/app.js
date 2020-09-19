@@ -66,13 +66,10 @@ const  App = () => {
       // values.showComment
     )
     .then((data) => {
-       
-       console.log(data);
-      //  data.map((item) => {return item.key = item.id})
-       return data;
+      data.map((item) => {return item.key = item.id})
+      return data;
     })
-    // .then((data) => {setItems(data)})
-    // setVisible(false);
+    .then((data) => {setItems(data)})
   };
 
   function onMentorCreate(values) {
