@@ -34,4 +34,3 @@ organizer: {
 
 for example
 scheduleApiService.getAllEvents() 
-
