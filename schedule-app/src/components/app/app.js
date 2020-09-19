@@ -1,5 +1,6 @@
 import React  from 'react';
 import './app.css';
+import ListRS from '../listRS/listRS';
 import  { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import Header from '../header/header';
 import AddEventModal from '../addEventModal/addEventModal';
@@ -10,6 +11,7 @@ import {Button} from 'antd';
 import 'antd/dist/antd.css';
 import ScheduleApiService from '../../services/scheduleApi-service';
 import Page from '../page/page';
+
 
 
 const  App = () => {
@@ -144,7 +146,9 @@ const  App = () => {
         <Route path="/calendar">
           <EventCalendar items={items}/>
         </Route>
-        <Route path="/list" render={() => <h2>List</h2>}></Route>
+        <Route path="/list">
+            <ListRS items={items}/>
+        </Route>
         <Route path="/page">
           <Page items={items} userType={userType} onUpdateEvent={onUpdateEvent} />
         </Route>
