@@ -19,3 +19,22 @@
 .site-layout .site-layout-background {
     background: #fff;
 }
+.site-layout-background{
+    margin: 24px 16px;
+    padding: 24px;
+    minHeight: 280px;
+}
+.list-rs-btn-group{
+    margin-bottom: 10px;
+}
+.list-rs-btn-group button{
+    margin-right: 10px;
+    line-height: 16px;
+}
+.default-img-rs {
+    background-image: url(rs_school.svg);
+    width: 200px;
+    height: 55px;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
