@@ -78,7 +78,7 @@ class ScheduleApiService {
       },
       body: JSON.stringify(body),
     })
-    return this.getEvent(eventId);
+    return this.getAllEvents();
   }
 
   async deleteEvent(eventId) {

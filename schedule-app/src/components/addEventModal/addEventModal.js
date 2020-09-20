@@ -42,7 +42,7 @@ function AddEventModal(props) {
         descriptionUrl: '',
         dateTime: '',
         time: '',
-        timePass: '',
+        timePass: '1',
         place: 'Online',
         comment: '',
         picture: '',
@@ -73,7 +73,7 @@ function AddEventModal(props) {
           <Select.Option value='Offline'>Offline</Select.Option>
         </Select>
       </Form.Item>
-      <Form.Item name='timePass' label='Длительность' hidden={(eventType === 'Deadline' || eventType === 'Screening') && true}><InputNumber min={1}/> часы</Form.Item>
+      <Form.Item name='timePass' label='Длительность' hidden={(eventType === 'Deadline' || eventType === 'Screening') && true}><InputNumber formatter={value => `${value}ч`} step={0.5} min={0.5}/></Form.Item>
       <Form.Item name='comment' label='Комментарий'><Input.TextArea /></Form.Item>
       <Form.Item name='picture' label='Картинка' hidden={(eventType === 'Deadline' || eventType === 'Test') && true}><Input /></Form.Item>
       <Form.Item name='video' label='Видео' hidden={(eventType === 'Deadline' || eventType === 'Test' || eventType === 'Deadline') && true}><Input /></Form.Item>
