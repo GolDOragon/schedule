@@ -1,7 +1,7 @@
 import React, { Component, useState } from 'react';
 import './listRS.css';
 import 'antd/dist/antd.css';
-import { Layout, Button, List, Card, Avatar, Space, Tag, Empty} from 'antd';
+import { Layout, Button, List, Card, Rate , Space, Tag, Empty} from 'antd';
 import {
     MessageOutlined, LikeOutlined, StarOutlined,
     EditOutlined, EllipsisOutlined, SettingOutlined,
@@ -12,7 +12,7 @@ const {Content } = Layout;
 const { Meta } = Card;
 
 
-const ListRS = ({items}) => {
+const ListRS = ({items, onSelect}) => {
     const [type, setType] = useState('list');
 
     const IconText = ({ icon, text }) => (
@@ -44,18 +44,26 @@ const ListRS = ({items}) => {
 
     if(type === 'list'){
         view =  <List
+            className="demo-loadmore-list"
             itemLayout="horizontal"
             dataSource={items}
             renderItem={item => (
-                <List.Item>
+                <List.Item
+                    actions={[
+                        <CheckType type={item.type}/>,
+                        <Rate allowHalf defaultValue={2.5} />,
+                        <Button type="link" size='large' onClick={() => onSelect(item)}>
+                            Смотреть
+                        </Button>
+                    ]}
+                    >
 
                     <List.Item.Meta
                         // avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+
                         title={<div><a href="#">{item.name}</a></div>}
                         description={<div>{item.description} <div><span>{item.time}  </span><span>{item.dateTime}</span></div></div>}
                     />
-                    <CheckType type={item.type}/>
-                    <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />
 
                 </List.Item>
             )}
@@ -145,7 +153,7 @@ const ListRS = ({items}) => {
                 className="site-layout-background"
 
             >
-                <div class="list-rs-btn-group">
+                <div className="list-rs-btn-group">
                     <Button onClick={() => setType('list')} icon={<BarsOutlined />}></Button>
                     <Button onClick={() => setType('grid')} icon={<AppstoreOutlined />}></Button>
                     <Button onClick={() => setType('vertical')} icon={<AuditOutlined />}></Button>

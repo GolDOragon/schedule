@@ -150,7 +150,7 @@ const  App = () => {
           <EventCalendar items={items}/>
         </Route>
         <Route path="/list">
-            <ListRS items={items}/>
+            <ListRS items={items} onSelect={onSelect}/>
         </Route>
         <Route path="/page">
           <Page items={items} userType={userType} onUpdateEvent={onUpdateEvent} />
