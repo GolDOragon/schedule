@@ -14,9 +14,9 @@ function AddEventModal(props) {
   return (
     <Modal
       visible={props.visible}
-      title="Создание нового события"
-      okText="Создать событие"
-      cancelText="Отмена"
+      title="Create new event"
+      okText="Create event"
+      cancelText="Cancel"
       onCancel={props.onCancel}
       onOk={() => {
         form
@@ -41,7 +41,7 @@ function AddEventModal(props) {
         description: '',
         descriptionUrl: '',
         dateTime: '',
-        time: '',
+        //time: moment('23:59:00', 'HH:mm'),
         timePass: '1',
         place: 'Online',
         comment: '',
@@ -51,7 +51,7 @@ function AddEventModal(props) {
         mentor: '',
       }}
       >
-      <Form.Item name='type' label='Событие'>
+      <Form.Item name='type' label='Event type'>
         <Select onChange={setEventType}>
           <Select.Option value='Self education'>Self education</Select.Option>
           <Select.Option value='Deadline'>Deadline</Select.Option>
@@ -62,23 +62,23 @@ function AddEventModal(props) {
           <Select.Option value='Screening'>Screening</Select.Option>
         </Select>
       </Form.Item>
-      <Form.Item name='name' label='Название' rules={[{required: true, message: 'Это обязательное поле'}]}><Input /></Form.Item>
-      <Form.Item name='dateTime' label='Дата' rules={[{required: true, message: 'Это обязательное поле'}]}><DatePicker /></Form.Item>
-      <Form.Item name='description' label='Описание'><Input.TextArea /></Form.Item>
-      <Form.Item name='descriptionUrl' label='Ссылка' hidden={eventType === 'Deadline' && true}><Input /></Form.Item>
-      <Form.Item name='time' label='Время' hidden={(eventType === 'Self education' || eventType === 'Screening') && true}><TimePicker format={timeFormat}/></Form.Item>
-      <Form.Item name='place' label='Место' hidden={(eventType !== 'Lecture' && eventType !== 'Meetup') && true}>
+      <Form.Item name='name' label='Name' rules={[{required: true, message: 'Это обязательное поле'}]}><Input /></Form.Item>
+      <Form.Item name='dateTime' label='Date' rules={[{required: true, message: 'Это обязательное поле'}]}><DatePicker /></Form.Item>
+      <Form.Item name='description' label='Description'><Input.TextArea /></Form.Item>
+      <Form.Item name='descriptionUrl' label='Link' hidden={eventType === 'Deadline' && true}><Input /></Form.Item>
+      <Form.Item name='time' label='Time' hidden={(eventType === 'Self education' || eventType === 'Screening') && true}><TimePicker format={timeFormat}/></Form.Item>
+      <Form.Item name='place' label='Place' hidden={(eventType !== 'Lecture' && eventType !== 'Meetup') && true}>
         <Select>
           <Select.Option value='Online'>Online</Select.Option>
           <Select.Option value='Offline'>Offline</Select.Option>
         </Select>
       </Form.Item>
-      <Form.Item name='timePass' label='Длительность' hidden={(eventType === 'Deadline' || eventType === 'Screening') && true}><InputNumber formatter={value => `${value}ч`} step={0.5} min={0.5}/></Form.Item>
-      <Form.Item name='comment' label='Комментарий'><Input.TextArea /></Form.Item>
-      <Form.Item name='picture' label='Картинка' hidden={(eventType === 'Deadline' || eventType === 'Test') && true}><Input /></Form.Item>
-      <Form.Item name='video' label='Видео' hidden={(eventType === 'Deadline' || eventType === 'Test' || eventType === 'Deadline') && true}><Input /></Form.Item>
-      <Form.Item name='map' label='Карта' hidden={(eventType !== 'Lecture' && eventType !== 'Meetup') && true}><Input /></Form.Item>
-      <Form.Item name='mentor' label='Ментор'>
+      <Form.Item name='timePass' label='Duration' hidden={(eventType === 'Deadline' || eventType === 'Screening') && true}><InputNumber formatter={value => `${value}ч`} step={0.5} min={0.5}/></Form.Item>
+      <Form.Item name='comment' label='Comment'><Input.TextArea /></Form.Item>
+      <Form.Item name='picture' label='Picture' hidden={(eventType === 'Deadline' || eventType === 'Test') && true}><Input /></Form.Item>
+      <Form.Item name='video' label='Video' hidden={(eventType === 'Deadline' || eventType === 'Test' || eventType === 'Deadline') && true}><Input /></Form.Item>
+      <Form.Item name='map' label='Map' hidden={(eventType !== 'Lecture' && eventType !== 'Meetup') && true}><Input /></Form.Item>
+      <Form.Item name='mentor' label='Mentor'>
         <Select>
           {children}
         </Select>

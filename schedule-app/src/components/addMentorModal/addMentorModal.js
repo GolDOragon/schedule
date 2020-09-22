@@ -8,9 +8,9 @@ function AddMentorModal(props) {
   return (
     <Modal
       visible={props.visible}
-      title="Создание нового ментора"
-      okText="Создать ментора"
-      cancelText="Отмена"
+      title="Create new mentor"
+      okText="Create mentor"
+      cancelText="Cancel"
       onCancel={props.onCancel}
       onOk={() => {
         form
@@ -35,9 +35,9 @@ function AddMentorModal(props) {
         face: '',
       }}
       >
-      <Form.Item name='name' label='Имя' rules={[{required: true, message: 'Это обязательное поле'}]}><Input /></Form.Item>
-      <Form.Item name='gitLink' label='Ссылка на профиль' rules={[{required: true, message: 'Это обязательное поле'}]}><Input /></Form.Item>
-      <Form.Item name='face' label='Ссылка на фото' rules={[{required: true, message: 'Это обязательное поле'}]}><Input /></Form.Item>
+      <Form.Item name='name' label='Name' rules={[{required: true, message: 'Это обязательное поле'}]}><Input /></Form.Item>
+      <Form.Item name='gitLink' label='Link to profile' rules={[{required: true, message: 'Это обязательное поле'}]}><Input /></Form.Item>
+      <Form.Item name='face' label='Link to photo' rules={[{required: true, message: 'Это обязательное поле'}]}><Input /></Form.Item>
     </Form>
     </Modal>
   );
