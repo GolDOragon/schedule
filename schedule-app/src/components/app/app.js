@@ -25,7 +25,7 @@ const  App = () => {
   function onCreate(values) {
     ScheduleApiService.addEvent(
       values.dateTime && values.dateTime.format('YYYY-MM-DD'),
-      values.time && values.time.format('HH:mm'),
+      values.time && values.time.format(),
       values.type,
       values.name,
       values.timePass,
@@ -87,6 +87,15 @@ const  App = () => {
   function onUserChange(user) {
     setUserType(user);
   }
+  
+  function onDeleteEvent(eventId) {
+    ScheduleApiService.deleteEvent(eventId)
+    .then((data) => {
+       data.map((item) => {return item.key = item.id})
+       return data;
+    })
+    .then((data) => {setItems(data)});
+  }
 
   React.useEffect(() => {
     ScheduleApiService.getAllEvents()
@@ -118,7 +127,7 @@ const  App = () => {
         <AddEventModal visible={visible} onCreate={onCreate} organizers={organizers} onCancel={() => {setVisible(false)}}/>
         <AddMentorModal visible={visibleM} onCreate={onMentorCreate} onCancel={() => {setVisibleM(false)}}/>
         <Route path="/" exact>
-          <AntTable items={items} onUpdateEvent={onUpdateEvent} onSelect={onSelect} userType={userType} organizers={organizers}/>
+          <AntTable items={items} onUpdateEvent={onUpdateEvent} onSelect={onSelect} userType={userType} organizers={organizers} onDeleteEvent={onDeleteEvent}/>
         </Route>
         <Route path="/calendar">
           <EventCalendar items={items}/>

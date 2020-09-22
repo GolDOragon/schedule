@@ -26,6 +26,7 @@ class AntTable extends React.Component {
   }
   onSelectedRowKeysChange = (selectedRowKeys) => {
     this.setState({ selectedRowKeys });
+    console.log(selectedRowKeys);
   }
 
   getColumnSearchProps = dataIndex => ({
@@ -123,7 +124,7 @@ class AntTable extends React.Component {
       }
       if (dataIndex === 'dateTime') {inputNode = <DatePicker format={'YYYY-MM-DD'} />}
       if (dataIndex === 'time') {inputNode = <TimePicker format={'HH:mm'} />}
-      if (dataIndex === 'timePass') {inputNode = <InputNumber />}
+      if (dataIndex === 'timePass') {inputNode = <InputNumber step={0.5} min={0.5}/>}
       if (dataIndex === 'mentor') {inputNode = <Select>{organizers}</Select>}
       if (dataIndex === 'place') {
         inputNode = <Select>
@@ -162,7 +163,8 @@ class AntTable extends React.Component {
       });
       this.setState({editingKey: record.key})
     };
-
+    
+    
     const cancel = () => {
       this.setState({editingKey: ''})
     };
@@ -225,7 +227,7 @@ class AntTable extends React.Component {
       },
       {dataIndex: 'type',
         key: 'type',
-        title: 'Link',
+        title: 'Event type',
         render: type => {
                 let color='';
                 if (type === 'Deadline') {color = 'red'}
@@ -307,9 +309,12 @@ class AntTable extends React.Component {
               </Popconfirm>
             </span>
           ) : (
-            <a href="#!" disabled={this.state.editingKey !== ''} onClick={() => edit(record)}>
-              Edit
-            </a>
+            <span>
+              <a href="#!" disabled={this.state.editingKey !== ''} onClick={() => edit(record)}>Edit</a>
+              <Popconfirm title="Sure to delete?" onConfirm={() => this.props.onDeleteEvent(record.id)}>
+                <a href="#!" disabled={this.state.editingKey !== ''}> Delete</a>
+              </Popconfirm>
+            </span>
           );
         },
       },
@@ -346,6 +351,11 @@ class AntTable extends React.Component {
               cell: EditableCell,
             },
           }}
+          /*rowClassName={(record, index) => {
+            if(selectedRowKeys.includes(record.id)) {
+              return 'hidden';
+            }
+          }}*/
           onRow={(record, rowIndex) => {
               return {
                 onDoubleClick: () => this.props.onSelect(record),

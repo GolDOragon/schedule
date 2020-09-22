@@ -5,7 +5,6 @@ import 'antd/dist/antd.css';
 function AddEventModal(props) {
   const [form] = Form.useForm();
   const [eventType, setEventType] = React.useState('');
-  const timeFormat = 'HH:mm';
   const { Option } = Select;
   const children = [];
   for (let i = 0; i < props.organizers.length; i++) {
@@ -66,14 +65,14 @@ function AddEventModal(props) {
       <Form.Item name='dateTime' label='Date' rules={[{required: true, message: 'Это обязательное поле'}]}><DatePicker /></Form.Item>
       <Form.Item name='description' label='Description'><Input.TextArea /></Form.Item>
       <Form.Item name='descriptionUrl' label='Link' hidden={eventType === 'Deadline' && true}><Input /></Form.Item>
-      <Form.Item name='time' label='Time' hidden={(eventType === 'Self education' || eventType === 'Screening') && true}><TimePicker format={timeFormat}/></Form.Item>
+      <Form.Item name='time' label='Time' hidden={(eventType === 'Self education' || eventType === 'Screening') && true}><TimePicker format={'HH:mm'}/></Form.Item>
       <Form.Item name='place' label='Place' hidden={(eventType !== 'Lecture' && eventType !== 'Meetup') && true}>
         <Select>
           <Select.Option value='Online'>Online</Select.Option>
           <Select.Option value='Offline'>Offline</Select.Option>
         </Select>
       </Form.Item>
-      <Form.Item name='timePass' label='Duration' hidden={(eventType === 'Deadline' || eventType === 'Screening') && true}><InputNumber formatter={value => `${value}ч`} step={0.5} min={0.5}/></Form.Item>
+      <Form.Item name='timePass' label='Duration' hidden={(eventType === 'Deadline' || eventType === 'Screening') && true}><InputNumber formatter={value => `${value}h`} step={0.5} min={0.5}/></Form.Item>
       <Form.Item name='comment' label='Comment'><Input.TextArea /></Form.Item>
       <Form.Item name='picture' label='Picture' hidden={(eventType === 'Deadline' || eventType === 'Test') && true}><Input /></Form.Item>
       <Form.Item name='video' label='Video' hidden={(eventType === 'Deadline' || eventType === 'Test' || eventType === 'Deadline') && true}><Input /></Form.Item>
