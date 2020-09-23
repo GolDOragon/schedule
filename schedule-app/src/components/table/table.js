@@ -9,12 +9,13 @@ class AntTable extends React.Component {
     searchText: '',
     searchedColumn: '',
     selectedRowKeys: [],
-    data: this.props.items,
+    data: '',
     editingKey: '',
   };
-  
+
   formRef = React.createRef();
-  
+
+
   selectRow = (record) => {
     const selectedRowKeys = [...this.state.selectedRowKeys];
     if (selectedRowKeys.indexOf(record.key) >= 0) {
@@ -163,8 +164,8 @@ class AntTable extends React.Component {
       });
       this.setState({editingKey: record.key})
     };
-    
-    
+
+
     const cancel = () => {
       this.setState({editingKey: ''})
     };
@@ -288,9 +289,10 @@ class AntTable extends React.Component {
                   </div>
                 )
               },
-      }, 
+      },
       {title: '',
         dataIndex: 'operation',
+        className: this.props.userType === 'student' && 'hidden',
         render: (_, record) => {
           const editable = isEditing(record);
           return editable ? (
@@ -319,7 +321,7 @@ class AntTable extends React.Component {
         },
       },
     ];
-    
+
     const mergedColumns = columns.map((col) => {
       if (!col.editable) {
         return col;
@@ -363,7 +365,7 @@ class AntTable extends React.Component {
             }}
           pagination={{onChange: cancel}}
           />;
-        </Form>  
+        </Form>
         </div>
       </div>
     );
