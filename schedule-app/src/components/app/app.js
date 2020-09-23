@@ -6,6 +6,7 @@ import Header from '../header/header';
 import AddEventModal from '../addEventModal/addEventModal';
 import AddMentorModal from '../addMentorModal/addMentorModal';
 import AntTable from '../table/table';
+import HideColumns from '../table/hideColumns';
 import {EventCalendar} from '../calendar/EventCalendar'
 import {Button} from 'antd';
 import 'antd/dist/antd.css';
@@ -15,12 +16,15 @@ import Page from '../page/page';
 
 
 const  App = () => {
+  const TYPES = ['Date', 'Name', 'Description', 'Link', 'Event type', 'Time', 'Place', 'Duration', 'Comment', 'Mentor'];
   const [items, setItems] = React.useState([]);
   const [userType, setUserType] = React.useState('mentor');
   const [visible, setVisible] = React.useState(false);
   const [visibleM, setVisibleM] = React.useState(false);
   const [organizers, setOrganaizers] = React.useState([]);
   const [redirect, setRedirect] = React.useState('/');
+  const [displayedCols, setDisplayedCols] = React.useState(TYPES);
+
 
   function onCreate(values) {
     ScheduleApiService.addEvent(
@@ -87,7 +91,7 @@ const  App = () => {
   function onUserChange(user) {
     setUserType(user);
   }
-  
+
   function onDeleteEvent(eventId) {
     ScheduleApiService.deleteEvent(eventId)
     .then((data) => {
@@ -95,6 +99,10 @@ const  App = () => {
        return data;
     })
     .then((data) => {setItems(data)});
+  }
+
+  function onHideColumn(values) {
+    setDisplayedCols(values);
   }
 
   React.useEffect(() => {
@@ -120,14 +128,23 @@ const  App = () => {
       <div>
         {redirect !== '/' && <Redirect to={redirect} />}
         <header>
-          <Header onUserChange={onUserChange}/>
+          <Header onUserChange={onUserChange} />
           {userType === 'mentor' && <Button type="primary" onClick={() => {setVisible(true)}}>Create event</Button> }
           {userType === 'mentor' && <Button className="secondBtn" type="primary" onClick={() => {setVisibleM(true)}}>Create mentor</Button> }
         </header>
         <AddEventModal visible={visible} onCreate={onCreate} organizers={organizers} onCancel={() => {setVisible(false)}}/>
         <AddMentorModal visible={visibleM} onCreate={onMentorCreate} onCancel={() => {setVisibleM(false)}}/>
         <Route path="/" exact>
-          <AntTable items={items} onUpdateEvent={onUpdateEvent} onSelect={onSelect} userType={userType} organizers={organizers} onDeleteEvent={onDeleteEvent}/>
+          <HideColumns onHideColumn={onHideColumn} types={TYPES}/>
+          <AntTable
+            items={items}
+            onUpdateEvent={onUpdateEvent}
+            onSelect={onSelect}
+            userType={userType}
+            organizers={organizers}
+            onDeleteEvent={onDeleteEvent}
+            displayedCols={displayedCols}
+            />
         </Route>
         <Route path="/calendar">
           <EventCalendar items={items}/>
