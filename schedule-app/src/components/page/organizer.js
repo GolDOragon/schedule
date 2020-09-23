@@ -1,17 +1,8 @@
-import React, { useState } from 'react';
-import ScheduleApiService from '../../services/scheduleApi-service';
+import React from 'react';
 import { Avatar } from 'antd';
 
 const Organizer = (props) => {
-  const {organizerId} = props;
-  const [organizer, setOrganizer] = useState('');
-
-  React.useEffect(() => {
-    ScheduleApiService.getOrganizer(organizerId)
-    .then((data) => {
-      console.log(data)
-      setOrganizer(data)});
-  }, [organizerId]);
+  const {organizer} = props;
 
     return (
       <div>

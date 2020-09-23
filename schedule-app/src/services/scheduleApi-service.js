@@ -165,7 +165,12 @@ class ScheduleApiService {
       description: event.description,
       place: event.place,
       timeZone : event.timeZone,
-      comment: event.comment
+      comment: event.comment,
+      picture: event.picture,
+      video: event.video,
+      map: event.map,
+      mentor: event.mentor,
+      showComment: 'true'
     }
   }
 

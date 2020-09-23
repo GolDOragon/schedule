@@ -1,12 +1,6 @@
 .card {
   width: 1020px;
 }
-
-.user-view {
-  border: none !important;
-  color: white !important;
-}
-
-.mentor-view {
-
+.title {
+  font-weight: bold;
 }
