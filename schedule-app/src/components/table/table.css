@@ -31,3 +31,6 @@
 .ant-table-cell a:hover{
   color: #1890ff !important
 }
+.anticon {
+  vertical-align: 0 !important
+}
