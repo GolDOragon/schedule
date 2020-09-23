@@ -21,12 +21,11 @@ const  App = () => {
   const [visibleM, setVisibleM] = React.useState(false);
   const [organizers, setOrganaizers] = React.useState([]);
   const [redirect, setRedirect] = React.useState('/');
-  const [eventId, setEventId] = React.useState('');
 
   function onCreate(values) {
     ScheduleApiService.addEvent(
-      values.dateTime ? values.dateTime.format('YYYY-MM-DD') : '',
-      values.time ? values.time.format('HH:mm') : '',
+      values.dateTime && values.dateTime.format('YYYY-MM-DD'),
+      values.time && values.time.format(),
       values.type,
       values.name,
       values.timePass,
@@ -51,11 +50,11 @@ const  App = () => {
 
   function onUpdateEvent(eventId, values) {
     ScheduleApiService.updateEvent(eventId,
-      values.dateTime ? values.dateTime.format('YYYY-MM-DD') : '',
-      values.time ? values.time.format('HH:mm') : '',
+      values.dateTime && values.dateTime.format('YYYY-MM-DD'),
+      values.time && values.time.format(),
       values.type,
       values.name,
-      values.timePass ? `${values.timePass}h` : '',
+      values.timePass && `${values.timePass}`,
       values.description,
       values.descriptionUrl,
       values.place,
@@ -68,13 +67,10 @@ const  App = () => {
       // values.showComment
     )
     .then((data) => {
-       
-       console.log(data);
-      //  data.map((item) => {return item.key = item.id})
-       return data;
+      data.map((item) => {return item.key = item.id})
+      return data;
     })
-    // .then((data) => {setItems(data)})
-    // setVisible(false);
+    .then((data) => {setItems(data)})
   };
 
   function onMentorCreate(values) {
@@ -83,35 +79,22 @@ const  App = () => {
     setVisibleM(false);
   }
 
-  function onEdit(newValue, row) {
-    ScheduleApiService.updateEvent(
-      row.id,
-      row.dateTime,
-      row.time,
-      row.type,
-      row.name,
-      row.timePass,
-      row.description,
-      row.descriptionUrl,
-      row.place,
-      row.timeZone,
-      row.comment,
-      row.picture,
-      row.video,
-      row.map,
-      row.mentor,
-      row.showComment
-    )
-  }
-
   function onSelect(row) {
     const url = `/page?${row.id}`;
     setRedirect(url);
-    setEventId(row.id);
   }
 
   function onUserChange(user) {
     setUserType(user);
+  }
+  
+  function onDeleteEvent(eventId) {
+    ScheduleApiService.deleteEvent(eventId)
+    .then((data) => {
+       data.map((item) => {return item.key = item.id})
+       return data;
+    })
+    .then((data) => {setItems(data)});
   }
 
   React.useEffect(() => {
@@ -138,13 +121,13 @@ const  App = () => {
         {redirect !== '/' && <Redirect to={redirect} />}
         <header>
           <Header onUserChange={onUserChange}/>
-          {userType === 'mentor' && <Button type="primary" onClick={() => {setVisible(true)}}>Добавить событие</Button> }
-          {userType === 'mentor' && <Button className="secondBtn" type="primary" onClick={() => {setVisibleM(true)}}>Добавить ментора</Button> }
+          {userType === 'mentor' && <Button type="primary" onClick={() => {setVisible(true)}}>Create event</Button> }
+          {userType === 'mentor' && <Button className="secondBtn" type="primary" onClick={() => {setVisibleM(true)}}>Create mentor</Button> }
         </header>
         <AddEventModal visible={visible} onCreate={onCreate} organizers={organizers} onCancel={() => {setVisible(false)}}/>
         <AddMentorModal visible={visibleM} onCreate={onMentorCreate} onCancel={() => {setVisibleM(false)}}/>
         <Route path="/" exact>
-          <AntTable items={items} onEdit={onEdit} onSelect={onSelect} userType={userType} organizers={organizers}/>
+          <AntTable items={items} onUpdateEvent={onUpdateEvent} onSelect={onSelect} userType={userType} organizers={organizers} onDeleteEvent={onDeleteEvent}/>
         </Route>
         <Route path="/calendar">
           <EventCalendar items={items}/>

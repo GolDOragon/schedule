@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 class ScheduleApiService {
 
   _apiBase = 'https://rs-react-schedule.firebaseapp.com/api/team/26';
@@ -14,6 +16,10 @@ class ScheduleApiService {
 
   async getAllEvents() {
     const res = await this.getResource(`/events`);
+    res.data.forEach((item, i) => {
+      item.dateTime = moment(item.dateTime);
+      item.time = moment(item.time);
+    });
     return res.data;
   }
 
@@ -78,7 +84,7 @@ class ScheduleApiService {
       },
       body: JSON.stringify(body),
     })
-    return this.getEvent(eventId);
+    return this.getAllEvents();
   }
 
   async deleteEvent(eventId) {

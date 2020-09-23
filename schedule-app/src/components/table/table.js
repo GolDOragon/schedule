@@ -1,6 +1,6 @@
 import React from 'react';
 import './table.css';
-import { Table, Input, Button, Space, Tag } from 'antd';
+import { Table, Input, Button, Space, Tag, Form, InputNumber, Popconfirm, Select, DatePicker, TimePicker } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 
@@ -9,8 +9,12 @@ class AntTable extends React.Component {
     searchText: '',
     searchedColumn: '',
     selectedRowKeys: [],
+    data: this.props.items,
+    editingKey: '',
   };
-
+  
+  formRef = React.createRef();
+  
   selectRow = (record) => {
     const selectedRowKeys = [...this.state.selectedRowKeys];
     if (selectedRowKeys.indexOf(record.key) >= 0) {
@@ -22,6 +26,7 @@ class AntTable extends React.Component {
   }
   onSelectedRowKeysChange = (selectedRowKeys) => {
     this.setState({ selectedRowKeys });
+    console.log(selectedRowKeys);
   }
 
   getColumnSearchProps = dataIndex => ({
@@ -90,38 +95,139 @@ class AntTable extends React.Component {
   };
 
   render() {
+    //Editable cells begin
+    const EditableCell = ({
+      editing,
+      dataIndex,
+      title,
+      inputType,
+      record,
+      index,
+      children,
+      ...restProps
+    }) => {
+      const organizers = [];
+      for (let i = 0; i < this.props.organizers.length; i++) {
+        organizers.push(<Select.Option key={this.props.organizers[i].id}>{this.props.organizers[i].name}</Select.Option>);
+      }
+      let inputNode = <Input />;
+      if (dataIndex === 'type') {
+        inputNode = <Select>
+                      <Select.Option value='Self education'>Self education</Select.Option>
+                      <Select.Option value='Deadline'>Deadline</Select.Option>
+                      <Select.Option value='Task'>Task</Select.Option>
+                      <Select.Option value='Test'>Test</Select.Option>
+                      <Select.Option value='Lecture'>Lecture</Select.Option>
+                      <Select.Option value='Meetup'>Meetup</Select.Option>
+                      <Select.Option value='Screening'>Screening</Select.Option>
+                    </Select>
+      }
+      if (dataIndex === 'dateTime') {inputNode = <DatePicker format={'YYYY-MM-DD'} />}
+      if (dataIndex === 'time') {inputNode = <TimePicker format={'HH:mm'} />}
+      if (dataIndex === 'timePass') {inputNode = <InputNumber step={0.5} min={0.5}/>}
+      if (dataIndex === 'mentor') {inputNode = <Select>{organizers}</Select>}
+      if (dataIndex === 'place') {
+        inputNode = <Select>
+                      <Select.Option value='Online'>Online</Select.Option>
+                      <Select.Option value='Offline'>Offline</Select.Option>
+                    </Select>}
+      return (
+        <td {...restProps}>
+          {editing ? (
+            <Form.Item name={dataIndex} >
+              {inputNode}
+            </Form.Item>
+          ) : (
+            children
+          )}
+        </td>
+      );
+    };
+
+    const isEditing = (record) => record.key === this.state.editingKey;
+
+    const edit = (record) => {
+      this.formRef.current.setFieldsValue({
+        id: '',
+        dateTime: '',
+        name: '',
+        description: '',
+        descriptionUrl: '',
+        type: '',
+        time: '',
+        place: '',
+        timePass: '',
+        comment: '',
+        mentor: '',
+        ...record,
+      });
+      this.setState({editingKey: record.key})
+    };
+    
+    
+    const cancel = () => {
+      this.setState({editingKey: ''})
+    };
+
+    const save = async (key) => {
+      try {
+        const row = await this.formRef.current.validateFields();
+        const newData = [...this.state.data];
+        const index = newData.findIndex((item) => key === item.key);
+
+        if (index > -1) {
+          const item = newData[index];
+          newData.splice(index, 1, { ...item, ...row });
+          this.setState({data: newData});
+          this.setState({editingKey: ''})
+        } else {
+          newData.push(row);
+          this.setState({data: newData});
+          this.setState({editingKey: ''})
+        }
+        this.props.onUpdateEvent(row.id, row);
+      } catch (errInfo) {
+        console.log('Validate Failed:', errInfo);
+      }
+    };
+    //Editable cells end
     const columns = [
+      {dataIndex: 'id', key: 'id', editable: true, className: 'hidden'},
       {dataIndex: 'dateTime',
         key: 'dateTime',
-        title: 'Дата',
+        title: 'Date',
         className: 'dateTime',
         defaultSortOrder: 'descend',
         sorter: (a, b) => new Date(a.dateTime) - new Date(b.dateTime),
         sortDirections: ['descend', 'ascend'],
-
+        editable: true,
+        render: date => {
+          return date.format('YYYY-MM-DD');
+        },
       },
       {dataIndex: 'name',
         key: 'name',
-        title: 'Название',
+        title: 'Name',
         ...this.getColumnSearchProps('name'),
         sorter: (a, b) => a.name.localeCompare(b.name),
-
+        editable: true,
       },
       {dataIndex: 'description',
         key: 'description',
-        title: 'Описание',
+        title: 'Description',
         ...this.getColumnSearchProps('description'),
-
+        editable: true,
       },
-      {dataIndex: 'descriptionUrl', key: 'descriptionUrl', title: 'Ссылка',
+      {dataIndex: 'descriptionUrl', key: 'descriptionUrl', title: 'Link',
         render: link => {
           if (link.length === 0) return false;
-          return <a target="_blank" rel="noopener noreferrer" href={link}>Ссылка</a>
-        }
+          return <a target="_blank" rel="noopener noreferrer" href={link}>Link</a>
+        },
+        editable: true,
       },
       {dataIndex: 'type',
         key: 'type',
-        title: 'Событие',
+        title: 'Event type',
         render: type => {
                 let color='';
                 if (type === 'Deadline') {color = 'red'}
@@ -156,13 +262,17 @@ class AntTable extends React.Component {
             text: 'Screening'
           }],
         onFilter: (value, record) => record.type.indexOf(value) === 0,
-
+        editable: true,
       },
-      {dataIndex: 'time', key: 'time', title: 'Время', },
-      {dataIndex: 'place', key: 'place', title: 'Место', },
-      {dataIndex: 'timePass', key: 'timePass', title: 'Длительность', },
-      {dataIndex: 'comment', key: 'comment', title: 'Комментарий', },
-      {dataIndex: 'mentor', key: 'mentor', title: 'Ментор',
+      {dataIndex: 'time', key: 'time', title: 'Time', editable: true,
+        render: time => {
+          return time.format('HH:mm');
+        },
+      },
+      {dataIndex: 'place', key: 'place', title: 'Place', editable: true,},
+      {dataIndex: 'timePass', key: 'timePass', title: 'Duration', editable: true,},
+      {dataIndex: 'comment', key: 'comment', title: 'Comment', editable: true,},
+      {dataIndex: 'mentor', key: 'mentor', title: 'Mentor', editable: true,
       render: mentor => {
                 let fullMentor = {};
                 this.props.organizers.forEach((item) => {
@@ -178,8 +288,52 @@ class AntTable extends React.Component {
                   </div>
                 )
               },
-      }
+      }, 
+      {title: '',
+        dataIndex: 'operation',
+        render: (_, record) => {
+          const editable = isEditing(record);
+          return editable ? (
+            <span>
+              <a
+                href="#!"
+                onClick={() => save(record.key)}
+                style={{
+                  marginRight: 8,
+                }}
+              >
+                Save
+              </a>
+              <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
+                <a href="#!">Cancel</a>
+              </Popconfirm>
+            </span>
+          ) : (
+            <span>
+              <a href="#!" disabled={this.state.editingKey !== ''} onClick={() => edit(record)}>Edit</a>
+              <Popconfirm title="Sure to delete?" onConfirm={() => this.props.onDeleteEvent(record.id)}>
+                <a href="#!" disabled={this.state.editingKey !== ''}> Delete</a>
+              </Popconfirm>
+            </span>
+          );
+        },
+      },
     ];
+    
+    const mergedColumns = columns.map((col) => {
+      if (!col.editable) {
+        return col;
+      }
+      return {
+        ...col,
+        onCell: (record) => ({
+          record,
+          dataIndex: col.dataIndex,
+          title: col.title,
+          editing: isEditing(record),
+        }),
+      };
+    });
 
     const { selectedRowKeys } = this.state;
     const rowSelection = {
@@ -190,13 +344,26 @@ class AntTable extends React.Component {
     return (
       <div className="table-wrapper tablesaw-overflow">
         <div>
-          <Table dataSource={this.props.items} columns={columns} rowSelection={rowSelection}
+        <Form ref={this.formRef} component={false}>
+          <Table dataSource={this.props.items} columns={mergedColumns} rowSelection={rowSelection}
+          components={{
+            body: {
+              cell: EditableCell,
+            },
+          }}
+          /*rowClassName={(record, index) => {
+            if(selectedRowKeys.includes(record.id)) {
+              return 'hidden';
+            }
+          }}*/
           onRow={(record, rowIndex) => {
               return {
                 onDoubleClick: () => this.props.onSelect(record),
               };
             }}
+          pagination={{onChange: cancel}}
           />;
+        </Form>  
         </div>
       </div>
     );
