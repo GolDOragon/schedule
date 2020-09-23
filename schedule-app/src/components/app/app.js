@@ -62,13 +62,13 @@ const  App = () => {
       values.description,
       values.descriptionUrl,
       values.place,
-      '', //values.timeZone
+      '', 
       values.comment,
       values.picture,
       values.video,
       values.map,
       values.mentor,
-      // values.showComment
+      values.showComment
     )
     .then((data) => {
       data.map((item) => {return item.key = item.id})
@@ -150,10 +150,10 @@ const  App = () => {
           <EventCalendar items={items}/>
         </Route>
         <Route path="/list">
-            <ListRS items={items}/>
+            <ListRS items={items} onSelect={onSelect}/>
         </Route>
         <Route path="/page">
-          <Page items={items} userType={userType} onUpdateEvent={onUpdateEvent} />
+          <Page items={items} userType={userType} onUpdateEvent={onUpdateEvent} organizers={organizers}/>
         </Route>
       </div>
     </Router>

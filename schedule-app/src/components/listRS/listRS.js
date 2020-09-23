@@ -1,18 +1,18 @@
 import React, { Component, useState } from 'react';
 import './listRS.css';
 import 'antd/dist/antd.css';
-import { Layout, Button, List, Card, Avatar, Space, Tag, Empty} from 'antd';
+import { Layout, Button, List, Card, Rate , Space, Tag, Empty} from 'antd';
 import {
     MessageOutlined, LikeOutlined, StarOutlined,
     EditOutlined, EllipsisOutlined, SettingOutlined,
-    BarsOutlined, AppstoreOutlined, AuditOutlined
+    BarsOutlined, AppstoreOutlined, AuditOutlined, FieldTimeOutlined
 } from '@ant-design/icons';
 
 const {Content } = Layout;
 const { Meta } = Card;
 
 
-const ListRS = ({items}) => {
+const ListRS = ({items, onSelect}) => {
     const [type, setType] = useState('list');
 
     const IconText = ({ icon, text }) => (
@@ -44,18 +44,38 @@ const ListRS = ({items}) => {
 
     if(type === 'list'){
         view =  <List
+            pagination={{
+                pageSize: 3,
+            }}
+            className="demo-loadmore-list"
             itemLayout="horizontal"
             dataSource={items}
             renderItem={item => (
-                <List.Item>
+                <List.Item
+                    actions={[
+                        <CheckType type={item.type}/>,
+                        <Button type="link" size='large' onClick={() => onSelect(item)}>
+                            Смотреть
+                        </Button>
+                    ]}
+                    >
 
                     <List.Item.Meta
-                        // avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+
                         title={<div><a href="#">{item.name}</a></div>}
-                        description={<div>{item.description} <div><span>{item.time}  </span><span>{item.dateTime}</span></div></div>}
+                        description={<div>
+                            <span>{item.time.format('HH:mm')}</span>
+                            <span> | </span>
+                            <span>{item.dateTime.format('YYYY-MM-DD')}</span>
+                            <span> | <FieldTimeOutlined />{item.timePass}</span>
+                            <br/>
+                            {item.description}
+                            <br/>
+                            <Rate allowHalf defaultValue={2.5} />
+                        </div>
+                        }
                     />
-                    <CheckType type={item.type}/>
-                    <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />
+
 
                 </List.Item>
             )}
@@ -63,6 +83,9 @@ const ListRS = ({items}) => {
     }
     if(type === 'grid'){
         view = <List
+            pagination={{
+                pageSize: 3,
+            }}
             grid={{
                 gutter: 16,
                 xs: 1,
@@ -81,16 +104,24 @@ const ListRS = ({items}) => {
                             <Empty />
                         }
                         actions={[
-                            <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />,
-                            <CheckType type={item.type}/>
+                            <Button type="link" size='large' onClick={() => onSelect(item)}>
+                                Смотреть
+                            </Button>
                         ]}
                     >
                         <Meta
-                            title={item.type}
-                            description={item.description}
+                            title={<div>{item.type} <CheckType type={item.type}/></div>}
+                            description={<div>
+
+                                <span>{item.time.format('HH:mm')}</span>
+                                <span> | </span>
+                                <span>{item.dateTime.format('YYYY-MM-DD')}</span>
+                                <span> | <FieldTimeOutlined />{item.timePass}</span>
+                                <br/>
+                                {item.description}
+                                <br/>
+                                <Rate allowHalf defaultValue={2.5} /></div>}
                         />
-                        <span>{item.time}  </span>
-                        <span>{item.dateTime}</span>
 
                     </Card>
 
@@ -103,9 +134,6 @@ const ListRS = ({items}) => {
             itemLayout="vertical"
             size="large"
             pagination={{
-                onChange: page => {
-                    console.log(page);
-                },
                 pageSize: 3,
             }}
             dataSource={items}
@@ -113,7 +141,10 @@ const ListRS = ({items}) => {
                 <List.Item
                     key={item.name}
                     actions={[
-                        <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />
+                        <CheckType type={item.type}/>,
+                        <Button type="link" size='large' onClick={() => onSelect(item)}>
+                            Смотреть
+                        </Button>
                     ]}
                     extra={
                         <Empty />
@@ -126,12 +157,18 @@ const ListRS = ({items}) => {
                     }
                 >
                     <List.Item.Meta
-                        avatar={<CheckType type={item.type}/>}
                         title={<a href={item.href}>{item.name}</a>}
-                        description={item.description}
+                        description={<div>
+                            <span>{item.time.format('HH:mm')}</span>
+                            <span> | </span>
+                            <span>{item.dateTime.format('YYYY-MM-DD')}</span>
+                            <span> | <FieldTimeOutlined />{item.timePass}</span>
+                            <br/>
+                            {item.description}
+                            <br/>
+                            <Rate allowHalf defaultValue={2.5} />
+                        </div>}
                     />
-                    <span>{item.time}  </span>
-                    <span>{item.dateTime}</span>
 
 
                 </List.Item>
@@ -145,7 +182,7 @@ const ListRS = ({items}) => {
                 className="site-layout-background"
 
             >
-                <div class="list-rs-btn-group">
+                <div className="list-rs-btn-group">
                     <Button onClick={() => setType('list')} icon={<BarsOutlined />}></Button>
                     <Button onClick={() => setType('grid')} icon={<AppstoreOutlined />}></Button>
                     <Button onClick={() => setType('vertical')} icon={<AuditOutlined />}></Button>
