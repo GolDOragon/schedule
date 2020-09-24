@@ -20,8 +20,8 @@ const Page = (props) => {
 
   function onUpdateEvent(eventId, values) {
     ScheduleApiService.updateEvent(eventId,
-      values.dateTime && values.dateTime.format('YYYY-MM-DD'),
-      values.time && values.time.format(),
+      values.dateTime,
+      values.time,
       values.type,
       values.name,
       values.timePass && `${values.timePass}`,
@@ -37,9 +37,15 @@ const Page = (props) => {
       values.showComment
     )
     .then((data) => {
-      data.map((item) => {return item.key = item.id})
+      console.log(data);
+      let currentEvent = '';
+      data.forEach((item, i) => {
+        if (item.id === eventId) currentEvent = item;
+      });
+      currentEvent.dateTime = currentEvent.dateTime.format('YYYY-MM-DD');
+      currentEvent.time = currentEvent.time.format();
+      setRow(currentEvent);
       setOnEdit(false);
-      return data;
     })
   };
 
