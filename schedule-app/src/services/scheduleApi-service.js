@@ -157,7 +157,7 @@ class ScheduleApiService {
     return {
       id: event.id,
       dateTime : event.dateTime,
-      time : event.time,
+      time: ("0" + new Date(event.time).getHours()).slice(-2)   + ":" + ("0" + new Date(event.time).getMinutes()).slice(-2),
       name:event.name,
       timePass: event.timePass,
       type: event.type,

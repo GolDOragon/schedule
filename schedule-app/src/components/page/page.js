@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Card, Row, Form, Divider, Tag, Rate} from 'antd';
+import React, { useEffect, useState } from 'react'
+import { Card, Row, Form, Divider, Tag, Rate, Comment} from 'antd';
 import Feedback from './feedback';
 import SimpleMap from './map';
 import Organizer from './organizer';
@@ -9,7 +9,7 @@ import { EditOutlined} from '@ant-design/icons';
 import EditedPage from './editedPage';
 
 const Page = (props) => {
-  const {onUpdateEvent} = props;
+  const { onSelect} = props;
   const str = window.location.href;
   const eventId = str.substr(str.lastIndexOf('?') + 1);
   const [onEdit, setOnEdit] = useState(false);
@@ -18,23 +18,46 @@ const Page = (props) => {
   const [row, setRow] = useState({});
   const [organizer, setOrganizer] = useState({});
 
-
-  React.useEffect(() => {
-    ScheduleApiService.getEvent(eventId)
+  function onUpdateEvent(eventId, values) {
+    ScheduleApiService.updateEvent(eventId,
+      values.dateTime && values.dateTime.format('YYYY-MM-DD'),
+      values.time && values.time.format(),
+      values.type,
+      values.name,
+      values.timePass && `${values.timePass}`,
+      values.description,
+      values.descriptionUrl,
+      values.place,
+      '', 
+      values.comment,
+      values.picture,
+      values.video,
+      values.map,
+      values.mentor,
+      values.showComment
+    )
     .then((data) => {
-      console.log(data)
+      data.map((item) => {return item.key = item.id})
+      setOnEdit(false);
       return data;
     })
-    .then(data => {
-      if(data.mentor!=='' && data.mentor!==undefined) {
-        ScheduleApiService.getOrganizer(data.mentor)
-        .then((res) => {
-          setOrganizer(res);
-        })
-      }
-      setRow(data);
-     
-    })
+  };
+
+  useEffect(() => {
+    ScheduleApiService.getEvent(eventId)
+      .then((data) => {
+        setRow(data);
+        console.log(data)
+        return data;
+      })
+      .then(data => {
+        if(data.mentor!=='' && data.mentor!==undefined) {
+          ScheduleApiService.getOrganizer(data.mentor)
+          .then((res) => {
+            setOrganizer(res);
+          })
+        }
+      })
     switch(row.type) {
       case 'Deadline': setColor('red'); break;
       case 'Self education': setColor(''); break;
@@ -45,12 +68,10 @@ const Page = (props) => {
       case 'Meetup': setColor('magenta'); break;
       default:setColor('');
     }
-  }, [eventId, form, row.type]);
-  const {dateTime, time, type, name, timePass, description, descriptionUrl, place, comment, mentor, showComment} = row;
+  }, [row.type]);
 
-  const changeView = () => {
-    onEdit===false ? setOnEdit(true) : setOnEdit(false)
-  }
+
+  const { dateTime, time, type, name, timePass, description, descriptionUrl, place, comment, mentor, showComment} = row;
 
     return (
       <Row>
@@ -60,7 +81,7 @@ const Page = (props) => {
           title={name}
           actions={
             props.userType === 'mentor' &&
-            [<EditOutlined key="edit" onClick={() => changeView()}/>]
+            [<EditOutlined key="edit" onClick={() => setOnEdit(true)}/>]
           }>
 
           <Tag color={color}>{type}</Tag>
@@ -93,13 +114,18 @@ const Page = (props) => {
             </div>
           </Row>
 
-          <p>{comment}</p>
-          {showComment==='true' &&
-            <Feedback comment={comment} />
+          <Comment
+            content={comment}>
+          </Comment>
+          {(showComment==='true' && comment!=='') ? 
+            <Feedback comment={comment} /> :
+            <Comment
+              content={comment}>
+            </Comment>
           }
           
         </Card> : 
-        <EditedPage event={row} eventId={eventId} onUpdateEvent={onUpdateEvent} organizer={organizer} organizers={props.organizers} changeView={changeView}/>
+        <EditedPage row={row} eventId={eventId} onUpdateEvent={onUpdateEvent} organizer={organizer} organizers={props.organizers}  onSelect={onSelect}/>
         }  
       </Row>
     )

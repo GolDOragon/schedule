@@ -136,7 +136,7 @@ const  App = () => {
             <ListRS items={items} onSelect={onSelect}/>
         </Route>
         <Route path="/page">
-          <Page items={items} userType={userType} onUpdateEvent={onUpdateEvent} organizers={organizers}/>
+          <Page items={items} userType={userType} organizers={organizers} onSelect={onSelect}/>
         </Route>
       </div>
     </Router>
