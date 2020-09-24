@@ -5,7 +5,7 @@ import { EditOutlined} from '@ant-design/icons';
 import './page.css';
 const EditedPage = (props)=> {
   const [form] = Form.useForm();
-  const {event :{dateTime, time, type, name, timePass, description, descriptionUrl, place, comment, picture, video, map, showComment}, eventId, onUpdateEvent, organizer} = props;
+  const {row :{dateTime, time, type, name, timePass, description, descriptionUrl, place, comment, picture, video, map, showComment}, eventId, onUpdateEvent, organizer} = props;
   const timeFormat = 'HH:mm';
   const dateFormat = 'YYYY-MM-DD';
   const [allowComment, setAllowComment] = useState(showComment);
@@ -53,6 +53,7 @@ const EditedPage = (props)=> {
           }}
           onFinish={(values)=> {
             onUpdateEvent(eventId,values)
+            
           }}
         >
         
