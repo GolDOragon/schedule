@@ -304,7 +304,6 @@ class AntTable extends React.Component {
           return editable ? (
             <span>
               <a
-                href="#!"
                 onClick={() => save(record.key)}
                 style={{
                   marginRight: 8,
@@ -313,14 +312,14 @@ class AntTable extends React.Component {
                 Save
               </a>
               <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-                <a href="#!">Cancel</a>
+                <a>Cancel</a>
               </Popconfirm>
             </span>
           ) : (
             <span>
-              <a href="#!" disabled={this.state.editingKey !== ''} onClick={() => edit(record)}>Edit</a>
+              <a disabled={this.state.editingKey !== ''} onClick={() => edit(record)}>Edit</a>
               <Popconfirm title="Sure to delete?" onConfirm={() => this.props.onDeleteEvent(record.id)}>
-                <a href="#!" disabled={this.state.editingKey !== ''}> Delete</a>
+                <a disabled={this.state.editingKey !== ''}> Delete</a>
               </Popconfirm>
             </span>
           );
