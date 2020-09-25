@@ -16,7 +16,7 @@ function Header(props) {
         </Select>
       </li>
       <li className="nav-item">
-        <Link className="nav-link" to="/table">table</Link>
+        <Link className="nav-link" to="/">table</Link>
       </li>
       <li className="nav-item">
         <Link className="nav-link" to="/calendar">calendar</Link>
