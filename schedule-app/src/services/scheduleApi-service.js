@@ -156,10 +156,10 @@ class ScheduleApiService {
   _transformEvent(event) {
     return {
       id: event.id,
-      dateTime : event.dateTime,
+      dateTime : new Date(event.dateTime).getFullYear() + '-' + ("0" + new Date(event.dateTime).getMonth()).slice(-2) + '-' + ("0" + new Date(event.dateTime).getDate()).slice(-2),
       time: ("0" + new Date(event.time).getHours()).slice(-2)   + ":" + ("0" + new Date(event.time).getMinutes()).slice(-2),
       name:event.name,
-      timePass: event.timePass,
+      timePass: event.timePass + 'h',
       type: event.type,
       descriptionUrl: event.descriptionUrl,
       description: event.description,

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Row, Form, Divider, Tag, Rate, Comment} from 'antd';
+import { Card, Row, Form, Divider, Tag, Rate, Comment, Spin} from 'antd';
 import Feedback from './feedback';
 import SimpleMap from './map';
 import Organizer from './organizer';
@@ -13,15 +13,18 @@ const Page = (props) => {
   const str = window.location.href;
   const eventId = str.substr(str.lastIndexOf('?') + 1);
   const [onEdit, setOnEdit] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [color, setColor] = useState('');
   const [form] = Form.useForm();
   const [row, setRow] = useState({});
   const [organizer, setOrganizer] = useState({});
 
   function onUpdateEvent(eventId, values) {
+    setLoading(true);
+    
     ScheduleApiService.updateEvent(eventId,
       values.dateTime,
-      values.time,
+      values.time ,
       values.type,
       values.name,
       values.timePass && `${values.timePass}`,
@@ -43,13 +46,16 @@ const Page = (props) => {
         if (item.id === eventId) currentEvent = item;
       });
       currentEvent.dateTime = currentEvent.dateTime.format('YYYY-MM-DD');
-      currentEvent.time = currentEvent.time.format();
+      currentEvent.time = currentEvent.time.format('HH:mm');
+      currentEvent.timePass = currentEvent.timePass + 'h';
       setRow(currentEvent);
+      setLoading(false);
       setOnEdit(false);
     })
   };
 
   useEffect(() => {
+    // setLoading(true);
     ScheduleApiService.getEvent(eventId)
       .then((data) => {
         setRow(data);
@@ -61,6 +67,7 @@ const Page = (props) => {
           ScheduleApiService.getOrganizer(data.mentor)
           .then((res) => {
             setOrganizer(res);
+            setLoading(false);
           })
         }
       })
@@ -80,7 +87,11 @@ const Page = (props) => {
   const { dateTime, time, type, name, timePass, description, descriptionUrl, place, comment, mentor, showComment} = row;
 
     return (
-      <Row>
+      loading ?
+        <Row className="vh-100"><Spin className="m-auto align-middle" tip="Loading..."></Spin></Row> :
+ 
+        <Row>
+     
       {onEdit===false ?
         <Card
           className="card m-auto"
@@ -134,6 +145,9 @@ const Page = (props) => {
         <EditedPage row={row} eventId={eventId} onUpdateEvent={onUpdateEvent} organizer={organizer} organizers={props.organizers}  onSelect={onSelect}/>
         }  
       </Row>
+      
+        
+      
     )
 }
 
