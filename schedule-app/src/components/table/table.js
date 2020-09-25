@@ -303,24 +303,24 @@ class AntTable extends React.Component {
           const editable = isEditing(record);
           return editable ? (
             <span>
-              <a
-                href="#!"
+              <Tag
+                color="default"
                 onClick={() => save(record.key)}
                 style={{
                   marginRight: 8,
                 }}
               >
                 Save
-              </a>
+              </Tag>
               <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-                <a href="#!">Cancel</a>
+                <Tag color="default">Cancel</Tag>
               </Popconfirm>
             </span>
           ) : (
             <span>
-              <a href="#!" disabled={this.state.editingKey !== ''} onClick={() => edit(record)}>Edit</a>
+              <Tag color="default" disabled={this.state.editingKey !== ''} onClick={() => edit(record)}>Edit</Tag>
               <Popconfirm title="Sure to delete?" onConfirm={() => this.props.onDeleteEvent(record.id)}>
-                <a href="#!" disabled={this.state.editingKey !== ''}> Delete</a>
+                <Tag color="error" disabled={this.state.editingKey !== ''}> Delete</Tag>
               </Popconfirm>
             </span>
           );
