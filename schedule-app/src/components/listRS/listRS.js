@@ -55,7 +55,7 @@ const ListRS = ({ items, onSelect, organizers }) => {
     if(type === 'list'){
         view =  <List
             pagination={{
-                pageSize: 3,
+                pageSize: 10,
             }}
             className="demo-loadmore-list"
             itemLayout="horizontal"
@@ -96,7 +96,7 @@ const ListRS = ({ items, onSelect, organizers }) => {
     if(type === 'grid'){
         view = <List
             pagination={{
-                pageSize: 3,
+                pageSize: 10,
             }}
             grid={{
                 gutter: 16,
@@ -123,9 +123,9 @@ const ListRS = ({ items, onSelect, organizers }) => {
                     >
                         <Meta
                             avatar={
-                                <Mentor mentor={item.mentor} organizers={organizers} />
+                               <Mentor mentor={item.mentor} organizers={organizers} />
                             }
-                            title={<div>{item.type} <CheckType type={item.type}/></div>}
+                            title={<div>{item.name}</div>}
                             description={<div>
 
                                 <span>{item.time.format('HH:mm')}</span>
@@ -134,6 +134,8 @@ const ListRS = ({ items, onSelect, organizers }) => {
                                 <span> | <FieldTimeOutlined />{item.timePass}</span>
                                 <br/>
                                 {item.description}
+                                <br/>
+                                <CheckType type={item.type}/>
                                 <br/>
                                 <Rate allowHalf defaultValue={2.5} /></div>}
                         />
@@ -149,7 +151,7 @@ const ListRS = ({ items, onSelect, organizers }) => {
             itemLayout="vertical"
             size="large"
             pagination={{
-                pageSize: 3,
+                pageSize: 10,
             }}
             dataSource={items}
             renderItem={item => (
