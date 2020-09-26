@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Card, Row, Form, Divider, Tag, Rate} from 'antd';
+import React, { useEffect, useState } from 'react'
+import { Card, Row, Form, Divider, Tag, Rate, Comment, Spin} from 'antd';
 import Feedback from './feedback';
 import SimpleMap from './map';
 import Organizer from './organizer';
@@ -8,33 +8,70 @@ import './page.css';
 import { EditOutlined} from '@ant-design/icons';
 import EditedPage from './editedPage';
 
+import YandexMap from './map';
+
 const Page = (props) => {
-  const {onUpdateEvent} = props;
+  const { onSelect} = props;
   const str = window.location.href;
   const eventId = str.substr(str.lastIndexOf('?') + 1);
   const [onEdit, setOnEdit] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [color, setColor] = useState('');
-  const [form] = Form.useForm();
   const [row, setRow] = useState({});
   const [organizer, setOrganizer] = useState({});
 
-
-  React.useEffect(() => {
-    ScheduleApiService.getEvent(eventId)
+  function onUpdateEvent(eventId, values) {
+    setLoading(true);
+    
+    ScheduleApiService.updateEvent(eventId,
+      values.dateTime,
+      values.time ,
+      values.type,
+      values.name,
+      values.timePass && `${values.timePass}`,
+      values.description,
+      values.descriptionUrl,
+      values.place,
+      '', 
+      values.comment,
+      values.picture,
+      values.video,
+      values.map,
+      values.mentor,
+      ''
+    )
     .then((data) => {
-      console.log(data)
-      return data;
+      console.log(data);
+      let currentEvent = '';
+      data.forEach((item, i) => {
+        if (item.id === eventId) currentEvent = item;
+      });
+      currentEvent.dateTime = currentEvent.dateTime.format('YYYY-MM-DD');
+      currentEvent.time = currentEvent.time.format('HH:mm');
+      currentEvent.timePass = currentEvent.timePass + 'h';
+      setRow(currentEvent);
+      setLoading(false);
+      setOnEdit(false);
     })
-    .then(data => {
-      if(data.mentor!=='' && data.mentor!==undefined) {
-        ScheduleApiService.getOrganizer(data.mentor)
-        .then((res) => {
-          setOrganizer(res);
-        })
-      }
-      setRow(data);
-     
-    })
+  };
+
+  useEffect(() => {
+    // setLoading(true);
+    ScheduleApiService.getEvent(eventId)
+      .then((data) => {
+        setRow(data);
+        console.log(data)
+        return data;
+      })
+      .then(data => {
+        if(data.mentor!=='' && data.mentor!==undefined) {
+          ScheduleApiService.getOrganizer(data.mentor)
+          .then((res) => {
+            setOrganizer(res);
+            setLoading(false);
+          })
+        }
+      })
     switch(row.type) {
       case 'Deadline': setColor('red'); break;
       case 'Self education': setColor(''); break;
@@ -45,22 +82,23 @@ const Page = (props) => {
       case 'Meetup': setColor('magenta'); break;
       default:setColor('');
     }
-  }, [eventId, form, row.type]);
-  const {dateTime, time, type, name, timePass, description, descriptionUrl, place, comment, mentor, showComment} = row;
+  }, [eventId, row.type]);
 
-  const changeView = () => {
-    onEdit===false ? setOnEdit(true) : setOnEdit(false)
-  }
+
+  const { dateTime, time, type, name, timePass, description, descriptionUrl, place, comment, mentor, showComment} = row;
 
     return (
-      <Row>
-      {onEdit===false ?
+      loading ?
+        <Row className="vh-100"><Spin className="m-auto align-middle" tip="Loading..."></Spin></Row> :
+ 
+        <Row>
+        {onEdit===false ?
         <Card
           className="card m-auto"
           title={name}
           actions={
             props.userType === 'mentor' &&
-            [<EditOutlined key="edit" onClick={() => changeView()}/>]
+            [<EditOutlined key="edit" onClick={() => setOnEdit(true)}/>]
           }>
 
           <Tag color={color}>{type}</Tag>
@@ -88,18 +126,26 @@ const Page = (props) => {
           <Divider  orientation="left">Место проведения:</Divider>
           <p>{place}</p>
           <Row className="m-3">
-            <div className="m-auto" style={{width: '480px', height: '360px'}}>
+            <YandexMap/>
+            {/* <div className="m-auto" style={{width: '480px', height: '360px'}}>
               <SimpleMap/>
-            </div>
+            </div> */}
           </Row>
 
-          <p>{comment}</p>
-          {showComment==='true' &&
-            <Feedback comment={comment} />
+          {/* <Comment
+            content={comment}>
+          </Comment> */}
+          {(showComment==='true') &&
+             (comment==='') ? 
+            <Feedback comment={comment} /> :
+            <Comment
+              content={comment}>
+            </Comment>
           }
+           
           
         </Card> : 
-        <EditedPage event={row} eventId={eventId} onUpdateEvent={onUpdateEvent} organizer={organizer} organizers={props.organizers} changeView={changeView}/>
+        <EditedPage row={row} eventId={eventId} onUpdateEvent={onUpdateEvent} organizer={organizer} organizers={props.organizers}  onSelect={onSelect}/>
         }  
       </Row>
     )

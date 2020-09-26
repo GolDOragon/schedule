@@ -9,12 +9,13 @@ class AntTable extends React.Component {
     searchText: '',
     searchedColumn: '',
     selectedRowKeys: [],
-    data: this.props.items,
+    data: '',
     editingKey: '',
   };
-  
+
   formRef = React.createRef();
-  
+
+
   selectRow = (record) => {
     const selectedRowKeys = [...this.state.selectedRowKeys];
     if (selectedRowKeys.indexOf(record.key) >= 0) {
@@ -163,8 +164,8 @@ class AntTable extends React.Component {
       });
       this.setState({editingKey: record.key})
     };
-    
-    
+
+
     const cancel = () => {
       this.setState({editingKey: ''})
     };
@@ -196,7 +197,7 @@ class AntTable extends React.Component {
       {dataIndex: 'dateTime',
         key: 'dateTime',
         title: 'Date',
-        className: 'dateTime',
+        className: !this.props.displayedCols.includes('Date') ? 'hidden' : 'dateTime',
         defaultSortOrder: 'descend',
         sorter: (a, b) => new Date(a.dateTime) - new Date(b.dateTime),
         sortDirections: ['descend', 'ascend'],
@@ -211,12 +212,14 @@ class AntTable extends React.Component {
         ...this.getColumnSearchProps('name'),
         sorter: (a, b) => a.name.localeCompare(b.name),
         editable: true,
+        className: !this.props.displayedCols.includes('Name') && 'hidden',
       },
       {dataIndex: 'description',
         key: 'description',
         title: 'Description',
         ...this.getColumnSearchProps('description'),
         editable: true,
+        className: !this.props.displayedCols.includes('Description') && 'hidden',
       },
       {dataIndex: 'descriptionUrl', key: 'descriptionUrl', title: 'Link',
         render: link => {
@@ -224,6 +227,7 @@ class AntTable extends React.Component {
           return <a target="_blank" rel="noopener noreferrer" href={link}>Link</a>
         },
         editable: true,
+        className: !this.props.displayedCols.includes('Link') && 'hidden',
       },
       {dataIndex: 'type',
         key: 'type',
@@ -263,16 +267,19 @@ class AntTable extends React.Component {
           }],
         onFilter: (value, record) => record.type.indexOf(value) === 0,
         editable: true,
+        className: !this.props.displayedCols.includes('Event type') && 'hidden',
       },
       {dataIndex: 'time', key: 'time', title: 'Time', editable: true,
         render: time => {
           return time.format('HH:mm');
         },
+        className: !this.props.displayedCols.includes('Time') && 'hidden',
       },
-      {dataIndex: 'place', key: 'place', title: 'Place', editable: true,},
-      {dataIndex: 'timePass', key: 'timePass', title: 'Duration', editable: true,},
-      {dataIndex: 'comment', key: 'comment', title: 'Comment', editable: true,},
+      {dataIndex: 'place', key: 'place', title: 'Place', editable: true, className: !this.props.displayedCols.includes('Place') && 'hidden',},
+      {dataIndex: 'timePass', key: 'timePass', title: 'Duration', editable: true, className: !this.props.displayedCols.includes('Duration') && 'hidden',},
+      {dataIndex: 'comment', key: 'comment', title: 'Comment', editable: true, className: !this.props.displayedCols.includes('Comment') && 'hidden',},
       {dataIndex: 'mentor', key: 'mentor', title: 'Mentor', editable: true,
+      className: !this.props.displayedCols.includes('Mentor') && 'hidden',
       render: mentor => {
                 let fullMentor = {};
                 this.props.organizers.forEach((item) => {
@@ -288,38 +295,39 @@ class AntTable extends React.Component {
                   </div>
                 )
               },
-      }, 
+      },
       {title: '',
         dataIndex: 'operation',
+        className: this.props.userType === 'student' && 'hidden',
         render: (_, record) => {
           const editable = isEditing(record);
           return editable ? (
             <span>
-              <a
-                href="#!"
+              <Tag
+                color="default"
                 onClick={() => save(record.key)}
                 style={{
                   marginRight: 8,
                 }}
               >
                 Save
-              </a>
+              </Tag>
               <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-                <a href="#!">Cancel</a>
+                <Tag color="default">Cancel</Tag>
               </Popconfirm>
             </span>
           ) : (
             <span>
-              <a href="#!" disabled={this.state.editingKey !== ''} onClick={() => edit(record)}>Edit</a>
+              <Tag color="default" disabled={this.state.editingKey !== ''} onClick={() => edit(record)}>Edit</Tag>
               <Popconfirm title="Sure to delete?" onConfirm={() => this.props.onDeleteEvent(record.id)}>
-                <a href="#!" disabled={this.state.editingKey !== ''}> Delete</a>
+                <Tag color="error" disabled={this.state.editingKey !== ''}> Delete</Tag>
               </Popconfirm>
             </span>
           );
         },
       },
     ];
-    
+
     const mergedColumns = columns.map((col) => {
       if (!col.editable) {
         return col;
@@ -357,13 +365,13 @@ class AntTable extends React.Component {
             }
           }}*/
           onRow={(record, rowIndex) => {
-              return {
-                onDoubleClick: () => this.props.onSelect(record),
+            return {
+              onDoubleClick: () => this.props.onSelect(record),
               };
             }}
           pagination={{onChange: cancel}}
           />;
-        </Form>  
+        </Form>
         </div>
       </div>
     );
