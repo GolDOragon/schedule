@@ -9,15 +9,18 @@ const EditedPage = (props)=> {
   const timeFormat = 'HH:mm';
   const dateFormat = 'YYYY-MM-DD';
   const [allowComment, setAllowComment] = useState(showComment);
+  // const [allowComment, setAllowComment] = useState('true');
   const { Option } = Select;
   const children = [];
   for (let i = 0; i < props.organizers.length; i++) {
     children.push(<Option key={props.organizers[i].id}>{props.organizers[i].name}</Option>);
   }
 
-  
-  const onChange = () => {
-    showComment === 'true' ? setAllowComment('false') : setAllowComment('true');
+ 
+  const onChange = (event) => {
+    console.log(event.target.checked)
+    setAllowComment(`${!event.target.checked}`) 
+    console.log('showComment' + allowComment)
   }
 
     return (
@@ -43,7 +46,6 @@ const EditedPage = (props)=> {
             description: description,
             descriptionUrl:descriptionUrl,
             place: place,
-            comment:comment,
             picture: picture,
             video: video,
             map: map,
@@ -52,9 +54,10 @@ const EditedPage = (props)=> {
 
           }}
           onFinish={(values)=> {
-            //console.log(values.dateTime);
-            //values.dateTime = values.dateTime.format('YYYY-MM-DD');
-            //values.time = values.time.format();
+            console.log(values.dateTime);
+            values.dateTime = values.dateTime.format('YYYY-MM-DD');
+            values.time = values.time.format();
+            console.log(values)
             props.onUpdateEvent(eventId, values)
           }}
         >
@@ -91,7 +94,8 @@ const EditedPage = (props)=> {
           <Form.Item name='descriptionUrl' label='Ссылка на ТЗ' ><Input /></Form.Item>
           <Form.Item name='video' label='Видео материалы' ><Input /></Form.Item>
           <Form.Item name='picture' label='Изображения' ><Input /></Form.Item>
-          <Checkbox name='showComment' onChange={onChange}>Разрешить оставлять комментарий</Checkbox>
+          <Checkbox name='showComment' valuePropName="checked" 
+          onChange={onChange}>Разрешить оставлять комментарий</Checkbox>
           <Form.Item><Button type="primary" htmlType="submit">Сохранить</Button></Form.Item>
         </Form>
       </Card>   

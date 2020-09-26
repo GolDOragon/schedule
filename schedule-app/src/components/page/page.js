@@ -8,6 +8,8 @@ import './page.css';
 import { EditOutlined} from '@ant-design/icons';
 import EditedPage from './editedPage';
 
+import YandexMap from './map';
+
 const Page = (props) => {
   const { onSelect} = props;
   const str = window.location.href;
@@ -15,7 +17,6 @@ const Page = (props) => {
   const [onEdit, setOnEdit] = useState(false);
   const [loading, setLoading] = useState(true);
   const [color, setColor] = useState('');
-  const [form] = Form.useForm();
   const [row, setRow] = useState({});
   const [organizer, setOrganizer] = useState({});
 
@@ -37,7 +38,7 @@ const Page = (props) => {
       values.video,
       values.map,
       values.mentor,
-      values.showComment
+      ''
     )
     .then((data) => {
       console.log(data);
@@ -81,7 +82,7 @@ const Page = (props) => {
       case 'Meetup': setColor('magenta'); break;
       default:setColor('');
     }
-  }, [row.type]);
+  }, [eventId, row.type]);
 
 
   const { dateTime, time, type, name, timePass, description, descriptionUrl, place, comment, mentor, showComment} = row;
@@ -91,8 +92,7 @@ const Page = (props) => {
         <Row className="vh-100"><Spin className="m-auto align-middle" tip="Loading..."></Spin></Row> :
  
         <Row>
-     
-      {onEdit===false ?
+        {onEdit===false ?
         <Card
           className="card m-auto"
           title={name}
@@ -126,28 +126,28 @@ const Page = (props) => {
           <Divider  orientation="left">Место проведения:</Divider>
           <p>{place}</p>
           <Row className="m-3">
-            <div className="m-auto" style={{width: '480px', height: '360px'}}>
+            <YandexMap/>
+            {/* <div className="m-auto" style={{width: '480px', height: '360px'}}>
               <SimpleMap/>
-            </div>
+            </div> */}
           </Row>
 
-          <Comment
+          {/* <Comment
             content={comment}>
-          </Comment>
-          {(showComment==='true' && comment!=='') ? 
+          </Comment> */}
+          {(showComment==='true') &&
+             (comment==='') ? 
             <Feedback comment={comment} /> :
             <Comment
               content={comment}>
             </Comment>
           }
+           
           
         </Card> : 
         <EditedPage row={row} eventId={eventId} onUpdateEvent={onUpdateEvent} organizer={organizer} organizers={props.organizers}  onSelect={onSelect}/>
         }  
       </Row>
-      
-        
-      
     )
 }
 

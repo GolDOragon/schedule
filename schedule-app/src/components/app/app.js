@@ -42,7 +42,7 @@ const  App = () => {
       values.video,
       values.map,
       values.mentor,
-      values.showComment
+      ''
     )
     .then((data) => {
        data.map((item) => {return item.key = item.id})

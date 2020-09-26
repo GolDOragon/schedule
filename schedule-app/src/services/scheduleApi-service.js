@@ -58,7 +58,7 @@ class ScheduleApiService {
     return this.getAllEvents();
   }
 
-  async updateEvent(eventId, dateTime, time, type, name, timePass, description, descriptionUrl, place, timeZone, comment, picture, video, map, mentor){
+  async updateEvent(eventId, dateTime, time, type, name, timePass, description, descriptionUrl, place, timeZone, comment, picture, video, map, mentor, showComment){
     const url = `https://rs-react-schedule.firebaseapp.com/api/team/26/event/${eventId}`;
     const body = {
       dateTime : dateTime,
@@ -75,6 +75,7 @@ class ScheduleApiService {
       video: video,
       map: map,
       mentor: mentor,
+      showComment: showComment
     };
     await fetch(url, {
       method: 'PUT',
@@ -156,8 +157,10 @@ class ScheduleApiService {
   _transformEvent(event) {
     return {
       id: event.id,
-      dateTime : new Date(event.dateTime).getFullYear() + '-' + ("0" + new Date(event.dateTime).getMonth()).slice(-2) + '-' + ("0" + new Date(event.dateTime).getDate()).slice(-2),
-      time: ("0" + new Date(event.time).getHours()).slice(-2)   + ":" + ("0" + new Date(event.time).getMinutes()).slice(-2),
+      dateTime: event.dateTime,
+      time: event.time,
+      // dateTime : new Date(event.dateTime).getFullYear() + '-' + ("0" + new Date(event.dateTime).getMonth()).slice(-2) + '-' + ("0" + new Date(event.dateTime).getDate()).slice(-2),
+      // time: ("0" + new Date(event.time).getHours()).slice(-2)   + ":" + ("0" + new Date(event.time).getMinutes()).slice(-2),
       name:event.name,
       timePass: event.timePass + 'h',
       type: event.type,
