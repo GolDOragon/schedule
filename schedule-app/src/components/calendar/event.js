@@ -8,13 +8,12 @@ function Array(props) {
     time = "";
     }
     else{
-    time = 'T' + props.items[i].time;
+    time = 'T' + props.items[i].time.format('HH:mm');
     }
-    let date=props.items[i].dateTime;
+    let date=props.items[i].dateTime.format('YYYY-MM-DD');
     let place=props.items[i].place;
     let type=props.items[i].type;
     let typeColor;
-        console.log(type);
     if(type === 'Self education'){
       typeColor = '#d9d9d9';
     }
@@ -33,9 +32,7 @@ function Array(props) {
     if(type === 'Screening'){
       typeColor = '#722ed1';
     }
-        console.log(typeColor);
     ListDemo.push({ title: "[" + type + "] " + name + " (" + place +")", backgroundColor: typeColor, start: date + time})
-    console.log(ListDemo);
   }
   List=ListDemo;
   ListDemo=[];
