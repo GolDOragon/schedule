@@ -126,6 +126,7 @@ const ListRS = ({ items, onSelect, organizers }) => {
                                <Mentor mentor={item.mentor} organizers={organizers} />
                             }
                             title={<div>{item.name}</div>}
+
                             description={<div>
 
                                 <span>{item.time.format('HH:mm')}</span>
