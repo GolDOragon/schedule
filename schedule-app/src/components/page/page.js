@@ -36,6 +36,7 @@ const Page = (props) => {
       values.video,
       values.map,
       values.mentor,
+      values.showComment,
       
     )
     .then((data) => {
@@ -66,12 +67,6 @@ const Page = (props) => {
           ScheduleApiService.getOrganizer(data.mentor)
           .then((res) => {
             !cancelled && setOrganizer(res);
-          })
-        }
-        if(data.map!==undefined){
-          ScheduleApiService.getCoordinates(data.map) 
-          .then((res) => {
-            return res;
           })
         }
       })
@@ -110,7 +105,7 @@ const Page = (props) => {
             <span>{time}</span>
             <span>{timePass}h</span>
           </Space>
-          {/* <span><Rate allowHalf defaultValue={2.5} /></span> */}
+  
           {mentor &&
           <Organizer organizer={organizer}/>
           }
@@ -125,9 +120,7 @@ const Page = (props) => {
           }
           <br />
           {type==='Lecture' &&
-          <Row>
-            <iframe title="видео"  src="https://youtube.com/embed/0M9Rz-wXYas" width="480" height="360" allowFullScreen></iframe>
-          </Row>
+          <a href={descriptionUrl}></a>
           }
           {place && <Divider  orientation="left">Место проведения:</Divider>}
           {place &&
@@ -146,7 +139,6 @@ const Page = (props) => {
             <Feedback comment={comment} /> 
           }
            
-          
         </Card> : 
         <EditedPage row={row} eventId={eventId} onUpdateEvent={onUpdateEvent} organizer={organizer} organizers={props.organizers}  onSelect={onSelect}/>
         }  
