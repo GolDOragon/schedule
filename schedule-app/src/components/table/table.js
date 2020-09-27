@@ -283,7 +283,6 @@ class AntTable extends React.Component {
       },
       {dataIndex: 'place', key: 'place', title: 'Place', editable: true, className: !this.props.displayedCols.includes('Place') && 'hidden',},
       {dataIndex: 'timePass', key: 'timePass', title: 'Duration', editable: true, className: !this.props.displayedCols.includes('Duration') && 'hidden',},
-      {dataIndex: 'comment', key: 'comment', title: 'Comment', editable: true, className: !this.props.displayedCols.includes('Comment') && 'hidden',},
       {dataIndex: 'mentor', key: 'mentor', title: 'Mentor', editable: true,
       className: !this.props.displayedCols.includes('Mentor') && 'hidden',
       render: mentor => {
@@ -308,7 +307,7 @@ class AntTable extends React.Component {
         render: (_, record) => {
           const editable = isEditing(record);
           return editable ? (
-            <span>
+            <span className="editCell">
               <Tag
                 color="default"
                 onClick={() => save(record.key)}
@@ -323,7 +322,7 @@ class AntTable extends React.Component {
               </Popconfirm>
             </span>
           ) : (
-            <span>
+            <span className="editCell">
               <Tag color="default" disabled={this.state.editingKey !== ''} onClick={() => edit(record)}>Edit</Tag>
               <Popconfirm title="Sure to delete?" onConfirm={() => this.props.onDeleteEvent(record.id)}>
                 <Tag color="error" disabled={this.state.editingKey !== ''}> Delete</Tag>
@@ -376,11 +375,11 @@ class AntTable extends React.Component {
               };
             }}
           pagination={{onChange: cancel}}
-          />;
+          />
         </Form>
         </div>
       </div>
-    );
+    )
   }
 }
 

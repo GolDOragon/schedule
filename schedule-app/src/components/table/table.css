@@ -25,6 +25,9 @@
 .hidden {
   display: none;
 }
+.ant-table {
+  overflow-x: scroll;
+}
 .ant-table-cell{
   cursor: default;
 }
@@ -36,4 +39,7 @@
 }
 .anticon {
   vertical-align: 0 !important
+}
+.editCell{
+  white-space: nowrap;
 }
