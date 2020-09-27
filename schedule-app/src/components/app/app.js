@@ -21,7 +21,7 @@ const { Header, Content, Footer, } = Layout;
 const  App = () => {
   const TYPES = ['Date', 'Name', 'Description', 'Link', 'Event type', 'Time', 'Place', 'Duration', 'Mentor'];
   const [items, setItems] = React.useState([]);
-  const [userType, setUserType] = React.useState('mentor');
+  const [userType, setUserType] = React.useState('student');
   const [visible, setVisible] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
   const [visibleM, setVisibleM] = React.useState(false);
@@ -152,7 +152,7 @@ const  App = () => {
               <div className="right-block-btn rs-lg-right-menu">
                   {userType === 'mentor' && <Button type="primary" onClick={() => {setVisible(true)}}>Create event</Button> }
                   {userType === 'mentor' && <Button className="secondBtn" type="primary" onClick={() => {setVisibleM(true)}}>Create mentor</Button> }
-                  <Select defaultValue="mentor" name="userType" style={{ width: 120 }} onChange={onUserChange}>
+                  <Select defaultValue="student" name="userType" style={{ width: 120 }} onChange={onUserChange}>
                       <Option value="student">Студент</Option>
                       <Option value="mentor">Ментор</Option>
                   </Select>

@@ -37,6 +37,7 @@
 .right-block-btn .ant-select{
   margin-left: 10px;
 }
+
 .rs-mobile-nav{
   width: 100%;
   display:none;
@@ -53,9 +54,7 @@
     display:none
   }
 }
-@media (max-width: 768px) {
 
-}
 @media (max-width: 992px) {
   .rs-lg-left-menu,
   .rs-lg-right-menu{
@@ -66,5 +65,15 @@
   }
 }
 @media (max-width: 1200px) {
-
+    main {
+        min-height: calc(100vh - 134px) !important;
+    }
+}
+@media (max-width: 700px) {
+  .ant-layout-content {
+    padding: 0 !important
+  }
+  .site-layout-background {
+    padding: 0 !important
+  }
 }

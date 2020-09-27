@@ -1,5 +1,5 @@
 import React from 'react';
-import {Select} from 'antd';
+import {Select, Tooltip} from 'antd';
 import 'antd/dist/antd.css';
 
 function HideColumns(props) {
@@ -11,6 +11,7 @@ function HideColumns(props) {
 
   return (
     <div>
+    <Tooltip title="Show and hide columns">
         <Select
           mode="multiple"
           style={{ width: '100%' }}
@@ -20,6 +21,7 @@ function HideColumns(props) {
           >
           {children}
         </Select>
+      </Tooltip>
     </div>
   )
 }
