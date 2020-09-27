@@ -6,7 +6,7 @@ const Organizer = (props) => {
 
     return (
       <div>
-        <Avatar  className="m-3" src={organizer.face}></Avatar>
+        <Avatar  style={{marginTop: 15}} src={organizer.face}></Avatar>
         <a href={organizer.gitLink} target="_blank" rel="noopener noreferrer">{organizer.name}</a>
       </div>
   )

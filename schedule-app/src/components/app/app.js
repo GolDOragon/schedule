@@ -1,7 +1,7 @@
 import React  from 'react';
 import './app.css';
 import ListRS from '../listRS/listRS';
-import  { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import  { BrowserRouter as Router, Route, Switch,Redirect } from 'react-router-dom';
 import Header from '../header/header';
 import AddEventModal from '../addEventModal/addEventModal';
 import AddMentorModal from '../addMentorModal/addMentorModal';
@@ -12,6 +12,7 @@ import {Button} from 'antd';
 import 'antd/dist/antd.css';
 import ScheduleApiService from '../../services/scheduleApi-service';
 import Page from '../page/page';
+import Error from '../error/error';
 
 
 
@@ -42,7 +43,7 @@ const  App = () => {
       values.video,
       values.map,
       values.mentor,
-      ''
+      
     )
     .then((data) => {
        data.map((item) => {return item.key = item.id})
@@ -134,27 +135,30 @@ const  App = () => {
         </header>
         <AddEventModal visible={visible} onCreate={onCreate} organizers={organizers} onCancel={() => {setVisible(false)}}/>
         <AddMentorModal visible={visibleM} onCreate={onMentorCreate} onCancel={() => {setVisibleM(false)}}/>
-        <Route path="/" exact>
-          <HideColumns onHideColumn={onHideColumn} types={TYPES}/>
-          <AntTable
-            items={items}
-            onUpdateEvent={onUpdateEvent}
-            onSelect={onSelect}
-            userType={userType}
-            organizers={organizers}
-            onDeleteEvent={onDeleteEvent}
-            displayedCols={displayedCols}
-            />
-        </Route>
-        <Route path="/calendar">
-          <EventCalendar items={items}/>
-        </Route>
-        <Route path="/list">
-            <ListRS items={items} onSelect={onSelect} organizers={organizers}/>
-        </Route>
-        <Route path="/page">
-          <Page items={items} userType={userType} organizers={organizers} onSelect={onSelect}/>
-        </Route>
+        <Switch>
+          <Route path="/" exact>
+            <HideColumns onHideColumn={onHideColumn} types={TYPES}/>
+            <AntTable
+              items={items}
+              onUpdateEvent={onUpdateEvent}
+              onSelect={onSelect}
+              userType={userType}
+              organizers={organizers}
+              onDeleteEvent={onDeleteEvent}
+              displayedCols={displayedCols}
+              />
+          </Route>
+          <Route path="/calendar">
+            <EventCalendar items={items}/>
+          </Route>
+          <Route path="/list">
+              <ListRS items={items} onSelect={onSelect} organizers={organizers}/>
+          </Route>
+          <Route path="/page">
+            <Page items={items} userType={userType} organizers={organizers} onSelect={onSelect}/>
+          </Route>
+          <Route><Error/></Route>
+        </Switch>
       </div>
     </Router>
   )
