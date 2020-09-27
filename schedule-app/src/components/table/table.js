@@ -3,6 +3,7 @@ import './table.css';
 import { Table, Input, Button, Space, Tag, Form, InputNumber, Popconfirm, Select, DatePicker, TimePicker, Tooltip } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
+import moment from 'moment';
 
 class AntTable extends React.Component {
   state = {
@@ -364,11 +365,11 @@ class AntTable extends React.Component {
               cell: EditableCell,
             },
           }}
-          /*rowClassName={(record, index) => {
-            if(selectedRowKeys.includes(record.id)) {
-              return 'hidden';
+          rowClassName={(record, index) => {
+            if(moment().isAfter(record.dateTime)) {
+              return 'lateRow';
             }
-          }}*/
+          }}
           onRow={(record, rowIndex) => {
             return {
               onDoubleClick: () => this.props.onSelect(record),

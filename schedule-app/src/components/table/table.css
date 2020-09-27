@@ -26,7 +26,7 @@
   display: none;
 }
 .ant-table {
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 .ant-table-cell{
   cursor: default;
@@ -42,4 +42,7 @@
 }
 .editCell{
   white-space: nowrap;
+}
+.lateRow {
+  opacity: 0.5;
 }
