@@ -34,7 +34,7 @@
 }
 
 .fc-daygrid-event{
-  overflow-x: scroll!important;
+  white-space: break-spaces;
 }
 
 .fc-h-event .fc-event-title {
