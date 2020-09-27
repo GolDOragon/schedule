@@ -109,19 +109,19 @@ const Page = (props) => {
           <Organizer organizer={organizer}/>
           }
 
-          {description && <Divider orientation="left">Описание:</Divider>}
+          {description && <Divider orientation="left">Description:</Divider>}
           {description &&
             <p>{description}</p>
           }
-          {descriptionUrl && <Divider orientation="left">Ссылка на тз:</Divider>}
+          {descriptionUrl && <Divider orientation="left">Description Url:</Divider>}
           {descriptionUrl &&
-          <a href={descriptionUrl}>Ссылка на ТЗ</a>
+          <a href={descriptionUrl}>Description Url</a>
           }
           <br />
           {type==='Lecture' &&
           <a href={descriptionUrl}></a>
           }
-          {place && <Divider  orientation="left">Место проведения:</Divider>}
+          {place && <Divider  orientation="left">Place:</Divider>}
           {place &&
             <p>{place}</p>
             
