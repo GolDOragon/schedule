@@ -36,8 +36,8 @@ function AddMentorModal(props) {
       }}
       >
       <Form.Item name='name' label='Name' rules={[{required: true, message: 'Это обязательное поле'}]}><Input /></Form.Item>
-      <Form.Item name='gitLink' label='Link to profile' rules={[{required: true, message: 'Это обязательное поле'}]}><Input /></Form.Item>
-      <Form.Item name='face' label='Link to photo' rules={[{required: true, message: 'Это обязательное поле'}]}><Input /></Form.Item>
+      <Form.Item name='gitLink' label='Link to profile'><Input /></Form.Item>
+      <Form.Item name='face' label='Link to photo'><Input /></Form.Item>
     </Form>
     </Modal>
   );
