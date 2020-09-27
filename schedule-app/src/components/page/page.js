@@ -69,17 +69,12 @@ const Page = (props) => {
           })
         }
         if(data.map!==undefined){
-          ScheduleApiService.getCoordinates('37.611347,55.76024') 
+          ScheduleApiService.getCoordinates(data.map) 
           .then((res) => {
-            console.log(res);
+            return res;
           })
         }
       })
-     
-        
-        
-      
-      
     switch(row.type) {
       case 'Deadline': setColor('red'); break;
       case 'Self education': setColor(''); break;
@@ -137,19 +132,18 @@ const Page = (props) => {
           {place && <Divider  orientation="left">Место проведения:</Divider>}
           {place &&
             <p>{place}</p>
+            
           }  
-
+          {map && 
+          <p>{map}</p>}
           {type==='Meetup' &&
             <Row>
-              <div>{map}</div>
               <YandexMap map={map}/>
             </Row>
           }
 
           {(showComment==='true') &&
-             
             <Feedback comment={comment} /> 
-            
           }
            
           

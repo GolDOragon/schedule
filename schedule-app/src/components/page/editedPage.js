@@ -34,8 +34,8 @@ const EditedPage = (props)=> {
         <Form
           form={form}
           className="m-auto" 
-          labelCol={{ span: 10 }}
-          wrapperCol={{ span: 24 }}
+          labelCol={{ span: 14 }}
+          wrapperCol={{ span: 20 }}
           layout="vertical"
           initialValues={{ 
             dateTime: moment(`${dateTime}`,dateFormat),
@@ -66,8 +66,8 @@ const EditedPage = (props)=> {
         
           <Form.Item name='name' label="Название события"><Input /></Form.Item>
   
-          <Row gutter={24}>
-            <Col span={7}>
+          <Row >
+            <Col lg={8} md={8} xs={12}>
               <Form.Item  name='type' label="Тип события">
                 <Select >
                   <Select.Option value='Self education'>Self education</Select.Option>
@@ -81,9 +81,9 @@ const EditedPage = (props)=> {
               </Form.Item>
             </Col>
            
-            <Col span={4}><Form.Item name='dateTime' label="Дата" ><DatePicker /></Form.Item></Col>
-            <Col span={4}><Form.Item name='time' label='Время' hidden={(type === 'Self education' || type === 'Screening') && true}><TimePicker /></Form.Item></Col>
-            <Col span={9}><Form.Item name='timePass' label="Время выполнения"><InputNumber formatter={value => `${value}h`} step={0.5} /></Form.Item></Col>
+            <Col  lg={4} md={4} xs={12}><Form.Item name='dateTime' label="Дата" ><DatePicker /></Form.Item></Col>
+            <Col  lg={4} md={4} xs={12} ><Form.Item name='time' label='Время' hidden={(type === 'Self education' || type === 'Screening') && true}><TimePicker /></Form.Item></Col>
+            <Col  lg={8} md={8} xs={12} ><Form.Item name='timePass' label="Время выполнения"><InputNumber formatter={value => `${value}h`} step={0.5} /></Form.Item></Col>
           </Row>
           
           <Form.Item name='mentor' label='Ментор'>
@@ -99,9 +99,8 @@ const EditedPage = (props)=> {
           <Form.Item name='video' label='Видео материалы' ><Input /></Form.Item>
           <Form.Item name='picture' label='Изображения' ><Input /></Form.Item>
           <Form.Item name='' label='Изображения' ><Input /></Form.Item>
-          <Space><Checkbox name='showComment' 
-          onChange={onChange}>Разрешить оставлять комментарий</Checkbox></Space>
-          <Form.Item><Button type="primary" htmlType="submit">Сохранить</Button></Form.Item>
+          <Checkbox name='showComment' onChange={onChange}>Разрешить оставлять комментарий</Checkbox>
+          <Form.Item style={{paddingTop: 15}}><Button  type="primary" htmlType="submit">Сохранить</Button></Form.Item>
         </Form>
       </Card>   
     )  

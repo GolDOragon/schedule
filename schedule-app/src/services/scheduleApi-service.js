@@ -5,7 +5,7 @@ class ScheduleApiService {
   _apiBase = 'https://rs-react-schedule.firebaseapp.com/api/team/26';
 
   async getCoordinates(map) {
-    const res = await fetch(`https://geocode-maps.yandex.ru/1.x/?414ea024-2f29-4bce-996e-cae0435d160c&geocode=${map}`)
+    const res = await fetch(`https://geocode-maps.yandex.ru/1.x/?apikey=414ea024-2f29-4bce-996e-cae0435d160c&geocode=${map}`)
     return res;
   }
   async getResource(url) {

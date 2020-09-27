@@ -5,12 +5,12 @@ import ScheduleApiService from '../../services/scheduleApi-service';
 
 
 const mapData = {
-  center: [55.751574, 37.573856],
-  zoom: 5,
+  center: [53.9000000, 27.5666700],
+  zoom: 11,
 };
 
 const coordinate = [
-  [55.684758, 37.738521]
+  [53.9000000, 27.5666700]
 ];
 
 const YandexMap = (props) => {
