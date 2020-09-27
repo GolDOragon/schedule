@@ -11,9 +11,9 @@ function Header(props) {
     <div>
       <ul className="nav">
       <li className="nav-item">
-        <Select defaultValue="mentor" name="userType" style={{ width: 120 }} onChange={props.onUserChange}>
-          <Option value="student">Студент</Option>
-          <Option value="mentor">Ментор</Option>
+        <Select defaultValue="student" name="userType" style={{ width: 120 }} onChange={props.onUserChange}>
+          <Option value="student">Student</Option>
+          <Option value="mentor">Mentor</Option>
         </Select>
       </li>
       <li className="nav-item">
