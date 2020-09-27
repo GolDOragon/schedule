@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Row, Form, Divider, Tag, Rate, Comment, Spin} from 'antd';
+import { Card, Row, Divider, Tag, Rate, Comment, Spin} from 'antd';
 import Feedback from './feedback';
-import SimpleMap from './map';
 import Organizer from './organizer';
 import ScheduleApiService from '../../services/scheduleApi-service';
 import './page.css';
@@ -21,7 +20,6 @@ const Page = (props) => {
   const [organizer, setOrganizer] = useState({});
 
   function onUpdateEvent(eventId, values) {
-    setLoading(true);
     
     ScheduleApiService.updateEvent(eventId,
       values.dateTime,
@@ -49,29 +47,33 @@ const Page = (props) => {
       currentEvent.dateTime = currentEvent.dateTime.format('YYYY-MM-DD');
       currentEvent.time = currentEvent.time.format('HH:mm');
       currentEvent.timePass = currentEvent.timePass + 'h';
+      
       setRow(currentEvent);
-      setLoading(false);
+      
       setOnEdit(false);
+      setLoading(false);
     })
   };
 
   useEffect(() => {
-    // setLoading(true);
+    let cancelled = false;
     ScheduleApiService.getEvent(eventId)
       .then((data) => {
         setRow(data);
         console.log(data)
+        setLoading(false);
         return data;
       })
       .then(data => {
         if(data.mentor!=='' && data.mentor!==undefined) {
           ScheduleApiService.getOrganizer(data.mentor)
           .then((res) => {
-            setOrganizer(res);
-            setLoading(false);
+            !cancelled && setOrganizer(res);
+            
           })
         }
       })
+      
     switch(row.type) {
       case 'Deadline': setColor('red'); break;
       case 'Self education': setColor(''); break;
@@ -82,6 +84,7 @@ const Page = (props) => {
       case 'Meetup': setColor('magenta'); break;
       default:setColor('');
     }
+    return () => cancelled = true;
   }, [eventId, row.type]);
 
 
@@ -125,16 +128,10 @@ const Page = (props) => {
           }
           <Divider  orientation="left">Место проведения:</Divider>
           <p>{place}</p>
-          <Row className="m-3">
-            <YandexMap/>
-            {/* <div className="m-auto" style={{width: '480px', height: '360px'}}>
-              <SimpleMap/>
-            </div> */}
+          <Row className="m-auto">
+            <YandexMap  className='m-auto'/>
           </Row>
 
-          {/* <Comment
-            content={comment}>
-          </Comment> */}
           {(showComment==='true') &&
              (comment==='') ? 
             <Feedback comment={comment} /> :
