@@ -1,27 +1,29 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Row, Form, Divider, Tag, Rate, Comment} from 'antd';
+import { Card, Row, Divider, Tag, Rate, Comment, Spin} from 'antd';
 import Feedback from './feedback';
-import SimpleMap from './map';
 import Organizer from './organizer';
 import ScheduleApiService from '../../services/scheduleApi-service';
 import './page.css';
 import { EditOutlined} from '@ant-design/icons';
 import EditedPage from './editedPage';
 
+import YandexMap from './map';
+
 const Page = (props) => {
   const { onSelect} = props;
   const str = window.location.href;
   const eventId = str.substr(str.lastIndexOf('?') + 1);
   const [onEdit, setOnEdit] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [color, setColor] = useState('');
-  const [form] = Form.useForm();
   const [row, setRow] = useState({});
   const [organizer, setOrganizer] = useState({});
 
   function onUpdateEvent(eventId, values) {
+    
     ScheduleApiService.updateEvent(eventId,
       values.dateTime,
-      values.time,
+      values.time ,
       values.type,
       values.name,
       values.timePass && `${values.timePass}`,
@@ -34,7 +36,7 @@ const Page = (props) => {
       values.video,
       values.map,
       values.mentor,
-      values.showComment
+      ''
     )
     .then((data) => {
       console.log(data);
@@ -43,27 +45,35 @@ const Page = (props) => {
         if (item.id === eventId) currentEvent = item;
       });
       currentEvent.dateTime = currentEvent.dateTime.format('YYYY-MM-DD');
-      currentEvent.time = currentEvent.time.format();
+      currentEvent.time = currentEvent.time.format('HH:mm');
+      currentEvent.timePass = currentEvent.timePass + 'h';
+      
       setRow(currentEvent);
+      
       setOnEdit(false);
+      setLoading(false);
     })
   };
 
   useEffect(() => {
+    let cancelled = false;
     ScheduleApiService.getEvent(eventId)
       .then((data) => {
         setRow(data);
         console.log(data)
+        setLoading(false);
         return data;
       })
       .then(data => {
         if(data.mentor!=='' && data.mentor!==undefined) {
           ScheduleApiService.getOrganizer(data.mentor)
           .then((res) => {
-            setOrganizer(res);
+            !cancelled && setOrganizer(res);
+            
           })
         }
       })
+      
     switch(row.type) {
       case 'Deadline': setColor('red'); break;
       case 'Self education': setColor(''); break;
@@ -74,14 +84,18 @@ const Page = (props) => {
       case 'Meetup': setColor('magenta'); break;
       default:setColor('');
     }
-  }, [row.type]);
+    return () => cancelled = true;
+  }, [eventId, row.type]);
 
 
   const { dateTime, time, type, name, timePass, description, descriptionUrl, place, comment, mentor, showComment} = row;
 
     return (
-      <Row>
-      {onEdit===false ?
+      loading ?
+        <Row className="vh-100"><Spin className="m-auto align-middle" tip="Loading..."></Spin></Row> :
+ 
+        <Row>
+        {onEdit===false ?
         <Card
           className="card m-auto"
           title={name}
@@ -114,21 +128,18 @@ const Page = (props) => {
           }
           <Divider  orientation="left">Место проведения:</Divider>
           <p>{place}</p>
-          <Row className="m-3">
-            <div className="m-auto" style={{width: '480px', height: '360px'}}>
-              <SimpleMap/>
-            </div>
+          <Row className="m-auto">
+            <YandexMap  className='m-auto'/>
           </Row>
 
-          <Comment
-            content={comment}>
-          </Comment>
-          {(showComment==='true' && comment!=='') ? 
+          {(showComment==='true') &&
+             (comment==='') ? 
             <Feedback comment={comment} /> :
             <Comment
               content={comment}>
             </Comment>
           }
+           
           
         </Card> : 
         <EditedPage row={row} eventId={eventId} onUpdateEvent={onUpdateEvent} organizer={organizer} organizers={props.organizers}  onSelect={onSelect}/>

@@ -1,7 +1,7 @@
 import React, { Component, useState } from 'react';
 import './listRS.css';
 import 'antd/dist/antd.css';
-import { Layout, Button, List, Card, Rate , Space, Tag, Empty} from 'antd';
+import { Layout, Button, List, Card, Rate , Space, Tag, Empty, Avatar} from 'antd';
 import {
     MessageOutlined, LikeOutlined, StarOutlined,
     EditOutlined, EllipsisOutlined, SettingOutlined,
@@ -12,7 +12,7 @@ const {Content } = Layout;
 const { Meta } = Card;
 
 
-const ListRS = ({items, onSelect}) => {
+const ListRS = ({ items, onSelect, organizers }) => {
     const [type, setType] = useState('list');
 
     const IconText = ({ icon, text }) => (
@@ -23,7 +23,6 @@ const ListRS = ({items, onSelect}) => {
     );
 
     const CheckType = ({ type }) => {
-        console.log(type)
         switch (type) {
             case "Deadline":
                 return <Tag color="red">{type}</Tag>;
@@ -40,6 +39,17 @@ const ListRS = ({items, onSelect}) => {
         }
     };
 
+    const Mentor = ({ mentor, organizers }) => {
+        let fullMentor = {};
+        organizers.forEach((item) => {
+            if (item.id === mentor) fullMentor = item;
+        });
+        return <div className="mentor-block"><Avatar src={fullMentor.face} />
+            <h4 className="ant-list-item-meta-title">
+                {fullMentor.name}
+            </h4></div>
+    }
+
     let view;
 
     if(type === 'list'){
@@ -55,13 +65,15 @@ const ListRS = ({items, onSelect}) => {
                     actions={[
                         <CheckType type={item.type}/>,
                         <Button type="link" size='large' onClick={() => onSelect(item)}>
-                            Смотреть
+                            More
                         </Button>
                     ]}
                     >
 
                     <List.Item.Meta
-
+                        avatar={
+                            <Mentor mentor={item.mentor} organizers={organizers} />
+                        }
                         title={<div><a href="#">{item.name}</a></div>}
                         description={<div>
                             <span>{item.time.format('HH:mm')}</span>
@@ -105,11 +117,14 @@ const ListRS = ({items, onSelect}) => {
                         }
                         actions={[
                             <Button type="link" size='large' onClick={() => onSelect(item)}>
-                                Смотреть
+                                More
                             </Button>
                         ]}
                     >
                         <Meta
+                            avatar={
+                                <Mentor mentor={item.mentor} organizers={organizers} />
+                            }
                             title={<div>{item.type} <CheckType type={item.type}/></div>}
                             description={<div>
 
@@ -157,6 +172,9 @@ const ListRS = ({items, onSelect}) => {
                     }
                 >
                     <List.Item.Meta
+                        avatar={
+                            <Mentor mentor={item.mentor} organizers={organizers} />
+                        }
                         title={<a href={item.href}>{item.name}</a>}
                         description={<div>
                             <span>{item.time.format('HH:mm')}</span>
@@ -177,7 +195,7 @@ const ListRS = ({items, onSelect}) => {
     }
 
     return (
-        <Layout className="site-layout">
+        <Layout className="site-layout list-rs">
             <Content
                 className="site-layout-background"
 

@@ -38,3 +38,12 @@
     background-size: contain;
     background-repeat: no-repeat;
 }
+.mentor-block{
+    text-align: center;
+}
+.list-rs svg {
+    vertical-align: baseline;
+}
+.list-rs .ant-card-body {
+    padding: 10px;
+}
