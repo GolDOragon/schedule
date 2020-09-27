@@ -60,11 +60,11 @@ const EditedPage = (props)=> {
           }}
         >
         
-          <Form.Item name='name' label="Название события"><Input /></Form.Item>
+          <Form.Item name='name' label="Name "><Input /></Form.Item>
   
           <Row >
             <Col lg={8} md={8} xs={12}>
-              <Form.Item  name='type' label="Тип события">
+              <Form.Item  name='type' label="Type">
                 <Select >
                   <Select.Option value='Self education'>Self education</Select.Option>
                   <Select.Option value='Deadline'>Deadline</Select.Option>
@@ -77,26 +77,25 @@ const EditedPage = (props)=> {
               </Form.Item>
             </Col>
            
-            <Col  lg={4} md={4} xs={12}><Form.Item name='dateTime' label="Дата" ><DatePicker /></Form.Item></Col>
-            <Col  lg={4} md={4} xs={12} ><Form.Item name='time' label='Время' hidden={(type === 'Self education' || type === 'Screening') && true}><TimePicker /></Form.Item></Col>
-            <Col  lg={8} md={8} xs={12} ><Form.Item name='timePass' label="Время выполнения"><InputNumber formatter={value => `${value}h`} step={0.5} /></Form.Item></Col>
+            <Col  lg={4} md={4} xs={12}><Form.Item name='dateTime' label="Date" ><DatePicker /></Form.Item></Col>
+            <Col  lg={4} md={4} xs={12} ><Form.Item name='time' label='Time' hidden={(type === 'Self education' || type === 'Screening') && true}><TimePicker /></Form.Item></Col>
+            <Col  lg={8} md={8} xs={12} ><Form.Item name='timePass' label="Duration"><InputNumber formatter={value => `${value}h`} step={0.5} /></Form.Item></Col>
           </Row>
           
-          <Form.Item name='mentor' label='Ментор'>
+          <Form.Item name='mentor' label='Organizer'>
             <Select>
               {children}
             </Select>
           </Form.Item>
          
-          <Form.Item name='description' label='Описание'><Input.TextArea /></Form.Item>
-          <Form.Item name='descriptionUrl' label='Ссылка на ТЗ' ><Input /></Form.Item>
-          <Form.Item name='place' label='Место проведения' ><Input /></Form.Item>
-          <Form.Item name='map' label='Адресс' ><Input /></Form.Item>
-          <Form.Item name='video' label='Видео материалы' ><Input /></Form.Item>
-          <Form.Item name='picture' label='Изображения' ><Input /></Form.Item>
-          <Form.Item name='' label='Изображения' ><Input /></Form.Item>
-          <Checkbox name='showComment' onChange={onChange}>Разрешить оставлять комментарий</Checkbox>
-          <Form.Item style={{paddingTop: 15}}><Button  type="primary" htmlType="submit">Сохранить</Button></Form.Item>
+          <Form.Item name='description' label='Description'><Input.TextArea /></Form.Item>
+          <Form.Item name='descriptionUrl' label='Description Url' ><Input /></Form.Item>
+          <Form.Item name='place' label='Place' ><Input /></Form.Item>
+          <Form.Item name='map' label='Address' ><Input /></Form.Item>
+          <Form.Item name='video' label='Video' ><Input /></Form.Item>
+          <Form.Item name='picture' label='Picture' ><Input /></Form.Item>
+          <Checkbox name='showComment' onChange={onChange}>Allow post comment</Checkbox>
+          <Form.Item style={{paddingTop: 15}}><Button  type="primary" htmlType="submit">Save</Button></Form.Item>
         </Form>
       </Card>   
     )  
