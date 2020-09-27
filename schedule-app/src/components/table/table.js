@@ -10,9 +10,9 @@ class AntTable extends React.Component {
   state = {
     searchText: '',
     searchedColumn: '',
-    selectedRowKeys: [],
     data: '',
     editingKey: '',
+    hiddenRows: [],
   };
 
   formRef = React.createRef();
@@ -29,7 +29,6 @@ class AntTable extends React.Component {
   }
   onSelectedRowKeysChange = (selectedRowKeys) => {
     this.setState({ selectedRowKeys });
-    console.log(selectedRowKeys);
   }
 
   getColumnSearchProps = dataIndex => ({
@@ -96,7 +95,27 @@ class AntTable extends React.Component {
     clearFilters();
     this.setState({ searchText: '' });
   };
-
+  
+  handleHideRows = () => {
+    const alreadySelected = this.state.hiddenRows.concat(this.state.selectedRowKeys);
+    this.setState({hiddenRows: alreadySelected});
+    const result = [];
+    this.state.data.forEach((i) => {
+      let trig = false;
+      this.state.selectedRowKeys.forEach((a) => {
+        if (i.id === a) trig = true;
+      });
+      if (!trig) result.push(i);
+    })
+    this.setState({data: result})
+  }
+  
+  handleShowRows = () => {
+    this.setState({hiddenRows: []});
+    this.setState({selectedRowKeys: []});
+    this.setState({data: this.props.items});
+  }
+  
   downloadExcel = () => {
    const data = this.props.items ? this.props.items : '';//tabular data
     var option={};
@@ -104,7 +123,6 @@ class AntTable extends React.Component {
     if (data) {
       for (let i in data) {
         if(data){
-          console.log(this.props.items[i].name)
           let obj = {
                        'Date': data[i].dateTime.format('YYYY-MM-DD'),
                        'Name': data[i].name,
@@ -134,9 +152,16 @@ class AntTable extends React.Component {
   }  
   
   componentWillReceiveProps(props) {
-    this.setState({data: this.props.items});
-    console.log(this.state.data, this.props.items)
+    this.timerHandle = setTimeout(()=>{
+      this.setState({data: this.props.items});
+    }, 0)
     return false;
+  }
+  componentDidMount(){
+    this.setState({data: this.props.items});
+  }
+  componentWillUnmount(){
+    clearTimeout(this.timerHandle);
   }
   
   render() {
@@ -400,9 +425,9 @@ class AntTable extends React.Component {
     return (
       <div className="table-wrapper tablesaw-overflow">
         <div>
-        {this.props.items.length ?
+        {this.state.data.length ?
         <Form ref={this.formRef} component={false}>
-          <Table dataSource={this.props.items} columns={mergedColumns} rowSelection={rowSelection}
+          <Table dataSource={this.state.data} columns={mergedColumns} rowSelection={rowSelection}
           components={{
             body: {
               cell: EditableCell,
@@ -423,7 +448,9 @@ class AntTable extends React.Component {
         </Form>
         : <Row className="vh-100"><Spin className="m-auto align-middle" tip="Loading..."></Spin></Row>}
         <div style={{float: "right"}}>
-           <Button onClick={this.downloadExcel}>Export Excel Table</Button>
+          <Button onClick={this.handleHideRows}>Hide rows</Button>
+          <Button onClick={this.handleShowRows}>Show hidden rows ({this.state.hiddenRows.length})</Button>
+          <Button onClick={this.downloadExcel}>Export Excel Table</Button>
         </div>
         </div>
       </div>
