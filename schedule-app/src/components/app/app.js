@@ -13,19 +13,23 @@ import 'antd/dist/antd.css';
 import ScheduleApiService from '../../services/scheduleApi-service';
 import Page from '../page/page';
 import Error from '../error/error';
+import { MenuOutlined } from '@ant-design/icons';
 
-const { Header, Content, Footer } = Layout;
+const { Header, Content, Footer, } = Layout;
+
 
 const  App = () => {
   const TYPES = ['Date', 'Name', 'Description', 'Link', 'Event type', 'Time', 'Place', 'Duration', 'Mentor'];
   const [items, setItems] = React.useState([]);
   const [userType, setUserType] = React.useState('student');
   const [visible, setVisible] = React.useState(false);
+  const [isOpen, setIsOpen] = React.useState(false);
   const [visibleM, setVisibleM] = React.useState(false);
   const [organizers, setOrganaizers] = React.useState([]);
   const [redirect, setRedirect] = React.useState('/');
   const [displayedCols, setDisplayedCols] = React.useState(TYPES);
   const { Option } = Select;
+
 
 
   function onCreate(values) {
@@ -129,8 +133,9 @@ const  App = () => {
     <Router>
       <Layout>
         {redirect !== '/' && <Redirect to={redirect} />}
-          <Header   style={{ position: 'fixed', zIndex: 9999, width: '100%', display: 'flex', justifyContent: 'space-between' }}>
-              <div>
+          <Header
+              style={{ position: 'fixed', zIndex: 9999, width: '100%', display: 'flex', justifyContent: 'space-between' }}>
+              <div className="rs-lg-left-menu">
                 <div className="logo" />
                 <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
                     <Menu.Item key="1">
@@ -144,13 +149,45 @@ const  App = () => {
                     </Menu.Item>
                 </Menu>
               </div>
-              <div className="right-block-btn">
+              <div className="right-block-btn rs-lg-right-menu">
                   {userType === 'mentor' && <Button type="primary" onClick={() => {setVisible(true)}}>Create event</Button> }
                   {userType === 'mentor' && <Button className="secondBtn" type="primary" onClick={() => {setVisibleM(true)}}>Create mentor</Button> }
                   <Select defaultValue="student" name="userType" style={{ width: 120 }} onChange={onUserChange}>
                       <Option value="student">Студент</Option>
                       <Option value="mentor">Ментор</Option>
                   </Select>
+              </div>
+              <div className="rs-mobile-nav" >
+
+                  <div className="logo" />
+                  <Button  onClick={() => {{setIsOpen(!isOpen)}}} type="primary" className="btn-mobile-menu" style={{ position: 'absolute'}}><MenuOutlined /></Button>
+
+                  {isOpen && <div className="rs-mobile-menu" >
+                      <Menu theme="light"  defaultSelectedKeys={['1']}>
+                          <Menu.Item key="1">
+                              <Link className="rs-nav-link" to="/">Table</Link>
+                          </Menu.Item>
+                          <Menu.Item key="2">
+                              <Link className="rs-nav-link" to="/calendar">Calendar</Link>
+                          </Menu.Item>
+                          <Menu.Item key="3">
+                              <Link className="rs-nav-link" to="/list">List</Link>
+                          </Menu.Item>
+                          <Menu.Item key="4">
+                              {userType === 'mentor' && <Button type="primary" onClick={() => {setVisible(true)}}>Create event</Button> }
+                          </Menu.Item>
+                          <Menu.Item key="5">
+                              {userType === 'mentor' && <Button className="secondBtn" type="primary" onClick={() => {setVisibleM(true)}}>Create mentor</Button> }
+                          </Menu.Item>
+                          <Menu.Item key="6">
+                              <Select defaultValue="mentor" name="userType" style={{ width: 120 }} onChange={onUserChange}>
+                                  <Option value="student">Студент</Option>
+                                  <Option value="mentor">Ментор</Option>
+                              </Select>
+                          </Menu.Item>
+                      </Menu>
+                  </div>
+                  }
               </div>
 
           </Header>
