@@ -69,7 +69,7 @@ export default class Feedback extends React.Component {
     const { comment } = this.props;
     return (
       <>
-        {comments.length > 0 && <CommentList comments={comments} />}
+        {comments.length > 0  && <CommentList comments={comments} />}
         <Comment
           avatar={
             <Avatar
@@ -78,7 +78,7 @@ export default class Feedback extends React.Component {
             />
           }
           content={
-            comment ? 
+            comment==='' ? 
             <Editor
               onChange={this.handleChange}
               onSubmit={this.handleSubmit}

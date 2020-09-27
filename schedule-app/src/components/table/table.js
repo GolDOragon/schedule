@@ -1,16 +1,18 @@
 import React from 'react';
 import './table.css';
-import { Table, Input, Button, Space, Tag, Form, InputNumber, Popconfirm, Select, DatePicker, TimePicker } from 'antd';
+import { Table, Input, Button, Space, Tag, Form, InputNumber, Popconfirm, Select, DatePicker, TimePicker, Tooltip, Spin, Row } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
+import ExportJsonExcel from 'js-export-excel';
+import moment from 'moment';
 
 class AntTable extends React.Component {
   state = {
     searchText: '',
     searchedColumn: '',
-    selectedRowKeys: [],
     data: '',
     editingKey: '',
+    hiddenRows: [],
   };
 
   formRef = React.createRef();
@@ -27,7 +29,6 @@ class AntTable extends React.Component {
   }
   onSelectedRowKeysChange = (selectedRowKeys) => {
     this.setState({ selectedRowKeys });
-    console.log(selectedRowKeys);
   }
 
   getColumnSearchProps = dataIndex => ({
@@ -94,9 +95,76 @@ class AntTable extends React.Component {
     clearFilters();
     this.setState({ searchText: '' });
   };
-
+  
+  handleHideRows = () => {
+    const alreadySelected = this.state.hiddenRows.concat(this.state.selectedRowKeys);
+    this.setState({hiddenRows: alreadySelected});
+    const result = [];
+    this.state.data.forEach((i) => {
+      let trig = false;
+      this.state.selectedRowKeys.forEach((a) => {
+        if (i.id === a) trig = true;
+      });
+      if (!trig) result.push(i);
+    })
+    this.setState({data: result})
+  }
+  
+  handleShowRows = () => {
+    this.setState({hiddenRows: []});
+    this.setState({selectedRowKeys: []});
+    this.setState({data: this.props.items});
+  }
+  
+  downloadExcel = () => {
+   const data = this.props.items ? this.props.items : '';//tabular data
+    var option={};
+    let dataTable = [];
+    if (data) {
+      for (let i in data) {
+        if(data){
+          let obj = {
+                       'Date': data[i].dateTime.format('YYYY-MM-DD'),
+                       'Name': data[i].name,
+                       'Description': data[i].description,
+                       'URL': data[i].descriptionUrl,
+                       'Event type': data[i].type,
+                       'Time': data[i].time.format('HH:mm'),
+                       'Place': data[i].place,
+                       'Duration': data[i].timePass,
+          }
+          dataTable.push(obj);
+        }
+      }
+    }
+       option.fileName = 'RS School Schedule'
+    option.datas=[
+      {
+        sheetData:dataTable,
+        sheetName:'sheet',
+               sheetFilter:['Date', 'Name', 'Description', 'URL', 'Event type', 'Time', 'Place', 'Duration'],
+               sheetHeader:['Date', 'Name', 'Description', 'URL', 'Event type', 'Time', 'Place', 'Duration'],
+      }
+    ];
+   
+    var toExcel = new ExportJsonExcel(option); 
+    toExcel.saveExcel();        
+  }  
+  
+  componentWillReceiveProps(props) {
+    this.timerHandle = setTimeout(()=>{
+      this.setState({data: this.props.items});
+    }, 0)
+    return false;
+  }
+  componentDidMount(){
+    this.setState({data: this.props.items});
+  }
+  componentWillUnmount(){
+    clearTimeout(this.timerHandle);
+  }
+  
   render() {
-    //Editable cells begin
     const EditableCell = ({
       editing,
       dataIndex,
@@ -203,7 +271,7 @@ class AntTable extends React.Component {
         sortDirections: ['descend', 'ascend'],
         editable: true,
         render: date => {
-          return date.format('YYYY-MM-DD');
+          return <Tooltip title="Double click to watch the event">{date.format('YYYY-MM-DD')}</Tooltip>;
         },
       },
       {dataIndex: 'name',
@@ -213,6 +281,9 @@ class AntTable extends React.Component {
         sorter: (a, b) => a.name.localeCompare(b.name),
         editable: true,
         className: !this.props.displayedCols.includes('Name') && 'hidden',
+        render: name => {
+          return <Tooltip title="Double click to watch the event">{name}</Tooltip>;
+        },
       },
       {dataIndex: 'description',
         key: 'description',
@@ -220,6 +291,9 @@ class AntTable extends React.Component {
         ...this.getColumnSearchProps('description'),
         editable: true,
         className: !this.props.displayedCols.includes('Description') && 'hidden',
+        render: description => {
+          return <Tooltip title="Double click to watch the event">{description}</Tooltip>;
+        },
       },
       {dataIndex: 'descriptionUrl', key: 'descriptionUrl', title: 'Link',
         render: link => {
@@ -277,7 +351,6 @@ class AntTable extends React.Component {
       },
       {dataIndex: 'place', key: 'place', title: 'Place', editable: true, className: !this.props.displayedCols.includes('Place') && 'hidden',},
       {dataIndex: 'timePass', key: 'timePass', title: 'Duration', editable: true, className: !this.props.displayedCols.includes('Duration') && 'hidden',},
-      {dataIndex: 'comment', key: 'comment', title: 'Comment', editable: true, className: !this.props.displayedCols.includes('Comment') && 'hidden',},
       {dataIndex: 'mentor', key: 'mentor', title: 'Mentor', editable: true,
       className: !this.props.displayedCols.includes('Mentor') && 'hidden',
       render: mentor => {
@@ -302,7 +375,7 @@ class AntTable extends React.Component {
         render: (_, record) => {
           const editable = isEditing(record);
           return editable ? (
-            <span>
+            <span className="editCell">
               <Tag
                 color="default"
                 onClick={() => save(record.key)}
@@ -317,7 +390,7 @@ class AntTable extends React.Component {
               </Popconfirm>
             </span>
           ) : (
-            <span>
+            <span className="editCell">
               <Tag color="default" disabled={this.state.editingKey !== ''} onClick={() => edit(record)}>Edit</Tag>
               <Popconfirm title="Sure to delete?" onConfirm={() => this.props.onDeleteEvent(record.id)}>
                 <Tag color="error" disabled={this.state.editingKey !== ''}> Delete</Tag>
@@ -352,29 +425,36 @@ class AntTable extends React.Component {
     return (
       <div className="table-wrapper tablesaw-overflow">
         <div>
+        {this.state.data.length ?
         <Form ref={this.formRef} component={false}>
-          <Table dataSource={this.props.items} columns={mergedColumns} rowSelection={rowSelection}
+          <Table dataSource={this.state.data} columns={mergedColumns} rowSelection={rowSelection}
           components={{
             body: {
               cell: EditableCell,
             },
           }}
-          /*rowClassName={(record, index) => {
-            if(selectedRowKeys.includes(record.id)) {
-              return 'hidden';
+          rowClassName={(record, index) => {
+            if(moment().isAfter(record.dateTime)) {
+              return 'lateRow';
             }
-          }}*/
+          }}
           onRow={(record, rowIndex) => {
             return {
               onDoubleClick: () => this.props.onSelect(record),
               };
             }}
           pagination={{onChange: cancel}}
-          />;
+          />
         </Form>
+        : <Row className="vh-100"><Spin className="m-auto align-middle" tip="Loading..."></Spin></Row>}
+        <div style={{float: "right"}}>
+          <Button onClick={this.handleHideRows}>Hide rows</Button>
+          <Button onClick={this.handleShowRows}>Show hidden rows ({this.state.hiddenRows.length})</Button>
+          <Button onClick={this.downloadExcel}>Export Excel Table</Button>
+        </div>
         </div>
       </div>
-    );
+    )
   }
 }
 

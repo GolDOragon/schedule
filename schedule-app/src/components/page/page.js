@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Row, Divider, Tag, Rate, Comment, Spin} from 'antd';
+import { Card, Row, Divider, Tag, Rate, Comment, Spin, Space} from 'antd';
 import Feedback from './feedback';
 import Organizer from './organizer';
 import ScheduleApiService from '../../services/scheduleApi-service';
@@ -36,7 +36,8 @@ const Page = (props) => {
       values.video,
       values.map,
       values.mentor,
-      ''
+      values.showComment,
+      
     )
     .then((data) => {
       console.log(data);
@@ -46,10 +47,7 @@ const Page = (props) => {
       });
       currentEvent.dateTime = currentEvent.dateTime.format('YYYY-MM-DD');
       currentEvent.time = currentEvent.time.format('HH:mm');
-      currentEvent.timePass = currentEvent.timePass + 'h';
-      
       setRow(currentEvent);
-      
       setOnEdit(false);
       setLoading(false);
     })
@@ -69,7 +67,6 @@ const Page = (props) => {
           ScheduleApiService.getOrganizer(data.mentor)
           .then((res) => {
             !cancelled && setOrganizer(res);
-            
           })
         }
       })
@@ -88,16 +85,16 @@ const Page = (props) => {
   }, [eventId, row.type]);
 
 
-  const { dateTime, time, type, name, timePass, description, descriptionUrl, place, comment, mentor, showComment} = row;
+  const { dateTime, time, type, name, timePass, description, descriptionUrl, place, comment, mentor, showComment, map} = row;
 
     return (
       loading ?
-        <Row className="vh-100"><Spin className="m-auto align-middle" tip="Loading..."></Spin></Row> :
+        <Row ><Spin className='loading' tip="Loading..."></Spin></Row> :
  
         <Row>
         {onEdit===false ?
         <Card
-          className="card m-auto"
+          className='card'
           title={name}
           actions={
             props.userType === 'mentor' &&
@@ -105,42 +102,44 @@ const Page = (props) => {
           }>
 
           <Tag color={color}>{type}</Tag>
-          <span>{dateTime}</span>
-          <span className="p-2">{time}</span>
-          <span className="p-2 pr-5">{timePass}</span>
-          <span className="float-right"><Rate allowHalf defaultValue={2.5} /></span>
+          <Space><span>{dateTime}</span>
+            <span>{time}</span>
+            <span>{timePass}h</span>
+          </Space>
+  
           {mentor &&
           <Organizer organizer={organizer}/>
           }
 
-          <Divider orientation="left">Описание:</Divider>
+          {description && <Divider orientation="left">Описание:</Divider>}
           {description &&
             <p>{description}</p>
           }
+          {descriptionUrl && <Divider orientation="left">Ссылка на тз:</Divider>}
           {descriptionUrl &&
           <a href={descriptionUrl}>Ссылка на ТЗ</a>
           }
           <br />
           {type==='Lecture' &&
-          <Row className="m-3">
-            <iframe title="видео" className="m-auto"  src="https://youtube.com/embed/0M9Rz-wXYas" width="480" height="360" allowFullScreen></iframe>
-          </Row>
+          <a href={descriptionUrl}></a>
           }
-          <Divider  orientation="left">Место проведения:</Divider>
-          <p>{place}</p>
-          <Row className="m-auto">
-            <YandexMap  className='m-auto'/>
-          </Row>
+          {place && <Divider  orientation="left">Место проведения:</Divider>}
+          {place &&
+            <p>{place}</p>
+            
+          }  
+          {map && 
+          <p>{map}</p>}
+          {type==='Meetup' &&
+            <Row>
+              <YandexMap map={map}/>
+            </Row>
+          }
 
           {(showComment==='true') &&
-             (comment==='') ? 
-            <Feedback comment={comment} /> :
-            <Comment
-              content={comment}>
-            </Comment>
+            <Feedback comment={comment} /> 
           }
            
-          
         </Card> : 
         <EditedPage row={row} eventId={eventId} onUpdateEvent={onUpdateEvent} organizer={organizer} organizers={props.organizers}  onSelect={onSelect}/>
         }  

@@ -4,6 +4,10 @@ class ScheduleApiService {
 
   _apiBase = 'https://rs-react-schedule.firebaseapp.com/api/team/26';
 
+  async getCoordinates(map) {
+    const res = await fetch(`https://geocode-maps.yandex.ru/1.x/?apikey=414ea024-2f29-4bce-996e-cae0435d160c&geocode=${map}`)
+    return res;
+  }
   async getResource(url) {
     const res = await fetch(`${this._apiBase}${url}`);
 
@@ -45,7 +49,7 @@ class ScheduleApiService {
       video: video,
       map: map,
       mentor: mentor,
-      showComment: 'true'
+      showComment: true
     };
     await fetch(url, {
       method: 'POST',
@@ -157,12 +161,12 @@ class ScheduleApiService {
   _transformEvent(event) {
     return {
       id: event.id,
-      dateTime: event.dateTime,
-      time: event.time,
-      // dateTime : new Date(event.dateTime).getFullYear() + '-' + ("0" + new Date(event.dateTime).getMonth()).slice(-2) + '-' + ("0" + new Date(event.dateTime).getDate()).slice(-2),
-      // time: ("0" + new Date(event.time).getHours()).slice(-2)   + ":" + ("0" + new Date(event.time).getMinutes()).slice(-2),
+      // dateTime: event.dateTime,
+      // time: event.time,
+      dateTime : new Date(event.dateTime).getFullYear() + '-' + ("0" + new Date(event.dateTime).getMonth()).slice(-2) + '-' + ("0" + new Date(event.dateTime).getDate()).slice(-2),
+      time: ("0" + new Date(event.time).getHours()).slice(-2)   + ":" + ("0" + new Date(event.time).getMinutes()).slice(-2),
       name:event.name,
-      timePass: event.timePass + 'h',
+      timePass: event.timePass,
       type: event.type,
       descriptionUrl: event.descriptionUrl,
       description: event.description,
@@ -173,7 +177,7 @@ class ScheduleApiService {
       video: event.video,
       map: event.map,
       mentor: event.mentor,
-      showComment: 'true'
+      showComment: 'true',
     }
   }
 
