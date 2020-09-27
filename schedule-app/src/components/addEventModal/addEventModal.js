@@ -72,11 +72,25 @@ function AddEventModal(props) {
           <Select.Option value='Offline'>Offline</Select.Option>
         </Select>
       </Form.Item>
+      <Form.Item
+        noStyle
+        shouldUpdate={(prevValues, currentValues) => prevValues.place !== currentValues.place}
+       >
+         {({ getFieldValue }) => {
+           return getFieldValue('place') === 'Offline' ? (
+             <Form.Item
+               name="map"
+               label="Location"
+             >
+               <Input />
+             </Form.Item>
+           ) : null;
+         }}
+       </Form.Item>
       <Form.Item name='timePass' label='Duration' hidden={(eventType === 'Deadline' || eventType === 'Screening') && true}><InputNumber formatter={value => `${value}h`} step={0.5} min={0.5}/></Form.Item>
       <Form.Item name='comment' label='Comment'><Input.TextArea /></Form.Item>
       <Form.Item name='picture' label='Picture' hidden={(eventType === 'Deadline' || eventType === 'Test') && true}><Input /></Form.Item>
       <Form.Item name='video' label='Video' hidden={(eventType === 'Deadline' || eventType === 'Test' || eventType === 'Deadline') && true}><Input /></Form.Item>
-      <Form.Item name='map' label='Map' hidden={(eventType !== 'Lecture' && eventType !== 'Meetup') && true}><Input /></Form.Item>
       <Form.Item name='mentor' label='Mentor'>
         <Select>
           {children}
