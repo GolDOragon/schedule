@@ -1,6 +1,6 @@
 import React from 'react';
 import './table.css';
-import { Table, Input, Button, Space, Tag, Form, InputNumber, Popconfirm, Select, DatePicker, TimePicker } from 'antd';
+import { Table, Input, Button, Space, Tag, Form, InputNumber, Popconfirm, Select, DatePicker, TimePicker, Tooltip } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 
@@ -203,7 +203,7 @@ class AntTable extends React.Component {
         sortDirections: ['descend', 'ascend'],
         editable: true,
         render: date => {
-          return date.format('YYYY-MM-DD');
+          return <Tooltip title="Double click to watch the event">{date.format('YYYY-MM-DD')}</Tooltip>;
         },
       },
       {dataIndex: 'name',
@@ -213,6 +213,9 @@ class AntTable extends React.Component {
         sorter: (a, b) => a.name.localeCompare(b.name),
         editable: true,
         className: !this.props.displayedCols.includes('Name') && 'hidden',
+        render: name => {
+          return <Tooltip title="Double click to watch the event">{name}</Tooltip>;
+        },
       },
       {dataIndex: 'description',
         key: 'description',
@@ -220,6 +223,9 @@ class AntTable extends React.Component {
         ...this.getColumnSearchProps('description'),
         editable: true,
         className: !this.props.displayedCols.includes('Description') && 'hidden',
+        render: description => {
+          return <Tooltip title="Double click to watch the event">{description}</Tooltip>;
+        },
       },
       {dataIndex: 'descriptionUrl', key: 'descriptionUrl', title: 'Link',
         render: link => {

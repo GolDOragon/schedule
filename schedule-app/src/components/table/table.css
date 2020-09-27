@@ -25,6 +25,9 @@
 .hidden {
   display: none;
 }
+.ant-table-cell{
+  cursor: default;
+}
 .ant-table-cell .ant-form-item {
   margin-bottom: 0;
 }
