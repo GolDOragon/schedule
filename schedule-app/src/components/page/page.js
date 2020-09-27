@@ -40,7 +40,6 @@ const Page = (props) => {
       
     )
     .then((data) => {
-      console.log(data);
       let currentEvent = '';
       data.forEach((item, i) => {
         if (item.id === eventId) currentEvent = item;
@@ -58,7 +57,6 @@ const Page = (props) => {
     ScheduleApiService.getEvent(eventId)
       .then((data) => {
         setRow(data);
-        console.log(data)
         setLoading(false);
         return data;
       })

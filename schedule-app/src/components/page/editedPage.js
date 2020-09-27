@@ -18,9 +18,7 @@ const EditedPage = (props)=> {
 
  
   const onChange = (event) => {
-    console.log(event.target.checked)
     setAllowComment(!event.target.checked) 
-    console.log('showComment' + allowComment)
   }
 
     return (
@@ -56,10 +54,8 @@ const EditedPage = (props)=> {
 
           }}
           onFinish={(values)=> {
-            console.log(values.dateTime);
             values.dateTime = values.dateTime.format('YYYY-MM-DD');
             values.time = values.time.format();
-            console.log(values)
             props.onUpdateEvent(eventId, values)
           }}
         >
