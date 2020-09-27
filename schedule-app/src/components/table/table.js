@@ -3,6 +3,7 @@ import './table.css';
 import { Table, Input, Button, Space, Tag, Form, InputNumber, Popconfirm, Select, DatePicker, TimePicker, Tooltip } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
+import ExportJsonExcel from 'js-export-excel';
 import moment from 'moment';
 
 class AntTable extends React.Component {
@@ -96,6 +97,42 @@ class AntTable extends React.Component {
     this.setState({ searchText: '' });
   };
 
+  downloadExcel = () => {
+   const data = this.props.items ? this.props.items : '';//tabular data
+    var option={};
+    let dataTable = [];
+    if (data) {
+      for (let i in data) {
+        if(data){
+          console.log(this.props.items[i].name)
+          let obj = {
+                       'Date': data[i].dateTime.format('YYYY-MM-DD'),
+                       'Name': data[i].name,
+                       'Description': data[i].description,
+                       'URL': data[i].descriptionUrl,
+                       'Event type': data[i].type,
+                       'Time': data[i].time.format('HH:mm'),
+                       'Place': data[i].place,
+                       'Duration': data[i].timePass,
+          }
+          dataTable.push(obj);
+        }
+      }
+    }
+       option.fileName = 'RS School Schedule'
+    option.datas=[
+      {
+        sheetData:dataTable,
+        sheetName:'sheet',
+               sheetFilter:['Date', 'Name', 'Description', 'URL', 'Event type', 'Time', 'Place', 'Duration'],
+               sheetHeader:['Date', 'Name', 'Description', 'URL', 'Event type', 'Time', 'Place', 'Duration'],
+      }
+    ];
+   
+    var toExcel = new ExportJsonExcel(option); 
+    toExcel.saveExcel();        
+  }
+  
   render() {
     //Editable cells begin
     const EditableCell = ({
@@ -378,6 +415,9 @@ class AntTable extends React.Component {
           pagination={{onChange: cancel}}
           />
         </Form>
+        <div style={{float: "right"}}>
+           <Button onClick={this.downloadExcel}>Export Excel Table</Button>
+        </div>
         </div>
       </div>
     )
