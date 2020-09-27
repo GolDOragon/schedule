@@ -1,6 +1,6 @@
 import React from 'react';
 import './table.css';
-import { Table, Input, Button, Space, Tag, Form, InputNumber, Popconfirm, Select, DatePicker, TimePicker, Tooltip } from 'antd';
+import { Table, Input, Button, Space, Tag, Form, InputNumber, Popconfirm, Select, DatePicker, TimePicker, Tooltip, Spin, Row } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import ExportJsonExcel from 'js-export-excel';
@@ -131,10 +131,15 @@ class AntTable extends React.Component {
    
     var toExcel = new ExportJsonExcel(option); 
     toExcel.saveExcel();        
+  }  
+  
+  componentWillReceiveProps(props) {
+    this.setState({data: this.props.items});
+    console.log(this.state.data, this.props.items)
+    return false;
   }
   
   render() {
-    //Editable cells begin
     const EditableCell = ({
       editing,
       dataIndex,
@@ -395,6 +400,7 @@ class AntTable extends React.Component {
     return (
       <div className="table-wrapper tablesaw-overflow">
         <div>
+        {this.props.items.length ?
         <Form ref={this.formRef} component={false}>
           <Table dataSource={this.props.items} columns={mergedColumns} rowSelection={rowSelection}
           components={{
@@ -415,6 +421,7 @@ class AntTable extends React.Component {
           pagination={{onChange: cancel}}
           />
         </Form>
+        : <Row className="vh-100"><Spin className="m-auto align-middle" tip="Loading..."></Spin></Row>}
         <div style={{float: "right"}}>
            <Button onClick={this.downloadExcel}>Export Excel Table</Button>
         </div>
