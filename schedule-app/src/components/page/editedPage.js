@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Card, Row, Col, Input, Form, Select, DatePicker, TimePicker, InputNumber, Checkbox, Button} from 'antd';
+import { Card, Row, Col, Input, Form, Select, DatePicker, TimePicker, InputNumber, Checkbox, Button, Space} from 'antd';
 import moment from 'moment';
 import { EditOutlined} from '@ant-design/icons';
 import './page.css';
@@ -19,7 +19,7 @@ const EditedPage = (props)=> {
  
   const onChange = (event) => {
     console.log(event.target.checked)
-    setAllowComment(`${!event.target.checked}`) 
+    setAllowComment(!event.target.checked) 
     console.log('showComment' + allowComment)
   }
 
@@ -50,7 +50,9 @@ const EditedPage = (props)=> {
             video: video,
             map: map,
             mentor: organizer.id,
-            showComment: allowComment
+            showComment: allowComment,
+            comment: comment,
+            map:map
 
           }}
           onFinish={(values)=> {
@@ -92,10 +94,13 @@ const EditedPage = (props)=> {
          
           <Form.Item name='description' label='Описание'><Input.TextArea /></Form.Item>
           <Form.Item name='descriptionUrl' label='Ссылка на ТЗ' ><Input /></Form.Item>
+          <Form.Item name='place' label='Место проведения' ><Input /></Form.Item>
+          <Form.Item name='map' label='Адресс' ><Input /></Form.Item>
           <Form.Item name='video' label='Видео материалы' ><Input /></Form.Item>
           <Form.Item name='picture' label='Изображения' ><Input /></Form.Item>
-          <Checkbox name='showComment' valuePropName="checked" 
-          onChange={onChange}>Разрешить оставлять комментарий</Checkbox>
+          <Form.Item name='' label='Изображения' ><Input /></Form.Item>
+          <Space><Checkbox name='showComment' 
+          onChange={onChange}>Разрешить оставлять комментарий</Checkbox></Space>
           <Form.Item><Button type="primary" htmlType="submit">Сохранить</Button></Form.Item>
         </Form>
       </Card>   
