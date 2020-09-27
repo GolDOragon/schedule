@@ -2,18 +2,19 @@ import React  from 'react';
 import './app.css';
 import ListRS from '../listRS/listRS';
 import  { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
-import Header from '../header/header';
+// import NewHeader from '../header/header';
 import AddEventModal from '../addEventModal/addEventModal';
 import AddMentorModal from '../addMentorModal/addMentorModal';
 import AntTable from '../table/table';
 import HideColumns from '../table/hideColumns';
 import {EventCalendar} from '../calendar/EventCalendar'
-import {Button} from 'antd';
+import {Button, Layout, Menu, Select} from 'antd';
 import 'antd/dist/antd.css';
 import ScheduleApiService from '../../services/scheduleApi-service';
 import Page from '../page/page';
+import { Link } from 'react-router-dom';
 
-
+const { Header, Content, Footer } = Layout;
 
 const  App = () => {
   const TYPES = ['Date', 'Name', 'Description', 'Link', 'Event type', 'Time', 'Place', 'Duration', 'Comment', 'Mentor'];
@@ -24,6 +25,7 @@ const  App = () => {
   const [organizers, setOrganaizers] = React.useState([]);
   const [redirect, setRedirect] = React.useState('/');
   const [displayedCols, setDisplayedCols] = React.useState(TYPES);
+  const { Option } = Select;
 
 
   function onCreate(values) {
@@ -125,37 +127,62 @@ const  App = () => {
 
   return (
     <Router>
-      <div>
+     <Layout>
         {redirect !== '/' && <Redirect to={redirect} />}
-        <header>
-          <Header onUserChange={onUserChange} />
-          {userType === 'mentor' && <Button type="primary" onClick={() => {setVisible(true)}}>Create event</Button> }
-          {userType === 'mentor' && <Button className="secondBtn" type="primary" onClick={() => {setVisibleM(true)}}>Create mentor</Button> }
-        </header>
-        <AddEventModal visible={visible} onCreate={onCreate} organizers={organizers} onCancel={() => {setVisible(false)}}/>
-        <AddMentorModal visible={visibleM} onCreate={onMentorCreate} onCancel={() => {setVisibleM(false)}}/>
-        <Route path="/" exact>
-          <HideColumns onHideColumn={onHideColumn} types={TYPES}/>
-          <AntTable
-            items={items}
-            onUpdateEvent={onUpdateEvent}
-            onSelect={onSelect}
-            userType={userType}
-            organizers={organizers}
-            onDeleteEvent={onDeleteEvent}
-            displayedCols={displayedCols}
-            />
-        </Route>
-        <Route path="/calendar">
-          <EventCalendar items={items}/>
-        </Route>
-        <Route path="/list">
-            <ListRS items={items} onSelect={onSelect} organizers={organizers}/>
-        </Route>
-        <Route path="/page">
-          <Page items={items} userType={userType} organizers={organizers} onSelect={onSelect}/>
-        </Route>
-      </div>
+          <Header   style={{ position: 'fixed', zIndex: 9999, width: '100%', display: 'flex', justifyContent: 'space-between' }}>
+              <div>
+                  <div className="logo" />
+                  <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
+                      <Menu.Item key="1">
+                          <Link className="rs-nav-link" to="/">Table</Link>
+                      </Menu.Item>
+                      <Menu.Item key="2">
+                          <Link className="rs-nav-link" to="/calendar">Calendar</Link>
+                      </Menu.Item>
+                      <Menu.Item key="3">
+                          <Link className="rs-nav-link" to="/list">List</Link>
+                      </Menu.Item>
+                  </Menu>
+              </div>
+              <div className="right-block-btn">
+                  {userType === 'mentor' && <Button type="primary" onClick={() => {setVisible(true)}}>Create event</Button> }
+                  {userType === 'mentor' && <Button className="secondBtn" type="primary" onClick={() => {setVisibleM(true)}}>Create mentor</Button> }
+                  <Select defaultValue="mentor" name="userType" style={{ width: 120 }} onChange={onUserChange}>
+                      <Option value="student">Студент</Option>
+                      <Option value="mentor">Ментор</Option>
+                  </Select>
+              </div>
+
+          </Header>
+        <Content className="site-layout" style={{ padding: '0 50px', marginTop: 64 }}>
+            <div className="site-layout-background" style={{ padding: 24, minHeight: 380 }}>
+                <AddEventModal visible={visible} onCreate={onCreate} organizers={organizers} onCancel={() => {setVisible(false)}}/>
+                <AddMentorModal visible={visibleM} onCreate={onMentorCreate} onCancel={() => {setVisibleM(false)}}/>
+            <Route path="/" exact>
+              <HideColumns onHideColumn={onHideColumn} types={TYPES}/>
+              <AntTable
+                items={items}
+                onUpdateEvent={onUpdateEvent}
+                onSelect={onSelect}
+                userType={userType}
+                organizers={organizers}
+                onDeleteEvent={onDeleteEvent}
+                displayedCols={displayedCols}
+                />
+            </Route>
+            <Route path="/calendar">
+              <EventCalendar items={items}/>
+            </Route>
+            <Route path="/list">
+                <ListRS items={items} onSelect={onSelect} organizers={organizers}/>
+            </Route>
+            <Route path="/page">
+              <Page items={items} userType={userType} organizers={organizers} onSelect={onSelect}/>
+            </Route>
+            </div>
+        </Content>
+         <Footer style={{ textAlign: 'center' }}>Schedule ©2020 Created by Team-26</Footer>
+      </Layout>
     </Router>
   )
 }

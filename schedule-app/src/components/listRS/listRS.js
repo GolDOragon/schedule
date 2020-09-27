@@ -82,8 +82,6 @@ const ListRS = ({ items, onSelect, organizers }) => {
                             <span> | <FieldTimeOutlined />{item.timePass}</span>
                             <br/>
                             {item.description}
-                            <br/>
-                            <Rate allowHalf defaultValue={2.5} />
                         </div>
                         }
                     />
@@ -137,8 +135,7 @@ const ListRS = ({ items, onSelect, organizers }) => {
                                 {item.description}
                                 <br/>
                                 <CheckType type={item.type}/>
-                                <br/>
-                                <Rate allowHalf defaultValue={2.5} /></div>}
+                            </div>}
                         />
 
                     </Card>
@@ -186,8 +183,6 @@ const ListRS = ({ items, onSelect, organizers }) => {
                             <span> | <FieldTimeOutlined />{item.timePass}</span>
                             <br/>
                             {item.description}
-                            <br/>
-                            <Rate allowHalf defaultValue={2.5} />
                         </div>}
                     />
 
@@ -198,11 +193,7 @@ const ListRS = ({ items, onSelect, organizers }) => {
     }
 
     return (
-        <Layout className="site-layout list-rs">
-            <Content
-                className="site-layout-background"
-
-            >
+            <div>
                 <div className="list-rs-btn-group">
                     <Button onClick={() => setType('list')} icon={<BarsOutlined />}></Button>
                     <Button onClick={() => setType('grid')} icon={<AppstoreOutlined />}></Button>
@@ -210,9 +201,8 @@ const ListRS = ({ items, onSelect, organizers }) => {
                 </div>
 
                 {view}
+            </div>
 
-            </Content>
-        </Layout>
     )
 }
 
