@@ -70,6 +70,7 @@ const Page = (props) => {
           })
         }
       })
+      
     switch(row.type) {
       case 'Deadline': setColor('red'); break;
       case 'Self education': setColor(''); break;

@@ -17,7 +17,7 @@ import Error from '../error/error';
 
 
 const  App = () => {
-  const TYPES = ['Date', 'Name', 'Description', 'Link', 'Event type', 'Time', 'Place', 'Duration', 'Comment', 'Mentor'];
+  const TYPES = ['Date', 'Name', 'Description', 'Link', 'Event type', 'Time', 'Place', 'Duration', 'Mentor'];
   const [items, setItems] = React.useState([]);
   const [userType, setUserType] = React.useState('mentor');
   const [visible, setVisible] = React.useState(false);
