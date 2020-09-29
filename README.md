@@ -1,13 +1,13 @@
 ### Schedule
 [Demo](https://schedule-team26.netlify.app)</br>
-The project was created as part of the RS school for integration into the school schedule. [Demo] (https://schedule-team26.netlify.app/) The application displays the schedule for the [UpSkill Lab] course (https://docs.google.com/spreadsheets/d/18cSE1xbAVuNostllMtyUVNo1q0lR25D3cTCMDb0qUQ8/edit#gid=0 ).
-The app was built with [Create React App] (https://github.com/facebook/create-react-app).
+The project was created as part of the RS school for integration into the school schedule. [Demo](https://schedule-team26.netlify.app/) The application displays the schedule for the [UpSkill Lab](https://docs.google.com/spreadsheets/d/18cSE1xbAVuNostllMtyUVNo1q0lR25D3cTCMDb0qUQ8/edit#gid=0) course .
+The app was built with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Contents
 
 1. [Installation and Usage](#installation-and-usage)
 2. [Technologies]()
-3. [Team](#team)
+3. [Team and team work](#team)
 
 ## <a name="installation-and-usage"></a>Installation and Usage
 1. For starting you need to have version control system [GIT](https://github.com/git/git) </br>
@@ -67,17 +67,21 @@ A full-sized drag & drop JavaScript event calendar
 A library to generate PDFs in JavaScript.
  - [js-export-excel](https://www.npmjs.com/package/js-export-excel)
  - [React yandex maps](https://www.npmjs.com/package/react-yandex-maps)
+ - [moment.js](https://github.com/moment/moment) 
+ A JavaScript date library for parsing, validating, manipulating, and formatting dates.
 
 ## <a name="team"></a>Team
 <a href="https://github.com/Mikisum">
 Viktoryia Kiyanka</br>
 <a href="https://github.com/Anglehart">
 Boris Kobzarev</br>
+<a href="https://github.com/Fenixol">
+Oleg Yasko</br>
 <a href="https://github.com/NastyaSvich">
 Nastya Svich</br>
 <a href="https://github.com/DaryaDan">
 Darya	Danchenko</br>
-<a href="https://github.com/Fenixol">
-Oleg Yasko</br>
-<a href="https://github.com/AMmetro">
-Andrei Mitskevich</br>
+
+## Team work
+For efficient organization of work, we used a project management system [Trello](https://trello.com/)</br>
+<a href="https://ibb.co/LdvDNBW"><img src="https://i.ibb.co/LdvDNBW/trello-work.png" alt="trello-work" border="0"></a>
