@@ -71,16 +71,11 @@ A library to generate PDFs in JavaScript.
  A JavaScript date library for parsing, validating, manipulating, and formatting dates.
 
 ## <a name="team"></a>Team
-<a href="https://github.com/Mikisum">
-Viktoryia Kiyanka</br>
-<a href="https://github.com/Anglehart">
-Boris Kobzarev</br>
-<a href="https://github.com/Fenixol">
-Oleg Yasko</br>
-<a href="https://github.com/NastyaSvich">
-Nastya Svich</br>
-<a href="https://github.com/DaryaDan">
-Darya	Danchenko</br>
+* <a href="https://github.com/Mikisum">Viktoryia Kiyanka</br>
+* <a href="https://github.com/Anglehart">Boris Kobzarev</br>
+* <a href="https://github.com/Fenixol">Oleg Yasko</br>
+* <a href="https://github.com/NastyaSvich">Nastya Svich</br>
+* <a href="https://github.com/DaryaDan">Darya	Danchenko</a></br>
 
 ## Team work
 For efficient organization of work, we used a project management system [Trello](https://trello.com/)</br>
