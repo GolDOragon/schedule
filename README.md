@@ -57,16 +57,16 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 
 ## <a name="technologies"></a>Technologies
 
-# - [React](https://ru.reactjs.org/)
+ - [React](https://ru.reactjs.org/)
 A JavaScript library for building user interfaces
-# - [Ant Design](https://ant.design/) 
+ - [Ant Design](https://ant.design/) 
 A design system for enterprise-level products. Create an efficient and enjoyable work experience.
-# - [FullCalendar](https://github.com/fullcalendar/fullcalendar)
+ - [FullCalendar](https://github.com/fullcalendar/fullcalendar)
 A full-sized drag & drop JavaScript event calendar
-# - [JSPdf](https://github.com/MrRio/jsPDF)
+ - [JSPdf](https://github.com/MrRio/jsPDF)
 A library to generate PDFs in JavaScript.
-# - [js-export-excel](https://www.npmjs.com/package/js-export-excel)
-# - [React yandex maps](https://www.npmjs.com/package/react-yandex-maps)
+ - [js-export-excel](https://www.npmjs.com/package/js-export-excel)
+ - [React yandex maps](https://www.npmjs.com/package/react-yandex-maps)
 
 ## <a name="team"></a>Team
 <a href="https://github.com/Mikisum">
